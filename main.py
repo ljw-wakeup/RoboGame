@@ -12,6 +12,7 @@ dc = [50, 50, 50, 50]
 direction_old = [0, 0, 0, 0]
 dc_old= [50, 50, 50, 50]
 
+GPIO.cleanup()
 pwm.pwm_init(motor)
 p1 = GPIO.PWM(motor[0][0], 50)
 p2 = GPIO.PWM(motor[1][0], 50)
