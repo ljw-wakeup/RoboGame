@@ -27,48 +27,48 @@ def getpic():
 	return frame
 	
 def detectline(img):
-    cv2.startWindowThread()
-    cv2.namedWindow('input image',cv2.WINDOW_NORMAL)
-    img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+	cv2.startWindowThread()
+	cv2.namedWindow('input image',cv2.WINDOW_NORMAL)
+	img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     #resize
-    resizeImg = cv2.resize(img,(320,240),interpolation = cv2.INTER_AREA)
-    cv2.imshow('input image', resizeImg)
-    cv2.waitKey(0)
+	resizeImg = cv2.resize(img,(320,240),interpolation = cv2.INTER_AREA)
+	cv2.imshow('input image', resizeImg)
+	cv2.waitKey(0)
 #BINARY has three methods ,below is Otsu
 #Gaussian
-    blur = cv2.GaussianBlur(resizeImg,(11,11),0)
-    ret, binary = cv2.threshold(blur,40,255,cv2.THRESH_BINARY)
+	blur = cv2.GaussianBlur(resizeImg,(11,11),0)
+	ret, binary = cv2.threshold(blur,40,255,cv2.THRESH_BINARY)
 #    binary = cv2.adaptiveThreshold(blur,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
-    binary = cv2.GaussianBlur(binary,(11,11),0)
-    cv2.imshow('binary', binary)
-    cv2.waitKey(0)
-    xgrad = cv2.Sobel(binary,cv2.CV_16SC1,1,0)
-    ygrad = cv2.Sobel(binary,cv2.CV_16SC1,0,1)
-    edge_output = cv2.Canny(xgrad,ygrad,50,150)
-    cv2.imshow('canny',edge_output)
+	binary = cv2.GaussianBlur(binary,(11,11),0)
+	cv2.imshow('binary', binary)
+	cv2.waitKey(0)
+	xgrad = cv2.Sobel(binary,cv2.CV_16SC1,1,0)
+	ygrad = cv2.Sobel(binary,cv2.CV_16SC1,0,1)
+	edge_output = cv2.Canny(xgrad,ygrad,50,150)
+	cv2.imshow('canny',edge_output)
 	lines = cv2.HoughLinesP(edge_output,5, np.pi / 180, 30 ,minLineLength = 5, maxLineGap = 20)
 	i = 0
 	edge_output[:,:] = 0
 	L = []
 	for line in lines:
-	    i = i + 1
-	    x1,y1,x2,y2 = line[0]
-	    cv2.line(edge_output,(x1,y1),(x2,y2),(255,255,255),1,lineType = cv2.LINE_AA)
-	    cv2.imshow(str(i)+".jpg",edge_output)
+		i = i + 1
+		x1,y1,x2,y2 = line[0]
+		cv2.line(edge_output,(x1,y1),(x2,y2),(255,255,255),1,lineType = cv2.LINE_AA)
+		cv2.imshow(str(i)+".jpg",edge_output)
 		cv2.waitKey(0)
-	    if ( x2 - x1 ) == 0 :
-		    k = 0
-		    b = x1
-		    theta = 90
+		if ( x2 - x1 ) == 0 :
+			k = 0
+			b = x1
+			theta = 90
 		else :
-		    k = float(y2-y1)/float(x2-x1)
- 		    b = y1-k*x1
-	            theta = math.atan(k)*180.0/(math.pi)	    
+			k = float(y2-y1)/float(x2-x1)
+			b = y1-k*x1
+			theta = math.atan(k)*180.0/(math.pi)	    
 		L.append([x1,y1,x2,y2,k,b,theta])
 		    
-	    print("originL", L)
+		print("originL", L)
        
-    return
+	return
 
 img = getpic()
 detectline(img)
