@@ -46,7 +46,28 @@ def detectline(img):
     ygrad = cv2.Sobel(binary,cv2.CV_16SC1,0,1)
     edge_output = cv2.Canny(xgrad,ygrad,50,150)
     cv2.imshow('canny',edge_output)
-    cv2.waitKey(0)    
+	lines = cv2.HoughLinesP(edge_output,5, np.pi / 180, 30 ,minLineLength = 5, maxLineGap = 20)
+	i = 0
+	edge_output[:,:] = 0
+	L = []
+	for line in lines:
+	    i = i + 1
+	    x1,y1,x2,y2 = line[0]
+	    cv2.line(edge_output,(x1,y1),(x2,y2),(255,255,255),1,lineType = cv2.LINE_AA)
+	    cv2.imshow(str(i)+".jpg",edge_output)
+		cv2.waitKey(0)
+	    if ( x2 - x1 ) == 0 :
+		    k = 0
+		    b = x1
+		    theta = 90
+		else :
+		    k = float(y2-y1)/float(x2-x1)
+ 		    b = y1-k*x1
+	            theta = math.atan(k)*180.0/(math.pi)	    
+		L.append([x1,y1,x2,y2,k,b,theta])
+		    
+	    print("originL", L)
+       
     return
 
 img = getpic()
