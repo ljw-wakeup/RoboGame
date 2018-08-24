@@ -1,13 +1,40 @@
+import numpy as np
 import cv2
-cap = cv2.VideoCapture(1)
-while 1 :
+import math
+import copy
+import time
+
+
+def initpic():
+	a = time.clock()
+	cap = cv2.VideoCapture(1)
+	while True :
+		ret,frame = cap.read()
+		b = time.clock()
+		if (b-a) > 5 :
+			break
+	return
+
+def getpic():
+	initpic()
+	cap = cv2.VideoCapture(1)
 	ret,frame = cap.read()
-#	cap.set(3,320)
-#	cap.set(4,240)
 	cv2.imshow("capture", frame)
-	if cv2.waitKey(1) & 0xFF == ord('q'):
-		cv2.imwrite("test.jpg",frame)
-		break
-cap.release()
-cv2.destroyAllWindows()
+	cv2.imwrite("test.jpg",frame)
+	cap.release()
+	cv2.destroyAllWindows()
+	return frame
+	
+def detectline(img):
+    cv2.startWindowThread()
+    cv2.namedWindow('input image',cv2.WINDOW_NORMAL)
+    #resize
+    resizeImg = cv2.resize(img,(320,240),interpolation = cv2.INTER_AREA)
+	cv2.imshow('input image', binary)
+	cv2.waitKey(0)
+	return
+
+img = getpic()
+detectline(img)
+
 
