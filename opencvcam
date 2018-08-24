@@ -73,7 +73,7 @@ def linesort(L):
 	print("aftersorted", Lbsorted)
 	Lsorted_length = len(Lsorted)
 	for line in Lsorted:
-	line.append(np.square(line[0]-line[2]) + np.square(line[1]-line[3]))
+		line.append(np.square(line[0]-line[2]) + np.square(line[1]-line[3]))
 	#(x1,y1,x2,y2,k,b,theta,length)
 	print("(x1,y1,x2,y2,k,b,theta,length)" , Lsorted)
 	Lmerge_first = []
@@ -83,8 +83,8 @@ def linesort(L):
 		maxlong = 0
 		while j < length:
 			if abs(bsorted[i][6] - Lsorted[j][6]) < 5 and abs(Lsorted[i][5] - Lsorted[j][5])/math.sqrt(1+Lsorted[i][4] * Lsorted[j][4]) < 10 :
-				if Lbsorted[i][7] > maxlong :
-					maxlong = Lbsorted[i][7]
+				if Lsorted[i][7] > maxlong :
+					maxlong = Lsorted[i][7]
 				j = j + 1
 			else :
 				break
@@ -99,7 +99,7 @@ def linesort(L):
 		for item in maxlinelist :
 			y = 0
 			while y < 4 :
-				newline[y] += Lbsorted[item][y]
+				newline[y] += Lsorted[item][y]
 				y += 1
 			y = 0
 			while y < 4 :
@@ -112,7 +112,7 @@ def linesort(L):
 			Lmerge_first.append(newline)
 		i = j
 #    print("Lmerge_first",Lmerge_first)
-    return Lmerge_first
+	return Lmerge_first
 img = getpic()
 L = detectline(img)
 linesort(L)
