@@ -9,10 +9,7 @@ def refreshmotor(dc,direction):
     input_gray = getgray.read_gray()
 
     status, output = Cpid.caculGrayForPid(input_gray)
-    if status:
-        a=GPID.pidFromGray(output)
-    else:
-        a=0
+    a = GPID.pidFromGray(output)
     for i in range(4):
         dc[0]=60 +a*20
         dc[1]=60 -a*20

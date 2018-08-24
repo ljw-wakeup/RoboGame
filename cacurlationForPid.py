@@ -1,3 +1,8 @@
+last_status = True
+lastlast_status = True
+last_trueCal = 0
+
+
 def caculGrayForPid(inputlist):
     blackcount = 0
     curblacklen = 0
@@ -22,13 +27,11 @@ def caculGrayForPid(inputlist):
     if lenth == 0:
         status = False
         output = 0
-        return status, output
     elif lenth == 1:
         list1 = (list)(blacklist[0])
 
         output = ((2 * int(list1[0]) + list1[1] - 1) / 2 - 4.5) * parament
         status = True
-        return status, output
     else:
         temp = 0
         maxcount = 0
@@ -46,10 +49,28 @@ def caculGrayForPid(inputlist):
         if maxcount != 1:
             status = False
             output = 0
-            return status, output
         else:
             b = list(blacklist[maxpos])
             output = ((2 * int(b[0]) + b[1] - 1) / 2 - 4.5) * parament
             status = True
-            return status, output
+	status, output = changecalcu(status, output)
+    return status, output
 
+def changecalcu(status,output):
+	global last_status
+	global lastlast_status
+	global last_trueCal
+	if status == True :
+	    last_trueCal = output
+		return status,output
+	else :
+	    if last_status == True :
+			output = last_trueCal
+		elif last_status == False :
+			if last_trueCal > 0 :
+				output = 3
+			else :
+				output = -3
+	return status, output
+		
+		
