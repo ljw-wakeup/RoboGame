@@ -33,6 +33,13 @@ def detectline(img):
     resizeImg = cv2.resize(img,(320,240),interpolation = cv2.INTER_AREA)
     cv2.imshow('input image', resizeImg)
     cv2.waitKey(0)
+#BINARY has three methods ,below is Otsu
+#Gaussian
+    blur = cv2.GaussianBlur(resizeImg,(11,11),0)
+# too slow: blur = cv2.bilateralFilter(img,3,70,70)
+    ret,binary = cv2.threshold(blur,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+	cv2.imshow('binary', binary)
+	cv2.waitKey(0)
     return
 
 img = getpic()
