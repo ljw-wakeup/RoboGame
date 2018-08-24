@@ -111,7 +111,7 @@ def linesort(L):
 			newline[7] = np.square(newline[0]-newline[2]) + np.square(newline[1] - newline[3])    
 			Lmerge_first.append(newline)
 		i = j
-#    print("Lmerge_first",Lmerge_first)
+	print("Lmerge_first",Lmerge_first)
 	return Lmerge_first
 img = getpic()
 L = detectline(img)
