@@ -42,6 +42,10 @@ def detectline(img):
     binary = cv2.GaussianBlur(binary,(11,11),0)
     cv2.imshow('binary', binary)
     cv2.waitKey(0)
+	xgrad = cv2.Sobel(gray,cv,CV_16SC1,1,0)
+	ygrad = cv2.Sobel(gray,cv.CV_16SC1,0,1)
+	edge_output = cv2.Canny(xgrad,ygrad,50,150)
+	cv2.imshow('canny',edge_output)
     return
 
 img = getpic()
