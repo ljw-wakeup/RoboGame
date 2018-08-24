@@ -29,6 +29,7 @@ def getpic():
 def detectline(img):
     cv2.startWindowThread()
     cv2.namedWindow('input image',cv2.WINDOW_NORMAL)
+    img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     #resize
     resizeImg = cv2.resize(img,(320,240),interpolation = cv2.INTER_AREA)
     cv2.imshow('input image', resizeImg)
@@ -36,10 +37,11 @@ def detectline(img):
 #BINARY has three methods ,below is Otsu
 #Gaussian
     blur = cv2.GaussianBlur(resizeImg,(11,11),0)
-# too slow: blur = cv2.bilateralFilter(img,3,70,70)
-    ret,binary = cv2.threshold(blur,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
-	cv2.imshow('binary', binary)
-	cv2.waitKey(0)
+    ret, binary = cv2.threshold(blur,40,255,cv2.THRESH_BINARY)
+#    binary = cv2.adaptiveThreshold(blur,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
+    binary = cv2.GaussianBlur(binary,(11,11),0)
+    cv2.imshow('binary', binary)
+    cv2.waitKey(0)
     return
 
 img = getpic()
