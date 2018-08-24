@@ -65,12 +65,56 @@ def detectline(img):
 			b = y1-k*x1
 			theta = math.atan(k)*180.0/(math.pi)	    
 		L.append([x1,y1,x2,y2,k,b,theta])
-		    
-		print("originL", L)
-       
-	return
-
+	print("originL", L)   
+	return L
+	
+def linesort(L):
+	Lsorted = sorted(L, key = lambda x:(x[6],x[4]))
+	print("aftersorted", Lbsorted)
+	Lsorted_length = len(Lsorted)
+	for line in Lsorted:
+	line.append(np.square(line[0]-line[2]) + np.square(line[1]-line[3]))
+	#(x1,y1,x2,y2,k,b,theta,length)
+	print("(x1,y1,x2,y2,k,b,theta,length)" , Lsorted)
+	Lmerge_first = []
+	i = 0
+	while i < length:
+		j = i + 1
+		maxlong = 0
+		while j < length:
+			if abs(bsorted[i][6] - Lsorted[j][6]) < 5 and abs(Lsorted[i][5] - Lsorted[j][5])/math.sqrt(1+Lsorted[i][4] * Lsorted[j][4]) < 10 :
+				if Lbsorted[i][7] > maxlong :
+					maxlong = Lbsorted[i][7]
+				j = j + 1
+			else :
+				break
+		x = i
+		maxlinelist = []
+		while x < j :
+			if Lsorted[x][7] > 0.6 * maxlong :
+				maxlinelist.append(x)
+			x += 1
+		maxlinenum = len(maxlinelist)
+		newline = [0,0,0,0,0,0,0,0]
+		for item in maxlinelist :
+			y = 0
+			while y < 4 :
+				newline[y] += Lbsorted[item][y]
+				y += 1
+			y = 0
+			while y < 4 :
+				newline[y] = float(newline[y])/maxlinenum
+				y += 1
+			newline[4] = (newline[3]-newline[1])/(newline[2]-newline[0])
+			newline[5] = newline[1] - newline[4] * newline[0]
+			newline[6] = math.atan(newline[4])*180.0/(math.pi)
+			newline[7] = np.square(newline[0]-newline[2]) + np.square(newline[1] - newline[3])    
+			Lmerge_first.append(newline)
+		i = j
+#    print("Lmerge_first",Lmerge_first)
+    return Lmerge_first
 img = getpic()
-detectline(img)
+L = detectline(img)
+linesort(L)
 
 
