@@ -92,7 +92,7 @@ def linesort(L,edge_output):
 		while j < Lsorted_length:
 			print("j",j) 
 			print("abs(Lsorted[i][6] - Lsorted[j][6])", (abs(Lsorted[i][6] - Lsorted[j][6]))%180)
-			if (abs(Lsorted[i][6] - Lsorted[j][6])) % 180 <2.5 :
+			if (abs(Lsorted[i][6] - Lsorted[j][6]) < 90 and abs(Lsorted[i][6] - Lsorted[j][6]) < 2.5) or (abs(Lsorted[i][6] - Lsorted[j][6]) > 90 and abs(Lsorted[i][6]) - abs(Lsorted[j][6])) < 2.5) :
 				if abs(Lsorted[i][6]) >45 and abs(Lsorted[j][6]) >45:
 					refer_y = (Lsorted[i][1]+Lsorted[i][3]+Lsorted[j][1]+Lsorted[j][3])/4
 					line_x_i = (refer_y - Lsorted[i][4])/Lsorted[i][5]
@@ -174,7 +174,7 @@ def orbitmerge(Lmerge):
 		while j < length :
 			print("j",j)
 			print("abs(Lmerge[i][6] - Lmerge[j][6]) ",(abs(Lmerge[i][6] - Lmerge[j][6]))%180)
-			if (abs(Lmerge[i][6] - Lmerge[j][6]))%180 < 20 :
+			if (abs(Lsorted[i][6] - Lsorted[j][6]) < 90 and abs(Lsorted[i][6] - Lsorted[j][6]) < 20) or (abs(Lsorted[i][6] - Lsorted[j][6]) > 90 and abs(Lsorted[i][6]) - abs(Lsorted[j][6])) < 20) :
 				if abs(Lmerge[i][6]) >45 :
 					refer_y = (Lmerge[i][1]+Lmerge[i][3]+Lmerge[j][1]+Lmerge[j][3])/4
 					line_x_i = (refer_y - Lmerge[i][4])/Lmerge[i][5]
@@ -232,19 +232,31 @@ def calculateForMode(normal, considerated) :
 	verticlelist = []
 	horizon = 0
 	horizonlist = []
-	for line in normal :
-		if line[6] > 45 or line[6] < -45 :
-			verticle += 1
-			verticlelist.append(line)
-		else :
-			horizon += 1
-			horizonlist.append(line)
+	if len(normal) != 0 :
+		for line in normal :
+			if line[6] > 45 or line[6] < -45 :
+				verticle += 1
+				verticlelist.append(line)
+			else :
+				horizon += 1
+				horizonlist.append(line)
+	else :
+		for line in considerated :
+			if line[6] > 60 or line[6] < -60 :
+				verticle += 1
+				verticlelist.append(line)
+			else :
+				horizon += 1
+				horizonlist.append(line)
 	if mode == 0 :
 		for line in verticlelist:
 			if line[6] == 90 :
 				line.append(line[0])
 			else :
-				line.append((240 - line[5])/line[4] - 80)
+				if line[4] == 0:
+					line.append(line[0])
+				else :
+					line.append((240 - line[5])/line[4] - 80)
 		verticlelist = sorted(verticlelist, key = lambda x:abs(x[8]))
 	print(verticlelist)
 	return verticlelist[0][8]
