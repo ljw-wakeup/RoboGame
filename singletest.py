@@ -6,9 +6,22 @@ import time
 mode = 0
 cap = 0
 pici = 0
+def initpic():
+	global cap
+	a = time.clock()
+	cap = cv2.VideoCapture(1)
+	while True :
+		ret,frame = cap.read()
+		b = time.clock()
+		if(b-a) > 3 :
+			break
+	return 
 def getpic():
 	global pici
-	frame = cv2.imread("originpic"+str(2)+".jpg")
+	pici = pici +1
+	ret,frame = cap.read()
+#	frame = cv2.imread("originpic"+str(0)+".jpg")
+	cv2.imwrite("originpic"+str(pici)+".jpg",frame)
 	cv2.imshow("origin",frame)
 	cv2.waitKey(0)
 	cv2.destroyAllWindows()
@@ -78,13 +91,14 @@ def linesort(L,edge_output):
 		maxlong = 0
 		while j < Lsorted_length:
 			print("j",j) 
-			print("abs(Lsorted[i][6] - Lsorted[j][6])", abs(Lsorted[i][6] - Lsorted[j][6]))
-			if abs(Lsorted[i][6] - Lsorted[j][6])<5 :
+			print("abs(Lsorted[i][6] - Lsorted[j][6])", (abs(Lsorted[i][6] - Lsorted[j][6]))%180)
+			if (abs(Lsorted[i][6] - Lsorted[j][6])) % 180 <2.5 :
 				if abs(Lsorted[i][6]) >45 and abs(Lsorted[j][6]) >45:
 					refer_y = (Lsorted[i][1]+Lsorted[i][3]+Lsorted[j][1]+Lsorted[j][3])/4
 					line_x_i = (refer_y - Lsorted[i][4])/Lsorted[i][5]
 					line_x_j = (refer_y - Lsorted[j][4])/Lsorted[j][5]
-					if abs(line_x_i - line_x_j) < 20 :
+					print("distance",abs(line_x_i-line_x_j))
+					if abs(line_x_i - line_x_j) < 5 :
 						if Lsorted[i][7] > maxlong :
 							maxlong = Lsorted[i][7]
 						j = j + 1
@@ -93,8 +107,9 @@ def linesort(L,edge_output):
 				elif abs(Lsorted[i][6]) < 45 and abs(Lsorted[j][6]) < 45 :
 					refer_x = (Lsorted[i][0]+Lsorted[i][2]+Lsorted[j][0]+Lsorted[j][2])/4
 					line_y_i = refer_x * Lsorted[i][5] + Lsorted[i][4]
-					line_y_i = refer_x * Lsorted[j][5] + Lsorted[j][4]
-					if abs(line_y_i - line_y_i) < 20 :
+					line_y_j = refer_x * Lsorted[j][5] + Lsorted[j][4]
+					print("distance",abs(line_y_i-line_y_j))
+					if abs(line_y_i - line_y_j) < 5 :
 						if Lsorted[i][7] > maxlong :
 							maxlong = Lsorted[i][7]
 						j = j + 1
@@ -142,7 +157,7 @@ def linesort(L,edge_output):
 			newline[5] = newline[1] - newline[4] * newline[0]
 			newline[6] = math.atan(newline[4])*180.0/(math.pi)
 			newline[7] = np.sqrt(np.square(newline[0]-newline[2]) + np.square(newline[1] - newline[3]))    
-			Lmerge_first.append(newline)
+		Lmerge_first.append(newline)
 		i = j
 	print("Lmerge_first",Lmerge_first)
 	return Lmerge_first
@@ -158,8 +173,8 @@ def orbitmerge(Lmerge):
 		j = i + 1
 		while j < length :
 			print("j",j)
-			print("abs(Lmerge[i][6] - Lmerge[j][6]) ",abs(Lmerge[i][6] - Lmerge[j][6]))
-			if abs(Lmerge[i][6] - Lmerge[j][6]) < 10 :
+			print("abs(Lmerge[i][6] - Lmerge[j][6]) ",(abs(Lmerge[i][6] - Lmerge[j][6]))%180)
+			if (abs(Lmerge[i][6] - Lmerge[j][6]))%180 < 20 :
 				if abs(Lmerge[i][6]) >45 :
 					refer_y = (Lmerge[i][1]+Lmerge[i][3]+Lmerge[j][1]+Lmerge[j][3])/4
 					line_x_i = (refer_y - Lmerge[i][4])/Lmerge[i][5]
@@ -231,17 +246,17 @@ def calculateForMode(normal, considerated) :
 			else :
 				line.append((240 - line[5])/line[4] - 80)
 		verticlelist = sorted(verticlelist, key = lambda x:abs(x[8]))
-#        print(verticlelist)
+	print(verticlelist)
 	return verticlelist[0][8]
-	
 
-
-img = getpic()
-L,edge_output = detectline(img)
-Lmerge = linesort(L,edge_output)
-normal,considerated = orbitmerge(Lmerge)
-print(calculateForMode(normal, considerated))
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+initpic()
+while True :
+	img = getpic()
+	L,edge_output = detectline(img)
+	Lmerge = linesort(L,edge_output)
+	normal,considerated = orbitmerge(Lmerge)
+	print(calculateForMode(normal, considerated))
+	cv2.waitKey(0)
+	cv2.destroyAllWindows()
 
 
