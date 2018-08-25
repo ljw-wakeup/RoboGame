@@ -6,6 +6,7 @@ import time
 mode = 0
 cap = 0
 pici = 0
+lastcal = 0
 def initpic():
 	global cap
 	a = time.clock()
@@ -276,16 +277,21 @@ def calculateForMode(normal, considerated) :
 #	print(verticlelist)
 	return verticlelist[0][8]
 
-initpic()
-while True :
+
+def init_picture():
+	initpic()
+def pic_oneline():
 	try :
 		img = getpic()
 		L,edge_output = detectline(img)
 		Lmerge = linesort(L,edge_output)
 		normal,considerated = orbitmerge(Lmerge)
-		print(calculateForMode(normal, considerated))
+#		print(calculateForMode(normal, considerated))
+		status = True
+		lastcal = calculateForMode(normal, considerated)
+		return status, lastcal
 		cv2.waitKey(0)
 	finally :
-		pass
+		return False,lastcal
 
 
