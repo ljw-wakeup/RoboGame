@@ -81,10 +81,29 @@ def linesort(L,edge_output):
 			print("abs(Lsorted[i][6] - Lsorted[j][6])", abs(Lsorted[i][6] - Lsorted[j][6]))
 			print("distance", abs(Lsorted[i][5] - Lsorted[j][5])/math.sqrt(1+Lsorted[i][4] * Lsorted[j][4]))
 			print("")
-			if abs(Lsorted[i][6] - Lsorted[j][6]) < 5 and abs(Lsorted[i][5] - Lsorted[j][5])/math.sqrt(1+Lsorted[i][4] * Lsorted[j][4]) < 20 :
-				if Lsorted[i][7] > maxlong :
-					maxlong = Lsorted[i][7]
-				j = j + 1
+			standardy = (Lsorted[i][1]+Lsorted[i][3]+Lsorted[j][1]+Lsorted[j][3]
+			if abs(Lsorted[i][6] - Lsorted[j][6]) < 5 :
+				if abs(Lsorted[i][6]) >45 :
+					refer_y = (Lsorted[i][1]+Lsorted[i][3]+Lsorted[j][1]+Lsorted[j][3]
+					line_x_i = (refer_y - Lsorted[i][4])/Lsorted[i][5]
+					line_x_j = (refer_y - Lsorted[j][4])/Lsorted[j][5]
+					if abs(line_x_i - line_x_j) < 20 :
+						if Lsorted[i][7] > maxlong :
+							maxlong = Lsorted[i][7]
+						j = j + 1
+					else :
+						break
+						
+				else :
+					refer_x = (Lsorted[i][0]+Lsorted[i][2]+Lsorted[j][0]+Lsorted[j][2]
+					line_y_i = refer_x * Lsorted[i][5] + Lsorted[i][4]
+					line_y_i = refer_x * Lsorted[j][5] + Lsorted[j][4]
+					if abs(line_y_i - line_y_i) < 20 :
+						if Lsorted[i][7] > maxlong :
+							maxlong = Lsorted[i][7]
+						j = j + 1
+					else :
+						break :
 			else :
 				break
 		print("maxlong",maxlong)
@@ -136,9 +155,30 @@ def orbitmerge(Lmerge):
 		j = i + 1
 		while j < length :
 			print("abs(Lmerge[i][6] - Lmerge[j][6]) < 5",abs(Lmerge[i][6] - Lmerge[j][6]) < 5)
-			print("abs(Lmerge[i][5] - Lmerge[j][5])/math.sqrt(1+Lmerge[i][4] * Lmerge[j][4])",abs(Lmerge[i][5] - Lmerge[j][5])/math.sqrt(1+Lmerge[i][4] * Lmerge[j][4]))
-			if abs(Lmerge[i][6] - Lmerge[j][6]) < 5 and abs(Lmerge[i][5] - Lmerge[j][5])/math.sqrt(1+Lmerge[i][4] * Lmerge[j][4]) < 200 :
-				j += 1
+			standardy = (Lmerge[i][1]+Lmerge[i][3]+Lmerge[j][1]+Lmerge[j][3]
+			if abs(Lmerge[i][6] - Lmerge[j][6]) < 5 :
+				if abs(Lmerge[i][6]) >45 :
+					refer_y = (Lmerge[i][1]+Lmerge[i][3]+Lmerge[j][1]+Lmerge[j][3]
+					line_x_i = (refer_y - Lmerge[i][4])/Lmerge[i][5]
+					line_x_j = (refer_y - Lmerge[j][4])/Lmerge[j][5]
+					print("distance:",abs(line_x_i - line_x_j))
+					if abs(line_x_i - line_x_j) < 70 :
+						if Lmerge[i][7] > maxlong :
+							maxlong = Lmerge[i][7]
+						j = j + 1
+					else :
+						break
+						
+				else :
+					refer_x = (Lmerge[i][0]+Lmerge[i][2]+Lmerge[j][0]+Lmerge[j][2]
+					line_y_i = refer_x * Lmerge[i][5] + Lmerge[i][4]
+					line_y_i = refer_x * Lmerge[j][5] + Lmerge[j][4]
+					if abs(line_y_i - line_y_i) < 20 :
+						if Lmerge[i][7] > maxlong :
+							maxlong = Lmerge[i][7]
+						j = j + 1
+					else :
+						break :
 			else :
 				break
 		if j - i == 1 :
