@@ -91,7 +91,7 @@ def linesort(L,edge_output):
 		while j < Lsorted_length:
 #			print("j",j) 
 #			print("abs(Lsorted[i][6] - Lsorted[j][6])", (abs(Lsorted[i][6] - Lsorted[j][6]))%180)
-			if (abs(Lsorted[i][6] - Lsorted[j][6]) < 90 and abs(Lsorted[i][6] - Lsorted[j][6]) < 2.5) or (abs(Lsorted[i][6] - Lsorted[j][6]) > 90 and abs(abs(Lsorted[i][6]) - abs(Lsorted[j][6])) < 2.5) :
+			if (abs(Lsorted[i][6] - Lsorted[j][6]) < 90 and abs(Lsorted[i][6] - Lsorted[j][6]) < 2.5) or (abs(Lsorted[i][6] - Lsorted[j][6]) > 90 and abs(180 - abs(Lsorted[i][6]) - abs(Lsorted[j][6])) < 2.5) :
 				if abs(Lsorted[i][6]) >45 and abs(Lsorted[j][6]) >45:
 					refer_y = (Lsorted[i][1]+Lsorted[i][3]+Lsorted[j][1]+Lsorted[j][3])/4
 					line_x_i = (refer_y - Lsorted[i][4])/Lsorted[i][5]
@@ -187,7 +187,7 @@ def orbitmerge(Lmerge):
 		while j < length :
 #			print("j",j)
 #			print("abs(Lmerge[i][6] - Lmerge[j][6]) ",(abs(Lmerge[i][6] - Lmerge[j][6]))%180)
-			if (abs(Lmerge[i][6] - Lmerge[j][6]) < 90 and abs(Lmerge[i][6] - Lmerge[j][6]) < 20) or (abs(Lmerge[i][6] - Lmerge[j][6]) > 90 and abs( abs(Lmerge[i][6]) - abs(Lmerge[j][6])) < 20) :
+			if (abs(Lmerge[i][6] - Lmerge[j][6]) < 90 and abs(Lmerge[i][6] - Lmerge[j][6]) < 20) or (abs(Lmerge[i][6] - Lmerge[j][6]) > 90 and abs( 180 - abs(Lmerge[i][6]) - abs(Lmerge[j][6])) < 20) :
 				if abs(Lmerge[i][6]) >45 :
 					refer_y = (Lmerge[i][1]+Lmerge[i][3]+Lmerge[j][1]+Lmerge[j][3])/4
 					line_x_i = (refer_y - Lmerge[i][4])/Lmerge[i][5]
