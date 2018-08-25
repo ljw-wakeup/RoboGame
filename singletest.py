@@ -120,6 +120,10 @@ def linesort(L,edge_output):
 				break
 #		print("maxlong",maxlong)
 		x = i
+		if Lsorted[i][6] > 45:
+			oritation_ver = True
+		else :
+			oritation_ver = False
 		maxlinelist = []
 		while x < j :
 			if Lsorted[x][7] > 0.6 * maxlong :
@@ -130,6 +134,16 @@ def linesort(L,edge_output):
 		maxlinenum = len(maxlinelist)
 		newline = [0,0,0,0,0,0,0,0]
 #		print("maxlinelistlist", Lsorted[maxlinelist[0]])
+		if oritation_ver == True :
+			for item in maxlinelist :	
+				if Lsorted[item][1] > Lsorted[item][3] :
+					Lsorted[item][1],Lsorted[item][3] = Lsorted[item][3],Lsorted[item][1]
+					Lsorted[item][0],Lsorted[item][2] = Lsorted[item][2],Lsorted[item][0]
+		else :
+			for item in maxlinelist :	
+				if Lsorted[item][0] > Lsorted[item][2] :
+					Lsorted[item][1],Lsorted[item][3] = Lsorted[item][3],Lsorted[item][1]
+					Lsorted[item][0],Lsorted[item][2] = Lsorted[item][2],Lsorted[item][0]
 		for item in maxlinelist :
 			newline[0] = newline[0]+Lsorted[item][0]
 			newline[1] = newline[1] +Lsorted[item][1]
