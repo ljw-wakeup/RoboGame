@@ -19,8 +19,8 @@ def initpic():
 
 def getpic():
 	ret,frame = cap.read()
-#	cv2.imshow("capture", frame)
-#	cv2.imwrite("test.jpg",frame)
+	cv2.imshow("originpic", frame)
+	cv2.waitKey(0)
 	cv2.destroyAllWindows()
 	return frame
 	
@@ -43,7 +43,8 @@ def detectline(img):
 	xgrad = cv2.Sobel(binary,cv2.CV_16SC1,1,0)
 	ygrad = cv2.Sobel(binary,cv2.CV_16SC1,0,1)
 	edge_output = cv2.Canny(xgrad,ygrad,50,150)
-#	cv2.imshow('canny',edge_output)
+	cv2.imshow('canny',edge_output)
+	cv2.waitKey(0)
 	lines = cv2.HoughLinesP(edge_output,5, np.pi / 180, 30 ,minLineLength = 5, maxLineGap = 20)
 	i = 0
 	edge_output[:,:] = 0
@@ -63,7 +64,7 @@ def detectline(img):
 			b = y1-k*x1
 			theta = math.atan(k)*180.0/(math.pi)	    
 		L.append([x1,y1,x2,y2,k,b,theta])
-#	print("originL", L)   
+	print("originL", L)   
 	return L
 	
 def linesort(L):
@@ -115,7 +116,7 @@ def linesort(L):
 				newline[7] = np.square(newline[0]-newline[2]) + np.square(newline[1] - newline[3])    
 			Lmerge_first.append(newline)
 		i = j
-#	print("Lmerge_first",Lmerge_first)
+	print("Lmerge_first",Lmerge_first)
 	return Lmerge_first
 
 	
@@ -159,8 +160,8 @@ def orbitmerge(Lmerge):
 				line[7] = np.square(line[0] - line[2]) + np.square(line[1] - line[3]) 
 			normal.append(line)
 		i = j
-#    print("normal", normal)
-#    print("considerated", considerated)
+	print("normal", normal)
+	print("considerated", considerated)
 	return normal, considerated
 	
 def calculateForMode(normal, considerated) :
@@ -193,6 +194,6 @@ while True :
 	Lmerge = linesort(L)
 	normal,considerated = orbitmerge(Lmerge)
 	print(calculateForMode(normal, considerated))
-
+	cv2.waitKey(0)
 
 
