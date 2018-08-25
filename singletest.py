@@ -75,6 +75,7 @@ def linesort(L):
 		while j < Lsorted_length:
 			print("j",j) 
 			print("abs(Lsorted[i][6] - Lsorted[j][6])", abs(Lsorted[i][6] - Lsorted[j][6]))
+			print("distance", abs(Lsorted[i][5] - Lsorted[j][5])/math.sqrt(1+Lsorted[i][4] * Lsorted[j][4]))
 			print("")
 			if abs(Lsorted[i][6] - Lsorted[j][6]) < 5 and abs(Lsorted[i][5] - Lsorted[j][5])/math.sqrt(1+Lsorted[i][4] * Lsorted[j][4]) < 10 :
 				if Lsorted[i][7] > maxlong :
@@ -82,12 +83,14 @@ def linesort(L):
 				j = j + 1
 			else :
 				break
+		print("maxlong",maxlong)
 		x = i
 		maxlinelist = []
 		while x < j :
 			if Lsorted[x][7] > 0.6 * maxlong :
 				maxlinelist.append(x)
 			x += 1
+		print("maxlinelist",maxlinelist)
 		maxlinenum = len(maxlinelist)
 		newline = [0,0,0,0,0,0,0,0]
 		for item in maxlinelist :
@@ -99,6 +102,10 @@ def linesort(L):
 			while y < 4 :
 				newline[y] = float(newline[y])/float(maxlinenum)
 				y += 1
+			edge_output[:,:] = 0
+			cv2.line(edge_output,(newline[0],newline[1]),(newline[1],newline[2]),(255,255,255),1,lineType = cv2.LINE_AA)
+			cv2.imshow("newline"+str(i)+".jpg",edge_output)
+			cv2.waitKey(0)
 			if newline[2]-newline[0] == 0:
 				newline[4] = 0
 				newline[5] = newline[0]
