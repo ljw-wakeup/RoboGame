@@ -49,7 +49,7 @@ def detectline(img):
 	edge_output = cv2.Canny(xgrad,ygrad,50,150)
 	cv2.imshow('canny',edge_output)
 	cv2.waitKey(0)
-	lines = cv2.HoughLinesP(edge_output,5, np.pi / 270, 100 ,minLineLength = 20, maxLineGap = 30)
+	lines = cv2.HoughLinesP(edge_output,1, np.pi / 90, 10 ,minLineLength = 10, maxLineGap = 0)
 	i = 0
 	edge_output[:,:] = 0
 	L = []

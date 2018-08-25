@@ -8,8 +8,8 @@ cap = 0
 pici = 0
 def getpic():
 	global pici
-	i = i+1
-	frame = cv2.imread("originpic"+str(pici)+".jpg", frame)
+	frame = cv2.imread("originpic"+str(1)+".jpg")
+	cv2.imshow("origin",frame)
 	cv2.waitKey(0)
 	cv2.destroyAllWindows()
 	return frame
@@ -35,7 +35,7 @@ def detectline(img):
 	edge_output = cv2.Canny(xgrad,ygrad,50,150)
 	cv2.imshow('canny',edge_output)
 	cv2.waitKey(0)
-	lines = cv2.HoughLinesP(edge_output,5, np.pi / 180, 30 ,minLineLength = 5, maxLineGap = 20)
+	lines = cv2.HoughLinesP(edge_output,1, np.pi / 90, 40 ,minLineLength = 30, maxLineGap = 60)
 	i = 0
 	edge_output[:,:] = 0
 	L = []
@@ -68,10 +68,14 @@ def linesort(L):
 #	print("(x1,y1,x2,y2,k,b,theta,length)" , Lsorted)
 	Lmerge_first = []
 	i = 0
+	print("i ",i)
 	while i < Lsorted_length:
 		j = i + 1
 		maxlong = 0
 		while j < Lsorted_length:
+			print("j",j) 
+			print("abs(Lsorted[i][6] - Lsorted[j][6])", abs(Lsorted[i][6] - Lsorted[j][6]))
+			print("")
 			if abs(Lsorted[i][6] - Lsorted[j][6]) < 5 and abs(Lsorted[i][5] - Lsorted[j][5])/math.sqrt(1+Lsorted[i][4] * Lsorted[j][4]) < 10 :
 				if Lsorted[i][7] > maxlong :
 					maxlong = Lsorted[i][7]
