@@ -8,7 +8,7 @@ cap = 0
 pici = 0
 def getpic():
 	global pici
-	frame = cv2.imread("originpic"+str(1)+".jpg")
+	frame = cv2.imread("originpic"+str(2)+".jpg")
 	cv2.imshow("origin",frame)
 	cv2.waitKey(0)
 	cv2.destroyAllWindows()
@@ -63,6 +63,10 @@ def linesort(L,edge_output):
 	print("aftersorted", Lsorted)
 	Lsorted_length = len(Lsorted)
 	for line in Lsorted:
+		edge_output[:,:] = 0
+		cv2.line(edge_output,(line[0],line[1]),(line[2],line[3]),(255,255,255),1,lineType = cv2.LINE_AA)
+		cv2.imshow("aftersorted"+".jpg",edge_output)
+		cv2.waitKey(0)
 		line.append(np.sqrt(np.square(line[0]-line[2]) + np.square(line[1]-line[3])))
 	#(x1,y1,x2,y2,k,b,theta,length)
 #	print("(x1,y1,x2,y2,k,b,theta,length)" , Lsorted)
@@ -133,7 +137,7 @@ def orbitmerge(Lmerge):
 		while j < length :
 			print("abs(Lmerge[i][6] - Lmerge[j][6]) < 5",abs(Lmerge[i][6] - Lmerge[j][6]) < 5)
 			print("abs(Lmerge[i][5] - Lmerge[j][5])/math.sqrt(1+Lmerge[i][4] * Lmerge[j][4])",abs(Lmerge[i][5] - Lmerge[j][5])/math.sqrt(1+Lmerge[i][4] * Lmerge[j][4]))
-			if abs(Lmerge[i][6] - Lmerge[j][6]) < 5 and abs(Lmerge[i][5] - Lmerge[j][5])/math.sqrt(1+Lmerge[i][4] * Lmerge[j][4]) < 150 :
+			if abs(Lmerge[i][6] - Lmerge[j][6]) < 5 and abs(Lmerge[i][5] - Lmerge[j][5])/math.sqrt(1+Lmerge[i][4] * Lmerge[j][4]) < 200 :
 				j += 1
 			else :
 				break
