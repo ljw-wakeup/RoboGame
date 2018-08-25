@@ -131,7 +131,9 @@ def orbitmerge(Lmerge):
 	while i < length :
 		j = i + 1
 		while j < length :
-			if abs(Lmerge[i][6] - Lmerge[j][6]) < 5 and abs(Lmerge[i][5] - Lmerge[j][5])/math.sqrt(1+Lmerge[i][4] * Lmerge[j][4]) < 50 :
+			print("abs(Lmerge[i][6] - Lmerge[j][6]) < 5",abs(Lmerge[i][6] - Lmerge[j][6]) < 5)
+			print("abs(Lmerge[i][5] - Lmerge[j][5])/math.sqrt(1+Lmerge[i][4] * Lmerge[j][4])",abs(Lmerge[i][5] - Lmerge[j][5])/math.sqrt(1+Lmerge[i][4] * Lmerge[j][4]))
+			if abs(Lmerge[i][6] - Lmerge[j][6]) < 5 and abs(Lmerge[i][5] - Lmerge[j][5])/math.sqrt(1+Lmerge[i][4] * Lmerge[j][4]) < 150 :
 				j += 1
 			else :
 				break
