@@ -56,9 +56,9 @@ def detectline(img):
 			theta = math.atan(k)*180.0/(math.pi)	    
 		L.append([x1,y1,x2,y2,k,b,theta])
 #	print("originL", L)   
-	return L
+	return L,edge_output
 	
-def linesort(L):
+def linesort(L,edge_output):
 	Lsorted = sorted(L, key = lambda x:(x[6],x[4]))
 #	print("aftersorted", Lsorted)
 	Lsorted_length = len(Lsorted)
@@ -192,8 +192,8 @@ def calculateForMode(normal, considerated) :
 
 
 img = getpic()
-L = detectline(img)
-Lmerge = linesort(L)
+L,edge_output = detectline(img)
+Lmerge = linesort(L,edge_output)
 normal,considerated = orbitmerge(Lmerge)
 print(calculateForMode(normal, considerated))
 cv2.waitKey(0)
