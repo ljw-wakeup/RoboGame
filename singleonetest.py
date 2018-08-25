@@ -20,7 +20,7 @@ def getpic():
 	global pici
 	pici = pici +1
 	ret,frame = cap.read()
-	frame = cv2.imread("originpic"+str(0)+".jpg")
+#	frame = cv2.imread("originpic"+str(0)+".jpg")
 	cv2.imwrite("originpic"+str(pici)+".jpg",frame)
 	cv2.imshow("origin",frame)
 	cv2.waitKey(0)
