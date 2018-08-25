@@ -58,7 +58,7 @@ def linesort(Lsorted):
 				break
 #		print("maxlong",maxlong)
 		x = i
-		if Lsorted[i][6] > 45:
+		if abs(Lsorted[i][6]) > 45:
 			oritation_ver = True
 		else :
 			oritation_ver = False
@@ -213,7 +213,8 @@ def calculateForMode(normal, considerated) :
 		return False
 #	print(verticlelist)
 	return verticlelist[0][8]
-L = [[157, 85, 161, 20, -16.25, 2636.25, -86.47854662307778], [147, 239, 161, 28, -15.071428571428571, 2454.5, -86.20394837351816], [197, 32, 205, 146, 14.25, -2775.25, 85.98582430458897], [196, 8, 205, 145, 15.222222222222221, -2975.555555555555, 86.24144431452801]]
+L = [[110, 234, 129, 45, -9.947368421052632, 1328.2105263157896, -84.2593933610481], [165, 43, 177, 226, 15.25, -2473.25, 86.24827092947403], [168, 100, 177, 239, 15.444444444444445, -2494.6666666666665, 86.29537255792287]]
+
 Lmerge = linesort(L)
 normal,considerated = orbitmerge(Lmerge)
 print(calculateForMode(normal, considerated))

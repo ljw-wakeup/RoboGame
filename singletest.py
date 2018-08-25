@@ -120,7 +120,7 @@ def linesort(L,edge_output):
 				break
 #		print("maxlong",maxlong)
 		x = i
-		if Lsorted[i][6] > 45:
+		if abs(Lsorted[i][6]) > 45:
 			oritation_ver = True
 		else :
 			oritation_ver = False
