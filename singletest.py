@@ -60,16 +60,16 @@ def detectline(img):
 	
 def linesort(L,edge_output):
 	Lsorted = sorted(L, key = lambda x:(x[6],x[4]))
-#	print("aftersorted", Lsorted)
+	print("aftersorted", Lsorted)
 	Lsorted_length = len(Lsorted)
 	for line in Lsorted:
-		line.append(np.square(line[0]-line[2]) + np.square(line[1]-line[3]))
+		line.append(np.sqrt(np.square(line[0]-line[2]) + np.square(line[1]-line[3])))
 	#(x1,y1,x2,y2,k,b,theta,length)
 #	print("(x1,y1,x2,y2,k,b,theta,length)" , Lsorted)
 	Lmerge_first = []
 	i = 0
-	print("i ",i)
 	while i < Lsorted_length:
+		print("i",i)
 		j = i + 1
 		maxlong = 0
 		while j < Lsorted_length:
@@ -77,7 +77,7 @@ def linesort(L,edge_output):
 			print("abs(Lsorted[i][6] - Lsorted[j][6])", abs(Lsorted[i][6] - Lsorted[j][6]))
 			print("distance", abs(Lsorted[i][5] - Lsorted[j][5])/math.sqrt(1+Lsorted[i][4] * Lsorted[j][4]))
 			print("")
-			if abs(Lsorted[i][6] - Lsorted[j][6]) < 5 and abs(Lsorted[i][5] - Lsorted[j][5])/math.sqrt(1+Lsorted[i][4] * Lsorted[j][4]) < 10 :
+			if abs(Lsorted[i][6] - Lsorted[j][6]) < 5 and abs(Lsorted[i][5] - Lsorted[j][5])/math.sqrt(1+Lsorted[i][4] * Lsorted[j][4]) < 20 :
 				if Lsorted[i][7] > maxlong :
 					maxlong = Lsorted[i][7]
 				j = j + 1
@@ -90,6 +90,7 @@ def linesort(L,edge_output):
 			if Lsorted[x][7] > 0.6 * maxlong :
 				maxlinelist.append(x)
 			x += 1
+		maxlong = 0
 		print("maxlinelist",maxlinelist)
 		maxlinenum = len(maxlinelist)
 		newline = [0,0,0,0,0,0,0,0]
@@ -102,20 +103,20 @@ def linesort(L,edge_output):
 			while y < 4 :
 				newline[y] = float(newline[y])/float(maxlinenum)
 				y += 1
-			edge_output[:,:] = 0
-			cv2.line(edge_output,(newline[0],newline[1]),(newline[1],newline[2]),(255,255,255),1,lineType = cv2.LINE_AA)
-			cv2.imshow("newline"+str(i)+".jpg",edge_output)
-			cv2.waitKey(0)
-			if newline[2]-newline[0] == 0:
-				newline[4] = 0
-				newline[5] = newline[0]
-				newline[6] = 90
-				newline[7] = np.square(newline[3]-newline[1])
-			else :
-				newline[4] = (newline[3]-newline[1])/(newline[2]-newline[0])
-				newline[5] = newline[1] - newline[4] * newline[0]
-				newline[6] = math.atan(newline[4])*180.0/(math.pi)
-				newline[7] = np.square(newline[0]-newline[2]) + np.square(newline[1] - newline[3])    
+		edge_output[:,:] = 0
+		cv2.line(edge_output,(int(newline[0]),int(newline[1])),(int(newline[2]),int(newline[3])),(255,255,255),1,lineType = cv2.LINE_AA)
+		cv2.imshow("newline"+str(i)+".jpg",edge_output)
+		cv2.waitKey(0)
+		if newline[2]-newline[0] == 0:
+			newline[4] = 0
+			newline[5] = newline[0]
+			newline[6] = 90
+			newline[7] = np.sqrt(np.square(newline[3]-newline[1]))
+		else :
+			newline[4] = (newline[3]-newline[1])/(newline[2]-newline[0])
+			newline[5] = newline[1] - newline[4] * newline[0]
+			newline[6] = math.atan(newline[4])*180.0/(math.pi)
+			newline[7] = np.sqrt(np.square(newline[0]-newline[2]) + np.square(newline[1] - newline[3]))    
 			Lmerge_first.append(newline)
 		i = j
 	print("Lmerge_first",Lmerge_first)
