@@ -42,8 +42,8 @@ def detectline(img):
 	for line in lines:
 		i = i + 1
 		x1,y1,x2,y2 = line[0]
-		cv2.line(edge_output,(x1,y1),(x2,y2),(255,255,255),1,lineType = cv2.LINE_AA)
-		cv2.imshow(str(i)+".jpg",edge_output)
+#		cv2.line(edge_output,(x1,y1),(x2,y2),(255,255,255),1,lineType = cv2.LINE_AA)
+#		cv2.imshow(str(i)+".jpg",edge_output)
 		cv2.waitKey(0)
 		print("line：",line)
 		if ( x2 - x1 ) == 0 :
@@ -79,12 +79,9 @@ def linesort(L,edge_output):
 		while j < Lsorted_length:
 			print("j",j) 
 			print("abs(Lsorted[i][6] - Lsorted[j][6])", abs(Lsorted[i][6] - Lsorted[j][6]))
-			print("distance", abs(Lsorted[i][5] - Lsorted[j][5])/math.sqrt(1+Lsorted[i][4] * Lsorted[j][4]))
-			print("")
-			standardy = (Lsorted[i][1]+Lsorted[i][3]+Lsorted[j][1]+Lsorted[j][3]
-			if abs(Lsorted[i][6] - Lsorted[j][6]) < 5 :
-				if abs(Lsorted[i][6]) >45 :
-					refer_y = (Lsorted[i][1]+Lsorted[i][3]+Lsorted[j][1]+Lsorted[j][3]
+			if abs(Lsorted[i][6] - Lsorted[j][6])<5 :
+				if abs(Lsorted[i][6]) >45 and abs(Lsorted[j][6]) >45:
+					refer_y = (Lsorted[i][1]+Lsorted[i][3]+Lsorted[j][1]+Lsorted[j][3])/4
 					line_x_i = (refer_y - Lsorted[i][4])/Lsorted[i][5]
 					line_x_j = (refer_y - Lsorted[j][4])/Lsorted[j][5]
 					if abs(line_x_i - line_x_j) < 20 :
@@ -93,9 +90,8 @@ def linesort(L,edge_output):
 						j = j + 1
 					else :
 						break
-						
-				else :
-					refer_x = (Lsorted[i][0]+Lsorted[i][2]+Lsorted[j][0]+Lsorted[j][2]
+				elif abs(Lsorted[i][6]) < 45 and abs(Lsorted[j][6]) < 45 :
+					refer_x = (Lsorted[i][0]+Lsorted[i][2]+Lsorted[j][0]+Lsorted[j][2])/4
 					line_y_i = refer_x * Lsorted[i][5] + Lsorted[i][4]
 					line_y_i = refer_x * Lsorted[j][5] + Lsorted[j][4]
 					if abs(line_y_i - line_y_i) < 20 :
@@ -103,7 +99,9 @@ def linesort(L,edge_output):
 							maxlong = Lsorted[i][7]
 						j = j + 1
 					else :
-						break :
+						break
+				else :
+					break
 			else :
 				break
 		print("maxlong",maxlong)
@@ -117,15 +115,19 @@ def linesort(L,edge_output):
 		print("maxlinelist",maxlinelist)
 		maxlinenum = len(maxlinelist)
 		newline = [0,0,0,0,0,0,0,0]
+		print("maxlinelistlist", Lsorted[maxlinelist[0]])
 		for item in maxlinelist :
-			y = 0
-			while y < 4 :
-				newline[y] += Lsorted[item][y]
-				y += 1
-			y = 0
-			while y < 4 :
-				newline[y] = float(newline[y])/float(maxlinenum)
-				y += 1
+			newline[0] = newline[0]+Lsorted[item][0]
+			newline[1] = newline[1] +Lsorted[item][1]
+			newline[2] = newline[2] +Lsorted[item][2]
+			newline[3] = newline[3] +Lsorted[item][3]
+
+		print("newline",newline)
+		y = 0
+		while y < 4 :
+			newline[y] = float(newline[y])/float(maxlinenum)
+			y += 1
+		print("newline", newline)
 		edge_output[:,:] = 0
 		cv2.line(edge_output,(int(newline[0]),int(newline[1])),(int(newline[2]),int(newline[3])),(255,255,255),1,lineType = cv2.LINE_AA)
 		cv2.imshow("newline"+str(i)+".jpg",edge_output)
@@ -152,33 +154,29 @@ def orbitmerge(Lmerge):
 	length = len(Lmerge)
 	i = 0
 	while i < length :
+		print("i",i)
 		j = i + 1
 		while j < length :
-			print("abs(Lmerge[i][6] - Lmerge[j][6]) < 5",abs(Lmerge[i][6] - Lmerge[j][6]) < 5)
-			standardy = (Lmerge[i][1]+Lmerge[i][3]+Lmerge[j][1]+Lmerge[j][3]
-			if abs(Lmerge[i][6] - Lmerge[j][6]) < 5 :
+			print("j",j)
+			print("abs(Lmerge[i][6] - Lmerge[j][6]) ",abs(Lmerge[i][6] - Lmerge[j][6]))
+			if abs(Lmerge[i][6] - Lmerge[j][6]) < 10 :
 				if abs(Lmerge[i][6]) >45 :
-					refer_y = (Lmerge[i][1]+Lmerge[i][3]+Lmerge[j][1]+Lmerge[j][3]
+					refer_y = (Lmerge[i][1]+Lmerge[i][3]+Lmerge[j][1]+Lmerge[j][3])/4
 					line_x_i = (refer_y - Lmerge[i][4])/Lmerge[i][5]
 					line_x_j = (refer_y - Lmerge[j][4])/Lmerge[j][5]
 					print("distance:",abs(line_x_i - line_x_j))
 					if abs(line_x_i - line_x_j) < 70 :
-						if Lmerge[i][7] > maxlong :
-							maxlong = Lmerge[i][7]
 						j = j + 1
 					else :
 						break
-						
 				else :
-					refer_x = (Lmerge[i][0]+Lmerge[i][2]+Lmerge[j][0]+Lmerge[j][2]
+					refer_x = (Lmerge[i][0]+Lmerge[i][2]+Lmerge[j][0]+Lmerge[j][2])/4
 					line_y_i = refer_x * Lmerge[i][5] + Lmerge[i][4]
 					line_y_i = refer_x * Lmerge[j][5] + Lmerge[j][4]
 					if abs(line_y_i - line_y_i) < 20 :
-						if Lmerge[i][7] > maxlong :
-							maxlong = Lmerge[i][7]
 						j = j + 1
 					else :
-						break :
+						break
 			else :
 				break
 		if j - i == 1 :
