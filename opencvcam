@@ -3,7 +3,7 @@ import cv2
 import math
 import copy
 import time
-
+mode = 0
 cap = 0
 def initpic():
 	global cap 
@@ -11,41 +11,39 @@ def initpic():
 	cap = cv2.VideoCapture(1)
 	while True :
 		ret,frame = cap.read()
-		cv2.imshow("init",frame)
+#		cv2.imshow("init",frame)
 		b = time.clock()
 		if (b-a) > 3 :
 			break
 	return
 
 def getpic():
-	initpic()
 	ret,frame = cap.read()
-	cv2.imshow("capture", frame)
-	cv2.imwrite("test.jpg",frame)
-	cap.release()
+#	cv2.imshow("capture", frame)
+#	cv2.imwrite("test.jpg",frame)
 	cv2.destroyAllWindows()
 	return frame
 	
 def detectline(img):
 	cv2.startWindowThread()
-	cv2.namedWindow('input image',cv2.WINDOW_NORMAL)
+#	cv2.namedWindow('input image',cv2.WINDOW_NORMAL)
 	img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     #resize
 	resizeImg = cv2.resize(img,(320,240),interpolation = cv2.INTER_AREA)
-	cv2.imshow('input image', resizeImg)
-	cv2.waitKey(0)
+#	cv2.imshow('input image', resizeImg)
+#	cv2.waitKey(0)
 #BINARY has three methods ,below is Otsu
 #Gaussian
 	blur = cv2.GaussianBlur(resizeImg,(11,11),0)
 	ret, binary = cv2.threshold(blur,40,255,cv2.THRESH_BINARY)
 #    binary = cv2.adaptiveThreshold(blur,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
 #	binary = cv2.GaussianBlur(binary,(11,11),0)
-	cv2.imshow('binary', binary)
-	cv2.waitKey(0)
+#	cv2.imshow('binary', binary)
+#	cv2.waitKey(0)
 	xgrad = cv2.Sobel(binary,cv2.CV_16SC1,1,0)
 	ygrad = cv2.Sobel(binary,cv2.CV_16SC1,0,1)
 	edge_output = cv2.Canny(xgrad,ygrad,50,150)
-	cv2.imshow('canny',edge_output)
+#	cv2.imshow('canny',edge_output)
 	lines = cv2.HoughLinesP(edge_output,5, np.pi / 180, 30 ,minLineLength = 5, maxLineGap = 20)
 	i = 0
 	edge_output[:,:] = 0
@@ -54,8 +52,8 @@ def detectline(img):
 		i = i + 1
 		x1,y1,x2,y2 = line[0]
 		cv2.line(edge_output,(x1,y1),(x2,y2),(255,255,255),1,lineType = cv2.LINE_AA)
-		cv2.imshow(str(i)+".jpg",edge_output)
-		cv2.waitKey(0)
+#		cv2.imshow(str(i)+".jpg",edge_output)
+#		cv2.waitKey(0)
 		if ( x2 - x1 ) == 0 :
 			k = 0
 			b = x1
@@ -65,17 +63,17 @@ def detectline(img):
 			b = y1-k*x1
 			theta = math.atan(k)*180.0/(math.pi)	    
 		L.append([x1,y1,x2,y2,k,b,theta])
-	print("originL", L)   
+#	print("originL", L)   
 	return L
 	
 def linesort(L):
 	Lsorted = sorted(L, key = lambda x:(x[6],x[4]))
-	print("aftersorted", Lsorted)
+#	print("aftersorted", Lsorted)
 	Lsorted_length = len(Lsorted)
 	for line in Lsorted:
 		line.append(np.square(line[0]-line[2]) + np.square(line[1]-line[3]))
 	#(x1,y1,x2,y2,k,b,theta,length)
-	print("(x1,y1,x2,y2,k,b,theta,length)" , Lsorted)
+#	print("(x1,y1,x2,y2,k,b,theta,length)" , Lsorted)
 	Lmerge_first = []
 	i = 0
 	while i < Lsorted_length:
@@ -117,7 +115,7 @@ def linesort(L):
 				newline[7] = np.square(newline[0]-newline[2]) + np.square(newline[1] - newline[3])    
 			Lmerge_first.append(newline)
 		i = j
-	print("Lmerge_first",Lmerge_first)
+#	print("Lmerge_first",Lmerge_first)
 	return Lmerge_first
 
 	
@@ -130,7 +128,7 @@ def orbitmerge(Lmerge):
 		j = i + 1
 		while j < length :
 			if abs(Lmerge[i][6] - Lmerge[j][6]) < 5 and abs(Lmerge[i][5] - Lmerge[j][5])/math.sqrt(1+Lmerge[i][4] * Lmerge[j][4]) < 50 :
-			j += 1
+				j += 1
 			else :
 				break
 		if j - i == 1 :
@@ -179,21 +177,22 @@ def calculateForMode(normal, considerated) :
 			horizon += 1
 			horizonlist.append(line)
 	if mode == 0 :
-	for line in verticlelist:
-		if line[6] == 90 :
-			line.append(line[0])
-		else :
-			line.append((240 - line[5])/line[4] - 80)
-	verticlelist = sorted(verticlelist, key = lambda x:abs(x[8]))
+		for line in verticlelist:
+			if line[6] == 90 :
+				line.append(line[0])
+			else :
+				line.append((240 - line[5])/line[4] - 80)
+		verticlelist = sorted(verticlelist, key = lambda x:abs(x[8]))
 #        print(verticlelist)
 	return verticlelist[0][8]
 	
-
-img = getpic()
-L = detectline(img)
-Lmerge = linesort(L)
-normal,considerated = orbitmerge(Lmerge)
-calculateForMode(normal, considerated)
+initpic()
+while True :
+	img = getpic()
+	L = detectline(img)
+	Lmerge = linesort(L)
+	normal,considerated = orbitmerge(Lmerge)
+	print(calculateForMode(normal, considerated))
 
 
 
