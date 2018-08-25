@@ -5,6 +5,7 @@ import copy
 import time
 mode = 0
 cap = 0
+pici = 0
 def initpic():
 	global cap 
 	a = time.clock()
@@ -18,8 +19,11 @@ def initpic():
 	return
 
 def getpic():
+	global pici
+	i = i+1
 	ret,frame = cap.read()
-	cv2.imshow("originpic", frame)
+	cv2.imshow("originpic"+str(pici), frame)
+	cv2.imwrite("originpic"+str(pici)"+".jpg", frame)
 	cv2.waitKey(0)
 	cv2.destroyAllWindows()
 	return frame
@@ -53,8 +57,9 @@ def detectline(img):
 		i = i + 1
 		x1,y1,x2,y2 = line[0]
 		cv2.line(edge_output,(x1,y1),(x2,y2),(255,255,255),1,lineType = cv2.LINE_AA)
-#		cv2.imshow(str(i)+".jpg",edge_output)
-#		cv2.waitKey(0)
+		cv2.imshow(str(i)+".jpg",edge_output)
+		cv2.waitKey(0)
+		print("line：",line)
 		if ( x2 - x1 ) == 0 :
 			k = 0
 			b = x1
@@ -64,7 +69,7 @@ def detectline(img):
 			b = y1-k*x1
 			theta = math.atan(k)*180.0/(math.pi)	    
 		L.append([x1,y1,x2,y2,k,b,theta])
-	print("originL", L)   
+#	print("originL", L)   
 	return L
 	
 def linesort(L):
@@ -195,5 +200,6 @@ while True :
 	normal,considerated = orbitmerge(Lmerge)
 	print(calculateForMode(normal, considerated))
 	cv2.waitKey(0)
+	cv2.destroyAllWindows()
 
 
