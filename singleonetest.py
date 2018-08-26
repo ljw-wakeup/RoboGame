@@ -19,9 +19,9 @@ def initpic():
 def getpic():
 	global pici
 	pici = pici +1
-	ret,frame = cap.read()
-#	frame = cv2.imread("originpic"+str(0)+".jpg")
-	cv2.imwrite("originpic"+str(pici)+".jpg",frame)
+#	ret,frame = cap.read()
+	frame = cv2.imread("originpic"+str(0)+".jpg")
+#	cv2.imwrite("originpic"+str(pici)+".jpg",frame)
 	cv2.imshow("origin",frame)
 	cv2.waitKey(0)
 	return frame
@@ -91,7 +91,7 @@ def linesort(L,edge_output):
 		while j < Lsorted_length:
 			print("j",j) 
 			print("abs(Lsorted[i][6] - Lsorted[j][6])", (abs(Lsorted[i][6] - Lsorted[j][6]))%180)
-			if (abs(Lsorted[i][6] - Lsorted[j][6]) < 90 and abs(Lsorted[i][6] - Lsorted[j][6]) < 2.5) or (abs(Lsorted[i][6] - Lsorted[j][6]) > 90 and abs(abs(Lsorted[i][6]) - abs(Lsorted[j][6])) < 2.5) :
+			if (abs(Lsorted[i][6] - Lsorted[j][6]) < 90 and abs(Lsorted[i][6] - Lsorted[j][6]) < 2.5) or (abs(Lsorted[i][6] - Lsorted[j][6]) > 90 and abs(abs(180 - Lsorted[i][6]) - abs(Lsorted[j][6])) < 2.5) :
 				if abs(Lsorted[i][6]) >45 and abs(Lsorted[j][6]) >45:
 					refer_y = (Lsorted[i][1]+Lsorted[i][3]+Lsorted[j][1]+Lsorted[j][3])/4
 					line_x_i = (refer_y - Lsorted[i][4])/Lsorted[i][5]
@@ -120,6 +120,10 @@ def linesort(L,edge_output):
 				break
 #		print("maxlong",maxlong)
 		x = i
+		if abs(Lsorted[i][6]) > 45:
+			oritation_ver = True
+		else :
+			oritation_ver = False
 		maxlinelist = []
 		while x < j :
 			if Lsorted[x][7] > 0.6 * maxlong :
@@ -130,13 +134,23 @@ def linesort(L,edge_output):
 		maxlinenum = len(maxlinelist)
 		newline = [0,0,0,0,0,0,0,0]
 #		print("maxlinelistlist", Lsorted[maxlinelist[0]])
+		if oritation_ver == True :
+			for item in maxlinelist :	
+				if Lsorted[item][1] > Lsorted[item][3] :
+					Lsorted[item][1],Lsorted[item][3] = Lsorted[item][3],Lsorted[item][1]
+					Lsorted[item][0],Lsorted[item][2] = Lsorted[item][2],Lsorted[item][0]
+		else :
+			for item in maxlinelist :	
+				if Lsorted[item][0] > Lsorted[item][2] :
+					Lsorted[item][1],Lsorted[item][3] = Lsorted[item][3],Lsorted[item][1]
+					Lsorted[item][0],Lsorted[item][2] = Lsorted[item][2],Lsorted[item][0]
 		for item in maxlinelist :
 			newline[0] = newline[0]+Lsorted[item][0]
 			newline[1] = newline[1] +Lsorted[item][1]
 			newline[2] = newline[2] +Lsorted[item][2]
 			newline[3] = newline[3] +Lsorted[item][3]
 
-		print("newline",newline)
+#		print("newline",newline)
 		y = 0
 		while y < 4 :
 			newline[y] = float(newline[y])/float(maxlinenum)
@@ -173,7 +187,7 @@ def orbitmerge(Lmerge):
 		while j < length :
 			print("j",j)
 			print("abs(Lmerge[i][6] - Lmerge[j][6]) ",(abs(Lmerge[i][6] - Lmerge[j][6]))%180)
-			if (abs(Lmerge[i][6] - Lmerge[j][6]) < 90 and abs(Lmerge[i][6] - Lmerge[j][6]) < 20) or (abs(Lmerge[i][6] - Lmerge[j][6]) > 90 and abs( abs(Lmerge[i][6]) - abs(Lmerge[j][6])) < 20) :
+			if (abs(Lmerge[i][6] - Lmerge[j][6]) < 90 and abs(Lmerge[i][6] - Lmerge[j][6]) < 20) or (abs(Lmerge[i][6] - Lmerge[j][6]) > 90 and abs( abs(180 - Lmerge[i][6]) - abs(Lmerge[j][6])) < 20) :
 				if abs(Lmerge[i][6]) >45 :
 					refer_y = (Lmerge[i][1]+Lmerge[i][3]+Lmerge[j][1]+Lmerge[j][3])/4
 					line_x_i = (refer_y - Lmerge[i][4])/Lmerge[i][5]
@@ -263,12 +277,12 @@ def calculateForMode(normal, considerated) :
 	return verticlelist[0][8]
 
 initpic()
-while True :
-	img = getpic()
-	L,edge_output = detectline(img)
-	Lmerge = linesort(L,edge_output)
-	normal,considerated = orbitmerge(Lmerge)
-	print(calculateForMode(normal, considerated))
-	cv2.waitKey(0)
+
+img = getpic()
+L,edge_output = detectline(img)
+Lmerge = linesort(L,edge_output)
+normal,considerated = orbitmerge(Lmerge)
+print(calculateForMode(normal, considerated))
+cv2.waitKey(0)
 
 
