@@ -21,6 +21,7 @@ typedef struct
   int maxlength;
 	float center;
 	int cross;
+	int repeat;
 } Graycalcudef;
 void Gray_Init(void);//≥ı ºªØ
 void Read_Gray(u8* grayrequest); //∂¡ª“∂»

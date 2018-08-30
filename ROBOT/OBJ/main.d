@@ -32,4 +32,9 @@
 ..\obj\main.o: ..\SYSTEM\delay\delay.h
 ..\obj\main.o: ..\SYSTEM\usart\usart.h
 ..\obj\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
-..\obj\main.o: gray.h
+..\obj\main.o: control.h
+..\obj\main.o: ..\HARDWARE\raspi\raspi.h
+..\obj\main.o: ..\HARDWARE\high-stm32\h_stm.h
+..\obj\main.o: ..\HARDWARE\ultrasonic\ultrasonic.h
+..\obj\main.o: ..\USER\led.h
+..\obj\main.o: timer.h

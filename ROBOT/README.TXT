@@ -44,8 +44,16 @@
 			公司网站：www.alientek.com
 			技术论坛：www.openedv.com
 			
-			
-			
+引脚说明：
+灰度：PE7-14,PD0-15
+超声波 PB5,PE9（这两个脚可以随意更改）
+PWM:PC6,7,8,9 PG6,7,8 PA8
+usart1:PA9,PA10
+usart2:PA2,PA3
+
+时钟使用：
+TIM3
+
 			
 			
 			

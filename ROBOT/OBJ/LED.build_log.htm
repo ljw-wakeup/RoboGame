@@ -21,24 +21,43 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V2.0.18.0
 Dialog DLL:      TARMSTM.DLL V1.65.0.0
  
 <h2>Project:</h2>
-E:\RoboGame\RoboGame\新STM32\实验1 跑马灯实验\USER\LED.uvprojx
-Project File Date:  08/28/2018
+E:\RoboGame\RoboGame\ROBOT\USER\LED.uvprojx
+Project File Date:  08/29/2018
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 3 (build 300)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'LED'
-compiling pid.c...
+compiling main.c...
+..\HARDWARE\ultrasonic\ultrasonic.h(16): warning:  #1-D: last line of file ends without a newline
+  #endif
+main.c(44): warning:  #223-D: function "Control_changeSpeed" declared implicitly
+  			Control_changeSpeed();
+main.c(54): warning:  #111-D: statement is unreachable
+  	Control_Straight(gray_request,direction);
+main.c(111): warning:  #128-D: loop is not reachable
+  				while(1){
+main.c(114): warning:  #111-D: statement is unreachable
+  				gray_request = 0;
+main.c(133): warning:  #111-D: statement is unreachable
+  				march_in_line(2);
+main.c(104): warning:  #177-D: variable "pass_cross" was declared but never referenced
+  				int pass_cross = 0;
+main.c(326): warning:  #1-D: last line of file ends without a newline
+  }
+main.c(314): warning:  #128-D: loop is not reachable
+  	while(1){
+main.c: 9 warnings, 0 errors
 linking...
-Program Size: Code=4268 RO-data=336 RW-data=36 ZI-data=1916  
+Program Size: Code=13536 RO-data=336 RW-data=160 ZI-data=2296  
 FromELF: creating hex file...
-"..\OBJ\LED.axf" - 0 Error(s), 0 Warning(s).
+"..\OBJ\LED.axf" - 0 Error(s), 9 Warning(s).
 
 <h2>Collection of Component include folders:</h2>
-  E:\RoboGame\RoboGame\新STM32\实验1 跑马灯实验\USER\RTE
+  E:\RoboGame\RoboGame\ROBOT\USER\RTE
   C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>
