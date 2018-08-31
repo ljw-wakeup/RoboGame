@@ -9,6 +9,7 @@
 #define M2_PIN GPIO_Pin_8
 #define M3_PIN GPIO_Pin_8
 #define M4_PIN GPIO_Pin_6
+#define PWM_ORIGIN 1000
 
 #include "sys.h"
 
@@ -35,4 +36,6 @@ void PWMstraightSet(int k1, int k2, int k3, int k4);
 void straight(int direction, int adjustment[4]);
 void rotate(int direction);
 void move_stop(void);
+void adjust(int* adjustment);
+
 #endif

@@ -12,5 +12,4 @@ void ultrasonic_GPIO_init(void);
 void TIM5_Configuration(u16 arr,u16 psc);
 void trig_ultrasonic(void);
 void getultrasonic(void);
-
 #endif

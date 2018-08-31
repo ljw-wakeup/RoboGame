@@ -117,8 +117,9 @@ void TIM3_PWM_Init(u16 arr,u16 psc)
 
 
 void straight(int direction, int adjustment[4]) {
+	adjust(adjustment);
 	if(direction % 2 == 0) {
-		if (direction > 1) {
+		if (direction < 1) {
 			GPIO_SetBits(M1_GROUP, M1_PIN);
 			GPIO_SetBits(M2_GROUP, M2_PIN);
 			TIM_SetCompare1(TIM3, straight_basic[0] + adjustment[0]);
@@ -126,29 +127,29 @@ void straight(int direction, int adjustment[4]) {
 		} else {
 			GPIO_ResetBits(M1_GROUP, M1_PIN);
 			GPIO_ResetBits(M2_GROUP, M2_PIN);
-			TIM_SetCompare1(TIM3, 899- straight_basic[0] - adjustment[0]);
-			TIM_SetCompare2(TIM3, 899 - straight_basic[1] - adjustment[1]);
+			TIM_SetCompare1(TIM3, PWM_ORIGIN- straight_basic[0] - adjustment[0]);
+			TIM_SetCompare2(TIM3, PWM_ORIGIN - straight_basic[1] - adjustment[1]);
 		}		
-		GPIO_SetBits(M3_GROUP, M3_PIN);
-		TIM_SetCompare3(TIM3, 0);
-		GPIO_SetBits(M4_GROUP, M4_PIN);
-		TIM_SetCompare4(TIM3, 0);
+		GPIO_ResetBits(M3_GROUP, M3_PIN);
+		TIM_SetCompare3(TIM3, PWM_ORIGIN+1);
+		GPIO_ResetBits(M4_GROUP, M4_PIN);
+		TIM_SetCompare4(TIM3, PWM_ORIGIN+1);
 	} else {
-		if (direction > 2) {
+		if (direction < 2) {
 			GPIO_ResetBits(M3_GROUP, M3_PIN);
 			GPIO_ResetBits(M4_GROUP, M4_PIN);
-			TIM_SetCompare3(TIM3, 899 - straight_basic[2] - adjustment[2]);
-			TIM_SetCompare4(TIM3, 899 - straight_basic[3] - adjustment[3]);
+			TIM_SetCompare3(TIM3, PWM_ORIGIN - straight_basic[2] - adjustment[2]);
+			TIM_SetCompare4(TIM3, PWM_ORIGIN - straight_basic[3] - adjustment[3]);
 		} else {
 			GPIO_SetBits(M3_GROUP, M3_PIN);
 			GPIO_SetBits(M4_GROUP, M4_PIN);
 			TIM_SetCompare3(TIM3, straight_basic[2] + adjustment[2]);
 			TIM_SetCompare4(TIM3, straight_basic[3] + adjustment[3]);
 		}
-		TIM_SetCompare1(TIM3, 0);
-		GPIO_SetBits(M1_GROUP, M1_PIN);
-		TIM_SetCompare2(TIM3, 0);
-		GPIO_SetBits(M2_GROUP, M2_PIN);	
+		TIM_SetCompare1(TIM3, PWM_ORIGIN+1 );
+		GPIO_ResetBits(M1_GROUP, M1_PIN);
+		TIM_SetCompare2(TIM3, PWM_ORIGIN+1) ;
+		GPIO_ResetBits(M2_GROUP, M2_PIN);	
 	}
 }
 
@@ -159,18 +160,18 @@ void rotate(int direction) {
 		GPIO_SetBits(M2_GROUP, M2_PIN);
 		GPIO_SetBits(M3_GROUP, M3_PIN);
 		GPIO_ResetBits(M4_GROUP, M4_PIN);
-		TIM_SetCompare1(TIM3, 899 - rotate_basic[0]);
+		TIM_SetCompare1(TIM3, PWM_ORIGIN - rotate_basic[0]);
 		TIM_SetCompare2(TIM3, rotate_basic[1]);
 		TIM_SetCompare3(TIM3, rotate_basic[2]);
-		TIM_SetCompare4(TIM3, 899 - rotate_basic[3]);
+		TIM_SetCompare4(TIM3, PWM_ORIGIN - rotate_basic[3]);
 	} else {
 		GPIO_SetBits(M1_GROUP, M1_PIN);
 		GPIO_ResetBits(M2_GROUP, M2_PIN);
 		GPIO_ResetBits(M3_GROUP, M3_PIN);
 		GPIO_SetBits(M4_GROUP, M4_PIN);
 		TIM_SetCompare1(TIM3, rotate_basic[0]);
-		TIM_SetCompare2(TIM3, 899 - rotate_basic[1]);
-		TIM_SetCompare3(TIM3, 899 - rotate_basic[2]);
+		TIM_SetCompare2(TIM3, PWM_ORIGIN - rotate_basic[1]);
+		TIM_SetCompare3(TIM3, PWM_ORIGIN - rotate_basic[2]);
 		TIM_SetCompare4(TIM3, rotate_basic[3]);
 	}
 }
@@ -204,12 +205,19 @@ void PWMrotateSet( int k1, int k2, int k3, int k4){
 }
 void move_stop() {
 	  GPIO_ResetBits(M1_GROUP, M1_PIN);
-		GPIO_SetBits(M2_GROUP, M2_PIN);
-		GPIO_SetBits(M3_GROUP, M3_PIN);
+		GPIO_ResetBits(M2_GROUP, M2_PIN);
+		GPIO_ResetBits(M3_GROUP, M3_PIN);
 		GPIO_ResetBits(M4_GROUP, M4_PIN);
-		TIM_SetCompare1(TIM3, 899);
-		TIM_SetCompare2(TIM3, 0);
-		TIM_SetCompare3(TIM3, 0);
-		TIM_SetCompare4(TIM3, 899);
+		TIM_SetCompare1(TIM3, PWM_ORIGIN + 1);
+		TIM_SetCompare2(TIM3, PWM_ORIGIN + 1);
+		TIM_SetCompare3(TIM3, PWM_ORIGIN + 1);
+		TIM_SetCompare4(TIM3, PWM_ORIGIN + 1);
 }
 
+void adjust(int* adjustment){
+	int i ;
+	for(i = 0; i < 4; i++){
+		if(adjustment[i] + straight_basic[i] > PWM_ORIGIN - (int)(0.05 * PWM_ORIGIN)) adjustment[i] = PWM_ORIGIN - straight_basic[i] - (int)(0.05 * PWM_ORIGIN);
+		else if(adjustment[i] + straight_basic[i] < (int)(0.05 * PWM_ORIGIN)) adjustment[i] = -straight_basic[i] + (int)(0.05 * PWM_ORIGIN);
+	}
+}

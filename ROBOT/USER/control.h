@@ -10,8 +10,9 @@
 #define ROUND0 1000
 #define ROUND1 1000
 #define MARCH_LINES 10000
-#define STRAIGHT_BASIC_SPEED 800
+#define STRAIGHT_BASIC_SPEED 700
 #define ROTATE_BASIC_SPEED 400
+#define STRAIGHT_SPEED_CHANGE -400
 
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
@@ -31,7 +32,12 @@ void Control_pwmInit(void);
 void Control_grayInit(void);
 u8 Control_Straight(u8 grayrequest,int direction);
 u8 Control_Rotate(int direction,int angle);
-
+void Control_changeSpeed(int direction,int Dvalue);
+void Control_to_plot(void);
+u8 march_in_line(void);
+void Control_test(void);
+void Control_Stop(void);
+void Control_Begin(int direction);
 
 		 				    
 #endif

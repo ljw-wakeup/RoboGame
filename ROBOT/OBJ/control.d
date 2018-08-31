@@ -34,3 +34,4 @@
 ..\obj\control.o: pwm.h
 ..\obj\control.o: gray.h
 ..\obj\control.o: ..\SYSTEM\delay\delay.h
+..\obj\control.o: timer.h

@@ -23,42 +23,17 @@ u8 colorlist[8] = {0, 0, 1, 2, 3, 0, 4, 0};
 u8 area = 0xFF;
 int circle_status = 0; //第一轮取旗为0，第二轮取旗为1
 int cross_count = 0;
+u8 iscross;
 int leftCross_count = 0;
 u8 fetch_flag = 0;
 u8 put_flag = 0;
 
 extern u8 L_flag;
-extern u8 TIM4_mode;
-extern u8 mode1_count;
-u8 march_in_line(int direction){
-	gray_request = 2;
-	if(direction == 0){
-		TIM4_mode = 1;
-		TIM4_Int_Init(4999,7199);//500ms
-		mode1_count = 0;
-		TIM_Cmd(TIM4,ENABLE);
-		//10是调参处
-		while(mode1_count <10){
-			if(mode1_count == 5)
-			//5也是调参处，这里代表要降速的时刻
-			Control_changeSpeed();
-		Control_Straight(gray_request,direction);
-		}
-		
-	}
-	direction = 0;
-	//
-	while(1){
-		
-	}
-	Control_Straight(gray_request,direction);
-	delay_ms(MARCH_LINES);
-	
-	
-}
+
+
 
 int main(void){
-	 u8 iscross;
+
 	 delay_init();	    //延时函数初始化	  
 	 Control_grayInit();
 	 Control_pidInit();
@@ -74,7 +49,7 @@ int main(void){
 	 gray_request = 0;
 	 direction = 0;
 	
-
+/*
 	while(1)
 	{	
 		
@@ -124,13 +99,42 @@ int main(void){
 					else cross_count = 0;
 				}
 				Control_Rotate(0, QUARTER0);
-				march_in_line(0);
+				gray_request = 1;
+				direction = 3;
+				while(1){
+					Control_Straight(gray_request, direction);
+					//像摄像头索取信息，到中间位置之后开始直走。
+				}
+				march_in_line();
 				//发送放旗信息
 				//等待放好信息
+				gray_request = 2;
+				direction = 2;
 				while(1){
-					
+					iscross = Control_Straight(gray_request, direction);
+					if(iscross){
+						cross_count ++;
+						if(cross_count > 3){
+							cross_count = 0;
+							break;
+						}
+					}
+					else cross_count = 0;
 				}
-				march_in_line(2);
+				gray_request = 1;
+				direction = 3;
+				while(1){
+					iscross = Control_Straight(gray_request, direction);
+					if(iscross){
+						cross_count ++ ;
+						if(cross_count > 3){
+							cross_count = 0;
+							break;
+						}
+					}
+					else cross_count = 0;
+				}
+				
 				
 			
 		}
@@ -307,20 +311,51 @@ int main(void){
 
 
 
-
+*/
 	
-	#define ABC 
+	#define ABC
 	#ifdef ABC
+	Control_Begin(direction);
 	while(1){
-		gray_request = 0;
-		direction = 0;
+		gray_request = 1;
+		direction = 1;
+		while(1){
 		iscross = Control_Straight(gray_request,direction);
 		if(iscross){
 			cross_count++;
+			if(cross_count > 3){
+				Control_Stop();
+				delay_ms(500);
+				delay_ms(500);
+				delay_ms(500);
+				delay_ms(500);
+				delay_ms(500);
+			
+				cross_count = 0;
+				break;
+			}
 		}
+		else cross_count = 0;
 	}
+		Control_Begin(direction);
+		while(1){
+		iscross =  Control_Straight(gray_request,direction);
+		if(!iscross){
+			leftCross_count++;
+			if(leftCross_count++ > 3){
+				leftCross_count = 0;
+				break;
+			}
+		}
+		else leftCross_count = 0;
+	}
+}
 	
 	#else
+		while(1){
+			Control_test();
+			delay_ms(300);
+		}
 	
 	#endif
 }

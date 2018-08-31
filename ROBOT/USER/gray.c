@@ -47,15 +47,16 @@ void Gray_Init(void)
 void Read_Gray0(u8* grayx_list)
 {
 	u8 i;
-	for(i = 0; i < 8 ; i++){
-		grayx_list[i] = PEin((i+7));
+	//(xiabiao)2:2, 1:1,
+	for(i = 0; i < 8; i++){
+		grayx_list[i] = PEin((14-i));
 	}
 }
 
 void Read_Gray1(u8* grayx_list){
 	u8 i;
 	for(i = 0; i < 8 ; i++){
-		grayx_list[i] = PDin(i);
+		grayx_list[i] = PDin(7-i);
 	}
 }
 
@@ -110,18 +111,18 @@ void CalculFromGray(Graycalcudef* graycal_x, u8* grayx_list, u8 listlength){
 		graycal_x->repeat = repeat;   // 是否有重复数据
 		graycal_x->max_number = max;
 		graycal_x->min_number = min;
-		graycal_x->maxlength = maxlength;
+		graycal_x->maxlength = maxlength;//maxlength如果是0；那么就是没有黑线在前面
 		graycal_x->center = (float)(max+min)/2.0-((float)listlength/2.0-0.5);
 		graycal_x->cross = 0;
 		//如果是1,2号灰度工作那么拐点进行PID修正，并判断是否到达拐点
 		if(listlength == 8){
-			if(graycal_x->maxlength >= 5){
+			if(graycal_x->maxlength >= 4 || graycal_x -> repeat && graycal_x -> maxlength >= 3){
 				graycal_x->cross = 1;
 				if(graycal_x->center >= 0.5){
-					graycal_x->center = graycal_x->min_number+1;
+					graycal_x->center = graycal_x->min_number + 0.6 ;
 				}
-				else if(graycal_x->center <= -1){
-					graycal_x->center = graycal_x->max_number-1;
+				else if(graycal_x->center <= - 0.5){
+					graycal_x->center = graycal_x->max_number - 0.6;
 				}
 		  }
 			else{

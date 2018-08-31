@@ -23,7 +23,7 @@
 //psc：时钟预分频数
 //这里使用的是定时器3!
 u8 TIM4_mode = 0;
-u8 mode1_count = 0;
+u8 TIM4mode1_count = 0;
 
 void TIM4_Int_Init(u16 arr,u16 psc)
 {
@@ -62,7 +62,7 @@ void TIM4_IRQHandler(void)   //TIM3中断
 		LED1=!LED1;
 		}
 	if(TIM4_mode == 1){
-		mode1_count++;
+		TIM4mode1_count++;
 	}			
 		
 }

@@ -44,7 +44,7 @@ float increpid(PIDtypedef* PIDx, float cur_error){
 	PIDx->lastlast_error = PIDx->last_error;
 	PIDx->last_error = cur_error;
 	PIDx->last_output = cur_output;
-	return -cur_output;
+	return cur_output;
 }
 
 void resetPID(PIDtypedef* PIDx)
