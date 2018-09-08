@@ -6,7 +6,7 @@
 #include "delay.h"
 
 void EXTI15_10_IRQHandler(void);
-void EXTI9_5_IRQHandler(void);
+void EXTI4_IRQHandler(void);
 void ultrasonic_IRQ_init(void);
 void ultrasonic_GPIO_init(void);
 void TIM5_Configuration(u16 arr,u16 psc);

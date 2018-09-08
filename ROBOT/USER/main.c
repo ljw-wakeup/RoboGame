@@ -31,6 +31,9 @@ u8 put_flag = 0;
 extern u8 L_flag;
 
 
+u16 a = 0;
+
+
 
 int main(void){
 
@@ -45,6 +48,7 @@ int main(void){
 	 uart2_init(9600);	//Ê÷Ý®ÅÉ
 	 ultrasonic_IRQ_init();
    ultrasonic_GPIO_init();
+	
 	 TIM5_Configuration(19999,71);
 	 gray_request = 0;
 	 direction = 0;
@@ -313,13 +317,14 @@ int main(void){
 
 */
 	
-	#define ABC
+	#define AB
 	#ifdef ABC
 	Control_Begin(direction);
 	while(1){
 		gray_request = 1;
 		direction = 1;
 		while(1){
+		
 		iscross = Control_Straight(gray_request,direction);
 		if(iscross){
 			cross_count++;
@@ -352,9 +357,9 @@ int main(void){
 }
 	
 	#else
+		trig_ultrasonic();
 		while(1){
-			Control_test();
-			delay_ms(300);
+			a = TIM_GetCounter(TIM5);
 		}
 	
 	#endif
