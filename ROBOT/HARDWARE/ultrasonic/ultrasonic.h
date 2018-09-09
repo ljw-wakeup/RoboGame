@@ -6,7 +6,7 @@
 #include "delay.h"
 
 
-#define ULTRASONIC_TRIGTIME 25
+#define ULTRASONIC_TRIGTIME 10
 
 void EXTI15_10_IRQHandler(void);
 void EXTI4_IRQHandler(void);

@@ -116,7 +116,7 @@ void CalculFromGray(Graycalcudef* graycal_x, u8* grayx_list, u8 listlength){
 		graycal_x->cross = 0;
 		//如果是1,2号灰度工作那么拐点进行PID修正，并判断是否到达拐点
 		if(listlength == 8){
-			if(graycal_x->maxlength >= 4 || graycal_x -> repeat && graycal_x -> maxlength >= 3){
+			if(graycal_x->maxlength > 5 || graycal_x -> repeat && graycal_x -> maxlength >= 3){
 				graycal_x->cross = 1;
 				if(graycal_x->center >= 0.5){
 					graycal_x->center = graycal_x->min_number + 0.6 ;

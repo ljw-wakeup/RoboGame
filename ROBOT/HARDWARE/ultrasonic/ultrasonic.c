@@ -1,10 +1,12 @@
 #include "ultrasonic.h"
 
 
-u16 ultrasonic1=0;
+u32 ultrasonic1=0;
+u32 temp1 = 0;
 u8 valid=0;
 u8 TIM5_mode= 0;//TIM5模式为0：
 u8 TIM5_count = 0;
+u8 Exti_count = 0;
 
 void TIM5_NVIC_Configuration(){
 	
@@ -55,6 +57,7 @@ void TIM5_IRQHandler(void)   //TIM3中断
 	else if( TIM5_mode == 1){
 		if(TIM5_count == 0){
 			TIM5_mode = 0;
+			valid = 0;
 			TIM5_count = ULTRASONIC_TRIGTIME;
 			TIM5_Configuration(60, 71);
 			GPIO_SetBits(GPIOA, GPIO_Pin_5);
@@ -124,18 +127,22 @@ void EXTI4_IRQHandler(void){
 	
 	//Delay(1);
 	
-	if(!PAin(4)&&valid){	// PE6=0 falling 
+	if(!PAin(4)){	// PE6=0 falling 
+		if(valid){
 		u16 temp =TIM_GetCounter(TIM5);
-		valid=0;
-		if(ultrasonic1>temp)
-		ultrasonic1=20000 + temp - ultrasonic1;
+		valid=0;	
 		
-		else 
-			ultrasonic1=temp-ultrasonic1;
+		ultrasonic1 = (ULTRASONIC_TRIGTIME - TIM5_count) * 20000 + temp - temp1;
+		}
 	}
 	else{ //Rising
+		u16 a;
+		a = TIM5->CNT;
+		TIM5_count = ULTRASONIC_TRIGTIME; 
+//		TIM_Cmd(TIM5, DISABLE);
+		TIM5->CNT = 0;
 		valid=1;
-		ultrasonic1=TIM_GetCounter(TIM5);
+		temp1=TIM_GetCounter(TIM5);
 	}
 	
 	

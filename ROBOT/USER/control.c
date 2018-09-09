@@ -237,8 +237,8 @@ u8 march_in_line(){
 
 
 void Control_test(){
-	int adjustment[4] = {0, 0, 600, 0};
-	straight(3,adjustment);
+	int adjustment[4] = {500, 500, 500, 500};
+	straight(0,adjustment);
 }
 
 void Control_Stop(){
