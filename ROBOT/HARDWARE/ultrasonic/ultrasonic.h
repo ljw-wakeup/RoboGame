@@ -5,11 +5,16 @@
 #include "sys.h"
 #include "delay.h"
 
+
+#define ULTRASONIC_TRIGTIME 25
+
 void EXTI15_10_IRQHandler(void);
 void EXTI4_IRQHandler(void);
 void ultrasonic_IRQ_init(void);
 void ultrasonic_GPIO_init(void);
 void TIM5_Configuration(u16 arr,u16 psc);
+void TIM5_NVIC_Configuration(void);
 void trig_ultrasonic(void);
-void getultrasonic(void);
+void get_ultrasonic(void);
+void stop_ultrasonic(void);
 #endif

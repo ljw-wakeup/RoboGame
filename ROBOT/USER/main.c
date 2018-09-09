@@ -29,9 +29,7 @@ u8 fetch_flag = 0;
 u8 put_flag = 0;
 
 extern u8 L_flag;
-
-
-u16 a = 0;
+extern u16 ultrasonic1;
 
 
 
@@ -317,14 +315,15 @@ int main(void){
 
 */
 	
-	#define AB
+	#define ABC
 	#ifdef ABC
+	trig_ultrasonic();
 	Control_Begin(direction);
 	while(1){
 		gray_request = 1;
 		direction = 1;
 		while(1){
-		
+		if(ultrasonic1 < ULTRASONIC_DISTANCE) Control_Stop();
 		iscross = Control_Straight(gray_request,direction);
 		if(iscross){
 			cross_count++;
@@ -344,6 +343,7 @@ int main(void){
 	}
 		Control_Begin(direction);
 		while(1){
+		if(ultrasonic1 < ULTRASONIC_DISTANCE) Control_Stop();
 		iscross =  Control_Straight(gray_request,direction);
 		if(!iscross){
 			leftCross_count++;
@@ -359,7 +359,6 @@ int main(void){
 	#else
 		trig_ultrasonic();
 		while(1){
-			a = TIM_GetCounter(TIM5);
 		}
 	
 	#endif

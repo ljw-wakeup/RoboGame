@@ -55,7 +55,7 @@ void TIM5_IRQHandler(void)   //TIM3中断
 	else if( TIM5_mode == 1){
 		if(TIM5_count == 0){
 			TIM5_mode = 0;
-			TIM5_count = 40;
+			TIM5_count = ULTRASONIC_TRIGTIME;
 			TIM5_Configuration(60, 71);
 			GPIO_SetBits(GPIOA, GPIO_Pin_5);
 		}
@@ -78,8 +78,6 @@ EXTI_InitTypeDef EXTI_InitStructure;
 	
 RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);	 //使能PB,PE端口时钟
 
-/* 
-PE9 CH1 DJ // PE10 CH2 MD // PE11 CH6 adjust */
 GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
 GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD; 
 GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; //50M
@@ -148,14 +146,15 @@ void EXTI4_IRQHandler(void){
 
 
 	
-void getultrasonic(void){
+void get_ultrasonic(void){
+	
 
 }
 
 
 void trig_ultrasonic(void){
 	TIM5_mode = 0;
-	TIM5_count = 40;
+	TIM5_count = ULTRASONIC_TRIGTIME;
 	TIM5_Configuration(60,71);
 	TIM5_NVIC_Configuration();
 	GPIO_SetBits(GPIOA, GPIO_Pin_5);
