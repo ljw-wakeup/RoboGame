@@ -7,6 +7,7 @@ u8 valid=0;
 u8 TIM5_mode= 0;//TIM5模式为0：
 u8 TIM5_count = 0;
 u8 Exti_count = 0;
+u8 test = 1;
 
 void TIM5_NVIC_Configuration(){
 	
@@ -49,10 +50,12 @@ void TIM5_IRQHandler(void)   //TIM3中断
 		TIM_ClearITPendingBit(TIM5, TIM_IT_Update  );  //清除TIMx的中断待处理位:TIM 中断源 
 	//	LED1=!LED1;
 		}
+
 	if(	TIM5_mode == 0){
 		TIM5_mode = 1;
 	  GPIO_ResetBits(GPIOA, GPIO_Pin_5);
 	  TIM5_Configuration(19999,71);
+		TIM5_count =  ULTRASONIC_TRIGTIME;
 	}
 	else if( TIM5_mode == 1){
 		if(TIM5_count == 0){
@@ -69,7 +72,17 @@ void TIM5_IRQHandler(void)   //TIM3中断
 
 }
 
-
+void TIM5_TEST_GPIO_init(void){
+	GPIO_InitTypeDef GPIO_InitStructure;
+	
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
+	
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(GPIOC, &GPIO_InitStructure);
+	
+}
 
 
 
@@ -92,7 +105,7 @@ GPIO_EXTILineConfig(GPIO_PortSourceGPIOA,GPIO_PinSource4);
 
 EXTI_InitStructure.EXTI_Line = EXTI_Line4;
 EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
-EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
+EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
 EXTI_InitStructure.EXTI_LineCmd = ENABLE;
 EXTI_Init(&EXTI_InitStructure);
 
@@ -120,11 +133,9 @@ NVIC_Init(&NVIC_InitStructure);
 }
 
 void EXTI4_IRQHandler(void){
-	
 	if(EXTI_GetITStatus(EXTI_Line4) != RESET){
 		
-	EXTI_ClearITPendingBit(EXTI_Line4);
-	
+
 	//Delay(1);
 	
 	if(!PAin(4)){	// PE6=0 falling 
@@ -145,6 +156,7 @@ void EXTI4_IRQHandler(void){
 		temp1=TIM_GetCounter(TIM5);
 	}
 	
+		EXTI_ClearITPendingBit(EXTI_Line4);
 	
 	} 
 }

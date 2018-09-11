@@ -71,14 +71,14 @@ u8 Control_Straight(u8 grayrequest,int direction){
 			//forward
 			if(direction == 0) {
 				//有无效信息
-				if (graycal_0.repeat){
+				if (graycal_0.invalid){
 					valid_increnum ++;
-					if(valid_increnum <= 3) incre = last_trueincre;
+					if(valid_increnum <= 3) incre = increpid(&PIDf, PIDf.last_error);
 					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 160;
 					else incre = -3 * 160;
 					
 				}
-				//没有重复信息
+				//没有信息
 				else{
 					incre = increpid(&PIDf, graycal_0.center) * 160;	
 					valid_increnum = 0;
@@ -88,9 +88,9 @@ u8 Control_Straight(u8 grayrequest,int direction){
 			//backward
 			else {
 				//无效
-				if(graycal_0.repeat){
+				if(graycal_0.invalid){
 					valid_increnum ++;
-					if(valid_increnum <= 3) incre = last_trueincre;
+					if(valid_increnum <= 3) incre = increpid(&PIDb, PIDb.last_error);
 					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 160;
 					else incre = -3 * 160;
 					
@@ -116,15 +116,15 @@ u8 Control_Straight(u8 grayrequest,int direction){
 			//forward
 			if(direction == 0) {
 				if(graycal_2.maxlength > 1 || graycal_3.maxlength >1){
-					if(graycal_2.repeat && graycal_3.repeat){
+					if(graycal_2.invalid && graycal_3.invalid){
 						valid_increnum ++;
-						if(valid_increnum <= 3) incre = last_trueincre;
-						else if (valid_increnum > 3 && last_trueincre > 0 ) incre = 3 * 20;
-						else incre = -3 * 20;
+						if(valid_increnum <= 3) incre = increpid(&PIDf, PIDf.last_error);
+						else if (valid_increnum > 3 && last_trueincre > 0 )  incre = 1.5 * 20;
+						else  incre = -1.5 * 20; 
 						}
-					else if(graycal_2.repeat)	incre = increpid(&PIDf, graycal_3.center) * 20;
-					else if(graycal_3.repeat) incre = increpid(&PIDf, graycal_2.center) * 20;
-					else incre = increpid(&PIDf, (graycal_2.center + graycal_3.center) / 2.0) * 20;
+					else if(graycal_2.invalid)	{incre = increpid(&PIDf, graycal_3.center) * 20; valid_increnum = 0;}
+					else if(graycal_3.invalid) { incre = increpid(&PIDf, graycal_2.center) * 20; valid_increnum = 0;}
+					else  { incre = increpid(&PIDf, (graycal_2.center + graycal_3.center) / 2.0) * 20; valid_increnum = 0;}
 				}
 				else{
 					//向树莓派索取摄像信息进行PID；
@@ -133,15 +133,15 @@ u8 Control_Straight(u8 grayrequest,int direction){
 			//backward
 			else{
 				if(graycal_2.maxlength >1 || graycal_3.maxlength > 1){
-					if(graycal_2.repeat && graycal_3.repeat){
+					if(graycal_2.invalid && graycal_3.invalid){
 						valid_increnum ++;
-						if(valid_increnum <= 3) incre = last_trueincre;
-						else if (valid_increnum > 3 && last_trueincre > 0 ) incre = 3 * 20;
-						else incre = -3 * 20;
+						if(valid_increnum <= 3) incre = increpid(&PIDb, PIDb.last_error);
+						else if (valid_increnum > 3 && last_trueincre > 0 )  incre = 1.5 * 20; 
+						else incre = -1.5 * 20;
 						}
-					else if(graycal_2.repeat)	incre = increpid(&PIDb, graycal_3.center) * 20;
-					else if(graycal_3.repeat) incre = increpid(&PIDb, graycal_2.center) * 20;
-					else incre = increpid(&PIDb, (graycal_2.center + graycal_3.center) / 2.0) * 20;
+					else if(graycal_2.invalid)	{incre = increpid(&PIDb, graycal_3.center) * 20;  valid_increnum = 0; }
+					else if(graycal_3.invalid) {incre = increpid(&PIDb, graycal_2.center) * 20;  valid_increnum = 0; }
+					else {incre = increpid(&PIDb, (graycal_2.center + graycal_3.center) / 2.0) * 20;  valid_increnum = 0; }
 				}
 				else{
 					//向树莓派索取摄像头信息

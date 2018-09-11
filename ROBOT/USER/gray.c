@@ -74,14 +74,24 @@ void Read_Gray3(u8* grayx_list){
 	}
 }
 
-void CalculFromGray(Graycalcudef* graycal_x, u8* grayx_list, u8 listlength){
-	  int repeat = 0;
-    int maxlength = 0;
-    int curlength = 0;
-    int min = 0;
-    int max = 0;
+void CalculFromGray(Graycalcudef* graycal_x, u8* grayx_list, u8 graytab){
+	  u8 repeat = 0;
+    u8 maxlength = 0;
+    u8 curlength = 0;
+    u8 min = 0;
+    u8 max = 0;
+	  u8 listlength  = 0;
     int i;
     int j;
+		u8 cross_judge = 0;  //该值只在1,2号灰度工作时才有意义
+	//给listlength赋值
+	//给cross_judge 赋值
+		if(graytab == 1 || graytab == 0) {
+			listlength = 8;
+			if(graytab) cross_judge = CROSS_JUDGE_1;
+			else cross_judge = CROSS_JUDGE_0;
+		}
+	  else listlength = 4;
     i = 0;
     while(i < listlength){
         j = i + 1;
@@ -116,7 +126,7 @@ void CalculFromGray(Graycalcudef* graycal_x, u8* grayx_list, u8 listlength){
 		graycal_x->cross = 0;
 		//如果是1,2号灰度工作那么拐点进行PID修正，并判断是否到达拐点
 		if(listlength == 8){
-			if(graycal_x->maxlength > 5 || graycal_x -> repeat && graycal_x -> maxlength >= 3){
+			if(graycal_x->maxlength >cross_judge|| (graycal_x -> repeat && graycal_x -> maxlength >= 3)){
 				graycal_x->cross = 1;
 				if(graycal_x->center >= 0.5){
 					graycal_x->center = graycal_x->min_number + 0.6 ;
@@ -129,6 +139,8 @@ void CalculFromGray(Graycalcudef* graycal_x, u8* grayx_list, u8 listlength){
 				graycal_x->cross = 0;
 			}	
 		}
+		if( maxlength == 0 || repeat == 1) graycal_x->invalid = 1;
+		else graycal_x->invalid = 0;
 		
 }
 
@@ -139,19 +151,19 @@ void Read_Gray(u8* grayrequest){
 	u8 gray3_list[4] = {0};
 	if(grayrequest [0]){
 		Read_Gray0(gray0_list);
-		CalculFromGray(&graycal_0, gray0_list, 8);	
+		CalculFromGray(&graycal_0, gray0_list, 0);	
 	}
 	if(grayrequest[1]){
 		Read_Gray1(gray1_list);
-		CalculFromGray(&graycal_1, gray1_list, 8);	
+		CalculFromGray(&graycal_1, gray1_list, 1);	
 	}
 	if(grayrequest[2]){
 		Read_Gray2(gray2_list);
-		CalculFromGray(&graycal_2, gray2_list, 4);
+		CalculFromGray(&graycal_2, gray2_list, 2);
 	}
 	if(grayrequest[3]){
 		Read_Gray3(gray3_list);
-		CalculFromGray(&graycal_3, gray3_list, 4);
+		CalculFromGray(&graycal_3, gray3_list, 3);
 	}
 }
 

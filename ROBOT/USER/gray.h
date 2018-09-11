@@ -13,15 +13,19 @@
 //Copyright(C) 广州市星翼电子科技有限公司 2009-2019
 //All rights reserved									  
 ////////////////////////////////////////////////////////////////////////////////// 
-
+#define CROSS_JUDGE_0 5
+#define CROSS_JUDGE_1 4
+#define CROSS_JUDGE_2 4    //如果为4则无效
+#define CROSS_JUDGE_3 4    //如果为4则无效
 typedef struct 
 {
   int max_number;//区间[min_number,max_number)
 	int min_number;
   int maxlength;
 	float center;
-	int cross;
-	int repeat;
+	u8 cross;
+	u8 repeat;
+	u8 invalid;
 } Graycalcudef;
 void Gray_Init(void);//初始化
 void Read_Gray(u8* grayrequest); //读灰度

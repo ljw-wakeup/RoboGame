@@ -13,7 +13,9 @@
 #define STRAIGHT_BASIC_SPEED 700
 #define ROTATE_BASIC_SPEED 400
 #define STRAIGHT_SPEED_CHANGE -400
-#define ULTRASONIC_DISTANCE 4000
+#define ULTRASONIC_DISTANCE 1000
+#define ULTRASONIC_SLOWDOWN 2000
+
 
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途

@@ -33,6 +33,7 @@ extern u32 ultrasonic1;
 
 
 
+
 int main(void){
 
 	 delay_init();	    //延时函数初始化	  
@@ -46,6 +47,7 @@ int main(void){
 	 uart2_init(9600);	//树莓派
 	 ultrasonic_IRQ_init();
    ultrasonic_GPIO_init();
+	 TIM5_TEST_GPIO_init();
 	
 	 TIM5_Configuration(19999,71);
 	 gray_request = 0;
@@ -315,23 +317,23 @@ int main(void){
 
 */
 	
-	#define AB
+	#define ABC
 	#ifdef ABC
-//	trig_ultrasonic();
+	trig_ultrasonic();
 	while(1){
-		gray_request = 0;
+		gray_request = 2;
 		direction = 0;
 		while(1){
-		//if(ultrasonic1 < ULTRASONIC_DISTANCE) {
-			//Control_Stop();
-			//while(1){
-				//if(ultrasonic1 > 1200) break;
-			//}
-		//}
+		if(ultrasonic1 < ULTRASONIC_DISTANCE) {
+			Control_Stop();
+			while(1){
+				if(ultrasonic1 > 1200) break;
+			}
+		}
 		iscross = Control_Straight(gray_request,direction);
 		if(iscross){
 			cross_count++;
-			if(cross_count > 3){
+			if(cross_count > 5){
 				Control_Stop();
 				delay_ms(500);
 				delay_ms(500);
@@ -349,7 +351,7 @@ int main(void){
 		iscross =  Control_Straight(gray_request,direction);
 		if(!iscross){
 			leftCross_count++;
-			if(leftCross_count++ > 3){
+			if(leftCross_count++ > 10){
 				leftCross_count = 0;
 				break;
 			}
@@ -360,23 +362,17 @@ int main(void){
 	
 	#else
 		trig_ultrasonic();
+		Control_test();
 		while(1){
-			int a  = 0;
-			Control_test();
-			if(ultrasonic1 < ULTRASONIC_DISTANCE){
+			if(ultrasonic1 < 1000){
 				Control_Stop();
-				while(1){
-					if(ultrasonic1 > 5000) {
-						a++ ;
-						if(a > 3) {
-							a = 0;
-							break;
-						}
-					}
-					else a = 0;
+				while(ultrasonic1 < 1100){
+					;
 				}
+				Control_test();
 			}
 		}
-	
+			
+
 	#endif
 }
