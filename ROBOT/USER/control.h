@@ -38,6 +38,7 @@ u8 Control_Rotate(int direction,int angle);
 void Control_changeSpeed(int direction,int Dvalue);
 void Control_to_plot(void);
 u8 march_in_line(void);
+void back_in_line(void);
 void Control_test(void);
 void Control_Stop(void);
 void Control_Begin(int direction);

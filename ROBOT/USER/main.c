@@ -31,126 +31,227 @@ u8 put_flag = 0;
 extern u8 L_flag;
 extern u32 ultrasonic1;
 
-
-
-
-int main(void){
-
-	 delay_init();	    //延时函数初始化	  
-	 Control_grayInit();
-	 Control_pidInit();
-	 Control_pwmInit();
-	 delay_ms(200);
-	
-	 NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); 
-	 uart1_init(9600);	 //上STM
-	 uart2_init(9600);	//树莓派
-	 ultrasonic_IRQ_init();
-   ultrasonic_GPIO_init();
-	 TIM5_TEST_GPIO_init();
-	
-	 TIM5_Configuration(19999,71);
-	 gray_request = 0;
-	 direction = 0;
-	
-/*
-	while(1)
-	{	
-		
-		//在初始线
-		if(area == 0xFF && circle_status == 0){
-			gray_request = 0;
-			direction = 0;
-			while(1){
-				iscross = Control_Straight(gray_request,direction);
-				if(iscross){
-					cross_count ++ ;
-					if(cross_count > 3){
-						area = 0;
-						cross_count = 0;
-						break;
-					}
-				}
-				else cross_count = 0;
+//在O包含了转弯
+void o_to_a(void){
+	Control_Rotate(0, QUARTER0);
+	gray_request = 1;
+	direction = 1;
+	while(1){
+		iscross = Control_Straight(gray_request, direction);
+		if(!iscross){
+			leftCross_count ++;
+			if(leftCross_count > 5){
+				leftCross_count = 0;
+				break;
 			}
 		}
-		
-		
-		//在重要结点处并在第一轮取旗
-		else if(area == 21 && circle_status == 0){
-			//如果有旗
-			if(colorlist[area] == 1 || colorlist[area] == 2){
-				int pass_cross = 0;
-				gray_request = 0;
-				direction = 0;
-				while(1){
-					Control_Straight(gray_request,direction);
-					//寻求超声波的信息，得到则停止，等待取旗完成信息
+		else leftCross_count = 0;
+	}
+	while(1){
+		Control_Straight(gray_request, direction);
+			//像摄像头索取信息，到中间位置之后开始直走。
+	}
+}
+
+//包括了在a点转圈
+void a_to_o(void){
+	gray_request = 1;
+	direction = 3;
+	while(1){
+		iscross = Control_Straight(gray_request, direction);
+		if(iscross){
+			cross_count++;
+			if(cross_count > 5){
+				cross_count = 0;
+				break;
+			}
+		}
+		else cross_count = 0;
+	}
+	Control_Rotate(1, QUARTER1);
+}
+void a_to_b(void){
+	Control_Rotate(1, QUARTER1);
+	gray_request = 0;
+	direction = 0;
+	while(1){
+		Control_Straight(gray_request,direction);
+		//寻求超声波的信息，得到则停止，等待取旗完成信息
+	}
+}
+
+void b_to_a(void)
+{
+		gray_request = 0;
+		direction = 2;
+		while(1){
+			iscross = Control_Straight(gray_request, direction);
+			if(iscross){
+				if(cross_count > 3){
+					cross_count = 0;
+					break;
 				}
+			}
+			else cross_count = 0;
+		}
+		Control_Rotate(0, QUARTER0);
+		gray_request = 1;
+		direction = 3;
+		while(1){
+			Control_Straight(gray_request, direction);
+			//像摄像头索取信息，到中间位置之后开始直走。
+		}
+}
+
+
+void o_to_c(void){
+	Control_Rotate(0, QUARTER0);
+	gray_request = 1;
+	direction = 3;
+	while(1){
+		iscross = Control_Straight(gray_request, direction);
+		if(iscross){
+			cross_count++;
+			if(cross_count > 5){
+				cross_count = 0;
+				break;
+			}
+		}
+		else cross_count = 0;
+	}
+	while(1){
+		Control_Straight(gray_request, direction);
+			//像摄像头索取信息，到中间位置之后开始直走。
+	}
+}
+
+void o_to_b(void){
+	gray_request = 0;
+	direction = 0;
+	while(1){
+			Control_Straight(gray_request,direction);
+			//寻求超声波的信息，得到则停止，等待取旗完成信息
+	}
+}
+
+void b_to_o(void){
+	gray_request= 0;
+	direction = 2;
+	while(1){
+		iscross = Control_Straight(gray_request, direction);
+		if(iscross){
+			cross_count++;
+			if(cross_count > 5){
+				cross_count = 0;
+				break;
+			}
+		}
+		else cross_count = 0;
+	}
+	while(1){
+		iscross = Control_Straight(gray_request, direction);
+		if(!iscross){
+			leftCross_count++;
+			if(leftCross_count > 5){
+				leftCross_count = 0;
+				break;
+			}
+		}
+		else leftCross_count = 0;
+	}
+	while(1){
+		iscross = Control_Straight(gray_request, direction);
+		if(iscross){
+			cross_count++;
+			if(cross_count > 5){
+				cross_count = 0;
+				break;
+			}
+		}
+		else cross_count = 0;
+	}
+	Control_Rotate(0,	QUARTER0);
+}
+
+void area_0xff(void){
+	gray_request = 0;
+	direction = 0;
+	while(1){
+		iscross = Control_Straight(gray_request,direction);
+		if(iscross){
+			cross_count ++ ;
+			if(cross_count > 3){
+				area = 0;
+				cross_count = 0;
+				break;
+			}
+		}
+		else cross_count = 0;
+	}
+}
+
+void area_21_circle_status0(void){
+	//如果有旗
+			if(colorlist[area] == 1 || colorlist[area] == 2){
+				o_to_b();
+				//发送抓旗命令
 				while(1){
 					//寻求蓝牙停止信息
 				}
-				gray_request = 0;
-				direction = 2;
-				while(1){
-					iscross = Control_Straight(gray_request, direction);
-					if(iscross){
-						if(cross_count > 3){
-							cross_count = 0;
-							break;
-						}
-					}
-					else cross_count = 0;
-				}
-				Control_Rotate(0, QUARTER0);
-				gray_request = 1;
-				direction = 3;
-				while(1){
-					Control_Straight(gray_request, direction);
-					//像摄像头索取信息，到中间位置之后开始直走。
-				}
-				march_in_line();
+				b_to_a();
+			}
+			//如果没旗
+			else {
+				o_to_a();
+			}
+			march_in_line();
 				//发送放旗信息
 				//等待放好信息
-				gray_request = 2;
-				direction = 2;
+			back_in_line();
+			//进入第二轮取旗
+			circle_status = 1;
+			//如果在第二轮取旗在最后一条有旗子
+			if(colorlist[area] == 3 || colorlist[area] == 4){
+				a_to_b();
+				//发送抓旗子命令
 				while(1){
-					iscross = Control_Straight(gray_request, direction);
-					if(iscross){
-						cross_count ++;
-						if(cross_count > 3){
-							cross_count = 0;
-							break;
-						}
-					}
-					else cross_count = 0;
+					//抓旗子结束信息
 				}
-				gray_request = 1;
-				direction = 3;
-				while(1){
-					iscross = Control_Straight(gray_request, direction);
-					if(iscross){
-						cross_count ++ ;
-						if(cross_count > 3){
-							cross_count = 0;
-							break;
-						}
+				b_to_o();
+			}
+			else{
+				a_to_o();
+			}
+			gray_request = 0;
+			direction = 2;
+			while(1){
+				iscross = Control_Straight(gray_request, direction);
+				if(!iscross){
+					leftCross_count ++;
+					if(leftCross_count > 3){
+						area = 20;
+						circle_status = 1;
+						leftCross_count = 0;
+						break;
 					}
-					else cross_count = 0;
 				}
-				
-				
-			
-		}
+				else leftCross_count = 0;
+			}		
+}
 
-		
-		
-		//在结点且在第一轮取旗
-		else if(area % 3 == 0 && circle_status == 0){
+void area_21_circle_status1(void){
+	o_to_c();
+	march_in_line();
+	//发送放旗信息
+	//等待放好信息
+	
+}
+
+void area_atpoint_status0(void){
 			request_colorList(area);//请求colorlist
       //###判断是否识别成功
 			//有目标旗且旗子还没被拿走
-			if(colorlist[area] == 1 || colorlist[area] == 2){
+			if(colorlist[area%3] == 1 || colorlist[area%3] == 2){
 				gray_request = 0;
 				direction = 0;
 				while(1){
@@ -186,16 +287,14 @@ int main(void){
 						leftCross_count = 0;
 					}
 				}					
-			}
-		}
-		
-		
-		
-		//在结点且在第二轮取旗
-		else if(area % 3 == 0 && circle_status == 1){
+			}	
+}
+
+
+void area_atpoint_status1(void){
 			request_colorList(area);//请求colorlist
       //###判断是否识别成功
-			if(colorlist[area] == 3 || colorlist[area] == 4){
+			if(colorlist[area%3] == 3 || colorlist[area%3] == 4){
 				gray_request = 0;
 				direction = 0;
 				iscross = Control_Straight(gray_request, direction);
@@ -233,11 +332,9 @@ int main(void){
 					}
 				}
 			}
-		}
-		
-		
-		//在取旗线之间且在第一轮取旗
-		else if(area % 3 ==2 && circle_status == 0 ){
+}
+
+void area_betweenpoint_status0(void){
 			gray_request = 1 ;
 			direction = 3;
 		  iscross = Control_Straight(gray_request,direction);
@@ -248,12 +345,10 @@ int main(void){
 					cross_count = 0;
 				}
 			}
-			else cross_count = 0;		
-		}
-		
-		//在取旗线之间且在第二轮取旗
-		else if(area % 3 == 2 && circle_status == 1){
-			if(fetch_flag < 2) {
+			else cross_count = 0;			
+}
+void area_betweenpoint_status1(void){
+		if(fetch_flag < 2) {
 				gray_request = 1;
 				direction = 1;
 				iscross = Control_Straight(gray_request,direction);
@@ -278,13 +373,10 @@ int main(void){
 					}
 				}
 				else cross_count = 0;
-			}
-		}
-		
-		
-		
-		//在取旗线
-		else if(area % 3 == 1){
+			}	
+}
+
+void area_fetchline(){
 			if(((colorlist[area] == 1 || colorlist[area] == 2 )&& circle_status == 0 )|| ((colorlist[area] == 3 || colorlist[area] == 4 ) && circle_status ==1)){
 				gray_request =  0 ;
 			  direction = 0 ;
@@ -304,18 +396,78 @@ int main(void){
 					}
 				}
 				else cross_count = 0;		
-		 }			
-	 }
-		
-			
- }
+		 }				
 }
+int main(void){
+
+	 delay_init();	    //延时函数初始化	  
+	 Control_grayInit();
+	 Control_pidInit();
+	 Control_pwmInit();
+	 delay_ms(200);
+	
+	 NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); 
+	 uart1_init(9600);	 //上STM
+	 uart2_init(9600);	//树莓派
+	 ultrasonic_IRQ_init();
+   ultrasonic_GPIO_init();
+	 TIM5_TEST_GPIO_init();
+	
+	 TIM5_Configuration(19999,71);
+	 gray_request = 0;
+	 direction = 0;
+	
+
+	while(1)
+	{	
+		
+		//在初始线
+		if(area == 0xFF && circle_status == 0){
+			 area_0xff();
+		}
+		//在重要结点处并在第一轮取旗
+		else if(area == 21 && circle_status == 0){
+			area_21_circle_status0();
+		}
+		
+
+		//在重要结点处并在第二轮取旗
+		else if(area == 21 && circle_status == 1){
+			area_21_circle_status1();
+		}
+		
+		
+		//在结点且在第一轮取旗
+		else if(area % 3 == 0 && circle_status == 0){
+			area_atpoint_status0();
+		}
+		//在结点且在第二轮取旗
+		else if(area % 3 == 0 && circle_status == 1){
+			area_atpoint_status1();
+		}
+		
+		//在取旗线之间且在第一轮取旗
+		else if(area % 3 ==2 && circle_status == 0 ){
+			area_betweenpoint_status0();
+
+		}
+		
+		//在取旗线之间且在第二轮取旗
+		else if(area % 3 == 2 && circle_status == 1){
+			area_betweenpoint_status1();
+		}
+		//在取旗线
+		else if(area % 3 == 1){
+			area_fetchline();		
+	 }	
+ }
 
 
 
 
 
-*/
+
+
 	
 	#define ABC
 	#ifdef ABC

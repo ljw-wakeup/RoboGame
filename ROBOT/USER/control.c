@@ -234,6 +234,23 @@ u8 march_in_line(){
 		return 1;
 }
 
+void back_in_line(){
+	u8 gray_request = 2;
+	int direction = 2;
+	u8 iscross;
+	int cross_count;
+	while(1){
+		iscross = Control_Straight(gray_request, direction);
+		if(iscross){
+				cross_count ++;
+				if(cross_count > 5){
+					cross_count = 0;
+					break;
+				}
+		}
+		else cross_count = 0;
+	}
+}
 
 
 void Control_test(){
