@@ -1,0 +1,7 @@
+s停止
+
+
+d [1,2,3,4][adapter1，adapter2] 调整电缸运行时间  adapter1×adapter2 （单位ms）使用要求adapter2<1000
+
+
+t [1,2,3,4][motor高八位][motor第八位][speed] 调整步进电机行程和速度
