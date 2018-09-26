@@ -29,6 +29,9 @@ extern Graycalcudef graycal_3;
 
 extern u8 TIM4_mode;
 extern u8 TIM4mode1_count;
+u8 CON_grayrequest;
+int CON_direction;
+u8 CON_cross;
 
 
 void Control_pidInit(){
@@ -40,13 +43,13 @@ void Control_pidInit(){
 	
 	pidSetPoint(&PIDf, 0.0);
 	pidSetPoint(&PIDb, 0.0);
-	pidSetPoint(&PIDl, 0.0);
-	pidSetPoint(&PIDr, 0.0);
+	pidSetPoint(&PIDl, 1);
+	pidSetPoint(&PIDr, 1);
 	
-	pidSetpara(&PIDf, 1, 0, 0);
-	pidSetpara(&PIDb, 1, 0, 0);
-	pidSetpara(&PIDl, 1, 0, 0);
-	pidSetpara(&PIDr, 1, 0, 0);
+	pidSetpara(&PIDf, 4, 0, 0);
+	pidSetpara(&PIDb, 2.5, 0, 5);
+	pidSetpara(&PIDl, 2.5, 0, 5);
+	pidSetpara(&PIDr, 2.5, 0, 5);
 	
 }
 
@@ -58,6 +61,50 @@ void Control_pwmInit(){
 void Control_grayInit(){
 	Gray_Init();
 }
+
+
+
+void TIM4_Int_Init(u16 arr,u16 psc)
+{
+  TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+	NVIC_InitTypeDef NVIC_InitStructure;
+
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE); //时钟使能
+	
+	//定时器TIM3初始化
+	TIM_TimeBaseStructure.TIM_Period = arr; //设置在下一个更新事件装入活动的自动重装载寄存器周期的值	
+	TIM_TimeBaseStructure.TIM_Prescaler =psc; //设置用来作为TIMx时钟频率除数的预分频值
+	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1; //设置时钟分割:TDTS = Tck_tim
+	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  //TIM向上计数模式
+	TIM_TimeBaseInit(TIM4, &TIM_TimeBaseStructure); //根据指定的参数初始化TIMx的时间基数单位
+ 
+	TIM_ITConfig(TIM4,TIM_IT_Update,ENABLE ); //使能指定的TIM4中断,允许更新中断
+
+	//中断优先级NVIC设置
+	NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;  //TIM4中断
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;  //先占优先级0级
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;  //从优先级3级
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; //IRQ通道被使能
+	NVIC_Init(&NVIC_InitStructure);  //初始化NVIC寄存器
+
+
+	TIM_Cmd(TIM4,DISABLE);  //失能TIMx					 
+}
+
+
+//定时器4中断服务程序
+void TIM4_IRQHandler(void)   //TIM3中断
+{
+	if (TIM_GetITStatus(TIM4, TIM_IT_Update) != RESET) //检查指定的TIM中断发生与否:TIM 中断源 
+		{
+		TIM_ClearITPendingBit(TIM4, TIM_IT_Update  );  //清除TIMx的中断待处理位:TIM 中断源 
+		}
+	CON_cross = Control_Straight(CON_grayrequest,CON_direction);
+		
+}
+
+
+
 u8 Control_Straight(u8 grayrequest,int direction){
 	int incre = 0;
 	int adjustment[4] = {0,0,0,0};
@@ -74,13 +121,13 @@ u8 Control_Straight(u8 grayrequest,int direction){
 				if (graycal_0.invalid){
 					valid_increnum ++;
 					if(valid_increnum <= 3) incre = increpid(&PIDf, PIDf.last_error);
-					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 160;
-					else incre = -3 * 160;
+					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 90;
+					else incre = -3 * 90;
 					
 				}
 				//没有信息
 				else{
-					incre = increpid(&PIDf, graycal_0.center) * 160;	
+					incre = increpid(&PIDf, graycal_0.center) * 90;	
 					valid_increnum = 0;
 					last_trueincre = incre;
 				}
@@ -91,12 +138,12 @@ u8 Control_Straight(u8 grayrequest,int direction){
 				if(graycal_0.invalid){
 					valid_increnum ++;
 					if(valid_increnum <= 3) incre = increpid(&PIDb, PIDb.last_error);
-					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 160;
-					else incre = -3 * 160;
+					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 90;
+					else incre = -3 * 90;
 					
 				}
 				else{
-					incre = increpid(&PIDf, graycal_0.center) * 160;	
+					incre = increpid(&PIDf, graycal_0.center) * 90;	
 					valid_increnum = 0;
 					last_trueincre = incre;
 				}
@@ -136,12 +183,12 @@ u8 Control_Straight(u8 grayrequest,int direction){
 					if(graycal_2.invalid && graycal_3.invalid){
 						valid_increnum ++;
 						if(valid_increnum <= 3) incre = increpid(&PIDb, PIDb.last_error);
-						else if (valid_increnum > 3 && last_trueincre > 0 )  incre = 1.5 * 20; 
+						else if (valid_increnum > 3 && last_trueincre > 0 )  incre = 1.5 * 90; 
 						else incre = -1.5 * 20;
 						}
-					else if(graycal_2.invalid)	{incre = increpid(&PIDb, graycal_3.center) * 20;  valid_increnum = 0; }
-					else if(graycal_3.invalid) {incre = increpid(&PIDb, graycal_2.center) * 20;  valid_increnum = 0; }
-					else {incre = increpid(&PIDb, (graycal_2.center + graycal_3.center) / 2.0) * 20;  valid_increnum = 0; }
+					else if(graycal_2.invalid)	{incre = increpid(&PIDb, graycal_3.center) * 90;  valid_increnum = 0; }
+					else if(graycal_3.invalid) {incre = increpid(&PIDb, graycal_2.center) * 90;  valid_increnum = 0; }
+					else {incre = increpid(&PIDb, (graycal_2.center + graycal_3.center) / 2.0) * 90;  valid_increnum = 0; }
 				}
 				else{
 					//向树莓派索取摄像头信息
@@ -164,12 +211,12 @@ u8 Control_Straight(u8 grayrequest,int direction){
 				if (graycal_1.repeat){
 					valid_increnum ++;
 					if(valid_increnum <= 3) incre = last_trueincre;
-					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 160;
-					else incre = -3 * 20;
+					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 90;
+					else incre = -3 * 90;
 				}
 				//没有重复信息
 				else{
-					incre = increpid(&PIDr, graycal_1.center) * 160;	
+					incre = increpid(&PIDr, graycal_1.center) * 90;	
 					valid_increnum = 0;
 					last_trueincre = incre;
 				}
@@ -179,12 +226,12 @@ u8 Control_Straight(u8 grayrequest,int direction){
 				if (graycal_1.repeat){
 					valid_increnum ++;
 					if(valid_increnum <= 3) incre = last_trueincre;
-					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 160;
-					else incre = -3 * 20;
+					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 90;
+					else incre = -3 * 90;
 				}
 				//没有重复信息
 				else{
-					incre = increpid(&PIDl, graycal_1.center) * 160;	
+					incre = increpid(&PIDl, graycal_1.center) * 90;	
 					valid_increnum = 0;
 					last_trueincre = incre;
 				}
@@ -203,6 +250,10 @@ u8 Control_Straight(u8 grayrequest,int direction){
 
 u8 Control_Rotate(int direction, int angle){
 	rotate(direction);
+	if(angle >= 1000){
+		delay_ms(1000);
+		angle -= 1000;
+	}
 	delay_ms(angle);
 	return 0;
 }
@@ -254,11 +305,12 @@ void back_in_line(){
 
 
 void Control_test(){
-	int adjustment[4] = {500, 500, 500, 500};
-	straight(0,adjustment);
+	int adjustment[4] = {200, 200, 200, 200};
+	straight(1,adjustment);
 }
 
 void Control_Stop(){
+	Control_PID_Stop();
 	move_stop();
 }
  
@@ -274,4 +326,52 @@ void Control_Begin(int direction){
 		straight(direction,adjustment);
 		delay_ms(100);
 	}
+}
+
+void Control_PID_Begin(){
+	resetPID(&PIDf);
+	resetPID(&PIDb);
+	resetPID(&PIDl);
+	resetPID(&PIDr);
+	TIM_Cmd(TIM4,ENABLE);
+}
+
+void Control_PID_Stop(){
+	TIM_Cmd(TIM4, DISABLE);
+}
+
+u8 Control_Cal_Gray(u8 grayrequest,int direction){
+	u8 gray[4] = {0,0,0,0};
+	//forward or backward
+	if (direction == 0 || direction == 2){
+		//正常直走
+		if(grayrequest == 0){
+			gray[0] = 1;
+			Read_Gray(gray);
+			//forward
+		
+			//backward
+			if (graycal_0.cross) return 1;
+			return 0;
+		}
+		//双线直走
+		else if (grayrequest == 2){	
+		  gray[2] = 1;
+			gray[3] = 1;
+			gray[0] = 1;
+			Read_Gray(gray);
+			if(graycal_0.cross) return 1;
+			return 0;
+		}
+	}
+	//right or left 
+  else{
+		if(grayrequest == 1){
+			gray[1] = 1;
+			Read_Gray(gray);
+			if(graycal_1.cross) return 1;
+			return 0;
+		}
+	}
+	return 0;
 }

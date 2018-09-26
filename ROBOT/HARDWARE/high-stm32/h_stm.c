@@ -1,7 +1,7 @@
 #include "h_stm.h"
 
 //////////////////////////////////////////////////////////////////////////////////	 
-//±¾³ÌĞòÖ»¹©Ñ§Ï°Ê¹ÓÃ£¬Î´¾­×÷ÕßĞí¿É£¬²»µÃÓÃÓÚÆäËüÈÎºÎÓÃÍ¾
+//±¾³ÌĞòÖ»¹Ñ§Ï°Ê¹ÓÃ£¬Î´¾­×÷ÕßĞí¿É£¬²»µÃÓÃÓÚÆäËüÈÎºÎÓÃÍ¾
 //ALIENTEK ¾«Ó¢STM32¿ª·¢°å
 //LEDÇı¶¯´úÂë	   
 //ÕıµãÔ­×Ó@ALIENTEK
@@ -97,6 +97,15 @@ void Back(){
 	B_flag=0;
 }
 
+void waite_L(){
+	while(!Ld_flag){}
+	Ld_flag=0;
+}
+
+void waite_R(){
+	while(!Rd_flag){}
+	Rd_flag=0;
+}
 void send_instruction(u8 instruction){
 	switch(instruction){
 		case 1:
@@ -118,8 +127,10 @@ void send_instruction(u8 instruction){
 			Back();
 			break;
 		case 7:
+			waite_L();
 			break;
 		case 8:
+			waite_R();
 			break;
 		case 9:
 			break;

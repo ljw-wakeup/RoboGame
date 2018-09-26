@@ -53,9 +53,10 @@ usart2:PA2,PA3
 
 时钟使用：
 TIM3:PWM 优先级：(0,3)
-TIM5:超声波(0,1)
+TIM5:超声波(0,2)
+TIM4:PID_CONTROL (0,3)
 			
-TIM5测试： PC11
+TIM5测试： PC11()
 
 			
 			

@@ -55,14 +55,14 @@ void Read_Gray0(u8* grayx_list)
 
 void Read_Gray1(u8* grayx_list){
 	u8 i;
-	for(i = 0; i < 8 ; i++){
+	for(i = 0; i < 7 ; i++){
 		grayx_list[i] = PDin(7-i);
 	}
 }
 
 void Read_Gray2(u8* grayx_list){
 	u8 i;
-	for(i = 0; i < 4 ; i++){
+	for(i = 0; i < 3 ; i++){
 		grayx_list[i] = PDin((8+i));
 	}
 }
@@ -86,12 +86,16 @@ void CalculFromGray(Graycalcudef* graycal_x, u8* grayx_list, u8 graytab){
 		u8 cross_judge = 0;  //该值只在1,2号灰度工作时才有意义
 	//给listlength赋值
 	//给cross_judge 赋值
-		if(graytab == 1 || graytab == 0) {
+	  if(graytab == 0){
 			listlength = 8;
-			if(graytab) cross_judge = CROSS_JUDGE_1;
-			else cross_judge = CROSS_JUDGE_0;
+			cross_judge = CROSS_JUDGE_0;
 		}
-	  else listlength = 4;
+	  else if(graytab == 1){
+			listlength = 7;
+			cross_judge = CROSS_JUDGE_1;
+		}
+	  else if(graytab = 2) listlength = 3;
+		else listlength = 4;
     i = 0;
     while(i < listlength){
         j = i + 1;
@@ -122,10 +126,12 @@ void CalculFromGray(Graycalcudef* graycal_x, u8* grayx_list, u8 graytab){
 		graycal_x->max_number = max;
 		graycal_x->min_number = min;
 		graycal_x->maxlength = maxlength;//maxlength如果是0；那么就是没有黑线在前面
-		graycal_x->center = (float)(max+min)/2.0-((float)listlength/2.0-0.5);
+		if(graytab == 1) graycal_x->center = (float)(max + min)/2.0 - 3.5;
+		else if(graytab == 2) graycal_x->center = (float)(max + min)/2.0 - 1.5;
+		else graycal_x->center = (float)(max+min)/2.0-((float)listlength/2.0-0.5);
 		graycal_x->cross = 0;
 		//如果是1,2号灰度工作那么拐点进行PID修正，并判断是否到达拐点
-		if(listlength == 8){
+		if(graytab == 0 || graytab == 1){
 			if(graycal_x->maxlength >cross_judge|| (graycal_x -> repeat && graycal_x -> maxlength >= 3)){
 				graycal_x->cross = 1;
 				if(graycal_x->center >= 0.5){
@@ -146,8 +152,8 @@ void CalculFromGray(Graycalcudef* graycal_x, u8* grayx_list, u8 graytab){
 
 void Read_Gray(u8* grayrequest){
 	u8 gray0_list[8] = {0};
-	u8 gray1_list[8] = {0};
-	u8 gray2_list[4] = {0};
+	u8 gray1_list[7] = {0};
+	u8 gray2_list[3] = {0};
 	u8 gray3_list[4] = {0};
 	if(grayrequest [0]){
 		Read_Gray0(gray0_list);
