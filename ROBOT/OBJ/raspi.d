@@ -1,11 +1,11 @@
 ..\obj\raspi.o: ..\HARDWARE\raspi\raspi.c
 ..\obj\raspi.o: ..\HARDWARE\raspi\raspi.h
 ..\obj\raspi.o: ..\SYSTEM\usart\usart.h
-..\obj\raspi.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+..\obj\raspi.o: E:\Keil_v5\ARM\ARMCC\bin\..\include\stdio.h
 ..\obj\raspi.o: ..\SYSTEM\sys\sys.h
 ..\obj\raspi.o: ..\USER\stm32f10x.h
 ..\obj\raspi.o: ..\CORE\core_cm3.h
-..\obj\raspi.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\raspi.o: E:\Keil_v5\ARM\ARMCC\bin\..\include\stdint.h
 ..\obj\raspi.o: ..\USER\system_stm32f10x.h
 ..\obj\raspi.o: ..\USER\stm32f10x_conf.h
 ..\obj\raspi.o: ..\STM32F10x_FWLib\inc\stm32f10x_adc.h

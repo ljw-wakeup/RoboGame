@@ -243,7 +243,7 @@ u8 Res;
 			 
 } 
 
-void uart_send_mydata(u8 *data,u8 len)
+void uart2_send_mydata(u8 *data,u8 len)
 {
 	int i;
 	for(i=0;i<len;i++)
@@ -253,7 +253,7 @@ void uart_send_mydata(u8 *data,u8 len)
 	}
 }
 
-void uart_receive_mydata(u8 *data,u8 *len)
+void uart2_receive_mydata(u8 *data,u8 *len)
 {
 	u8 i=0;
 	*len = (USART2_RX_STA&0xFF);

@@ -18,10 +18,10 @@
 u8 left = 2;      //该变量用来标识是不是左侧场地、、原始为右侧场地
 u8 gray_request;
 int direction;
-extern u8 color_list[8]; //the same as colorlist
+extern u8 color_list[9]; //the same as colorlist
 extern u8 cam;
 u8 colorlist[8] = {0, 1, 2, 4, 3, 0, 0, 0};
-u8 area = 0x7F;
+u8 area= 0x7F;
 int circle_status = 0; //第一轮取旗为0，第二轮取旗为1
 int cross_count = 0;
 u8 iscross;
