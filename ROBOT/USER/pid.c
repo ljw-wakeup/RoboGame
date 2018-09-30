@@ -39,6 +39,7 @@ void pidSetpara(PIDtypedef* PIDx, float pp, float ii, float dd){
 float increpid(PIDtypedef* PIDx, float cur_error){
 	float incre;
 	float cur_output;
+	cur_error -= PIDx->setpoint;
 	incre = PIDx->proportion * (cur_error - PIDx->last_error) + PIDx->integral * PIDx->last_error + PIDx->derivative * (cur_error - 2 * PIDx->last_error + PIDx->lastlast_error );
 	cur_output = PIDx->last_output + incre;
 	PIDx->lastlast_error = PIDx->last_error;

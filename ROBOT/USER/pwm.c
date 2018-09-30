@@ -84,7 +84,7 @@ void TIM3_PWM_Init(u16 arr,u16 psc)
 	GPIO_Init(GPIOC, &GPIO_InitStructure);//初始化GPIO
 
 	GPIO_InitStructure.GPIO_Pin = M1_PIN | M2_PIN | M3_PIN | M4_PIN; //TIM_CH2
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;  //复用推挽输出
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;  
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(M1_GROUP, &GPIO_InitStructure);//初始化GPIO
  	GPIO_Init(M2_GROUP, &GPIO_InitStructure);
@@ -123,7 +123,8 @@ void straight(int direction, int adjustment[4]) {
 			GPIO_SetBits(M1_GROUP, M1_PIN);
 			GPIO_SetBits(M2_GROUP, M2_PIN);
 			TIM_SetCompare1(TIM3, straight_basic[0] + adjustment[0]);
-			TIM_SetCompare2(TIM3, straight_basic[1] + adjustment[1]);
+      TIM_SetCompare2(TIM3, straight_basic[1] + adjustment[1]);
+			
 			if(adjustment[1] > 0){
 				GPIO_ResetBits(M3_GROUP, M3_PIN);
 			  GPIO_ResetBits(M4_GROUP, M4_PIN);
@@ -148,17 +149,25 @@ void straight(int direction, int adjustment[4]) {
 			GPIO_ResetBits(M2_GROUP, M2_PIN);
 			TIM_SetCompare1(TIM3, PWM_ORIGIN- straight_basic[0] - adjustment[0]);
 			TIM_SetCompare2(TIM3, PWM_ORIGIN - straight_basic[1] - adjustment[1]);
+			TIM_SetCompare4(TIM3, PWM_ORIGIN+1) ;
+		  GPIO_ResetBits(M4_GROUP, M4_PIN);	
 			if(adjustment[1] > 0){
 				GPIO_ResetBits(M3_GROUP, M3_PIN);
-			  GPIO_ResetBits(M4_GROUP, M4_PIN);
-				TIM_SetCompare3(TIM3, PWM_ORIGIN - 350 - adjustment[1]* 0.5);
-			  TIM_SetCompare4(TIM3, PWM_ORIGIN - 350 - adjustment[1] *0.5);
+//			  GPIO_ResetBits(M4_GROUP, M4_PIN);
+				TIM_SetCompare3(TIM3, PWM_ORIGIN - 350 - adjustment[1]* 0.4);
+//			  TIM_SetCompare4(TIM3, PWM_ORIGIN - 350 - adjustment[1] *0.5);
 			}
-			else{
+			else if(adjustment[1] < 0){
 				GPIO_SetBits(M3_GROUP, M3_PIN);
-			  GPIO_SetBits(M4_GROUP, M4_PIN);
-			  TIM_SetCompare3(TIM3, 350 - adjustment[1] * 0.5);
-			  TIM_SetCompare4(TIM3, 350 - adjustment[1] * 0.5);
+//			  GPIO_SetBits(M4_GROUP, M4_PIN);
+			  TIM_SetCompare3(TIM3, 350 - adjustment[1] * 0.4);
+//			  TIM_SetCompare4(TIM3, 350 - adjustment[1] * 0.5);
+			}
+      else{
+				GPIO_ResetBits(M3_GROUP, M3_PIN);
+    		TIM_SetCompare3(TIM3, PWM_ORIGIN+1);
+    		GPIO_ResetBits(M4_GROUP, M4_PIN);
+    		TIM_SetCompare4(TIM3, PWM_ORIGIN+1);
 			}			
 		}		
 //		GPIO_ResetBits(M3_GROUP, M3_PIN);
@@ -171,8 +180,10 @@ void straight(int direction, int adjustment[4]) {
 			GPIO_ResetBits(M4_GROUP, M4_PIN);
 			TIM_SetCompare3(TIM3, PWM_ORIGIN - straight_basic[2] - adjustment[2]);
 			TIM_SetCompare4(TIM3, PWM_ORIGIN - straight_basic[3] - adjustment[3]);
+		
 			TIM_SetCompare2(TIM3, PWM_ORIGIN+1) ;
 		  GPIO_ResetBits(M2_GROUP, M2_PIN);	
+
 			if(adjustment[3] > 0){
 				GPIO_ResetBits(M1_GROUP, M1_PIN);
 //			  GPIO_ResetBits(M2_GROUP, M2_PIN);
@@ -202,16 +213,16 @@ void straight(int direction, int adjustment[4]) {
 //			TIM_SetCompare3(TIM3, straight_basic[2]);
 //    		TIM_SetCompare4(TIM3, straight_basic[3]);
 			if(adjustment[3] > 0){
-				GPIO_ResetBits(M1_GROUP, M1_PIN);
+//				GPIO_ResetBits(M1_GROUP, M1_PIN);
 			  GPIO_ResetBits(M2_GROUP, M2_PIN);
 //			  TIM_SetCompare1(TIM3, PWM_ORIGIN- 750  -  adjustment[3]);
-			  TIM_SetCompare2(TIM3, PWM_ORIGIN - 350 - adjustment[3]);
+			  TIM_SetCompare2(TIM3, PWM_ORIGIN - 350 - 0.5 * adjustment[3]);
 			}
 			else if(adjustment[3] < 0){
-				GPIO_SetBits(M1_GROUP, M1_PIN);
+//				GPIO_SetBits(M1_GROUP, M1_PIN);
 			  GPIO_SetBits(M2_GROUP, M2_PIN);
 //			  TIM_SetCompare1(TIM3, 750 - adjustment[3]);
-			  TIM_SetCompare2(TIM3, 350 - adjustment[3]);
+			  TIM_SetCompare2(TIM3, 350 - 0.5 * adjustment[3]);
 			}
 			else{
 				TIM_SetCompare1(TIM3, PWM_ORIGIN+1 );

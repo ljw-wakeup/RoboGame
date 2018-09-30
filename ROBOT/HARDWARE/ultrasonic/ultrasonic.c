@@ -124,8 +124,8 @@ NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 
 /* PB6 PE5 interrupt */
 NVIC_InitStructure.NVIC_IRQChannel = EXTI4_IRQn; 
-NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1; //highest priority
-NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0; 
+NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0; //highest priority
+NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2; 
 NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 NVIC_Init(&NVIC_InitStructure);
 

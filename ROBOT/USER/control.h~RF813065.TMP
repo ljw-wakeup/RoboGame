@@ -1,7 +1,7 @@
 #ifndef __CONTROL_H
 #define __CONTROL_H	 
 #include "sys.h"
-#define QUARTER0 940
+#define QUARTER0 950
 #define QUARTER1 1000
 #define TWO_QUARTER0 1000
 #define TWO_QUARTER1 1000
@@ -12,8 +12,8 @@
 #define MARCH_LINES 10000
 #define STRAIGHT_BASIC_SPEED 750
 #define ROTATE_BASIC_SPEED 700
-#define STRAIGHT_SPEED_CHANGE -300
-#define ULTRASONIC_DISTANCE 500
+#define STRAIGHT_SPEED_CHANGE -400
+#define ULTRASONIC_DISTANCE 1500
 #define ULTRASONIC_SLOWDOWN 2000
 
 
@@ -46,9 +46,6 @@ void TIM4_Int_Init(u16 arr,u16 psc);
 void Control_PID_Begin(void);
 void Control_PID_Stop(void);
 u8 Control_Cal_Gray(u8 grayrequest,int direction);
-void Control_Set_PID(u8 direction , float goal);
-void Control_Set_PID_para(u8 direction, float pp, float ii, float dd);
-void Control_Reset_PID();
 
 		 				    
 #endif

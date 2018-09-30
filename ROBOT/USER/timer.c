@@ -22,8 +22,6 @@
 //arr：自动重装值。
 //psc：时钟预分频数
 //这里使用的是定时器3!
-u8 TIM4_mode = 0;
-u8 TIM4mode1_count = 0;//减速
 
 
 void TIMx_ENABLE(void){

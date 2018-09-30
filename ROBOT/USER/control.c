@@ -27,13 +27,32 @@ extern Graycalcudef graycal_1;
 extern Graycalcudef graycal_2;
 extern Graycalcudef graycal_3;
 
-extern u8 TIM4_mode;
-extern u8 TIM4mode1_count;
+u8 TIM4_mode;
+int TIM4mode1_count;
 u8 CON_grayrequest;
 int CON_direction;
 u8 CON_cross;
 
+void Control_Set_PID(u8 direction , float goal){
+	if(direction == 0) pidSetPoint(&PIDf, goal);
+	else if (direction == 1) pidSetPoint(&PIDr, goal);
+	else if (direction == 2) pidSetPoint(&PIDb, goal);
+	else pidSetPoint(&PIDl, goal);
+}
 
+void Control_Set_PID_para(u8 direction, float pp, float ii, float dd){
+	if(direction == 0) pidSetpara(&PIDf, pp, ii, dd);
+	else if (direction == 1)  pidSetpara(&PIDr, pp, ii, dd);
+	else if (direction == 2)  pidSetpara(&PIDb, pp, ii, dd);
+	else pidSetpara(&PIDl, pp, ii, dd);
+}
+void Control_Reset_PID(){
+	resetPID(&PIDf);
+	resetPID(&PIDb);
+	resetPID(&PIDl);
+		resetPID(&PIDr);
+	
+}
 void Control_pidInit(){
 	
 	pidInit(&PIDf);
@@ -43,13 +62,13 @@ void Control_pidInit(){
 	
 	pidSetPoint(&PIDf, 0.0);
 	pidSetPoint(&PIDb, 0.0);
-	pidSetPoint(&PIDl, 1);
-	pidSetPoint(&PIDr, 1);
+	pidSetPoint(&PIDl, 0.3);
+	pidSetPoint(&PIDr, 0.3);
 	
-	pidSetpara(&PIDf, 4, 0, 0);
-	pidSetpara(&PIDb, 2.5, 0, 5);
-	pidSetpara(&PIDl, 2.5, 0, 5);
-	pidSetpara(&PIDr, 2.5, 0, 5);
+	pidSetpara(&PIDf, 2.0, 0.0, 0.6);
+	pidSetpara(&PIDb, 1.0, 0.0, 0.6);
+	pidSetpara(&PIDl, 0.8, 0.0, 0.7);
+	pidSetpara(&PIDr, 1, 0.0, 0.7);
 	
 }
 
@@ -99,6 +118,9 @@ void TIM4_IRQHandler(void)   //TIM3中断
 		{
 		TIM_ClearITPendingBit(TIM4, TIM_IT_Update  );  //清除TIMx的中断待处理位:TIM 中断源 
 		}
+	if(TIM4_mode == 1){ 
+		TIM4mode1_count++;
+	}
 	CON_cross = Control_Straight(CON_grayrequest,CON_direction);
 		
 }
@@ -143,7 +165,7 @@ u8 Control_Straight(u8 grayrequest,int direction){
 					
 				}
 				else{
-					incre = increpid(&PIDf, graycal_0.center) * 90;	
+					incre = increpid(&PIDb, graycal_0.center) * 90;	
 					valid_increnum = 0;
 					last_trueincre = incre;
 				}
@@ -162,16 +184,16 @@ u8 Control_Straight(u8 grayrequest,int direction){
 			Read_Gray(gray);
 			//forward
 			if(direction == 0) {
-				if(graycal_2.maxlength > 1 || graycal_3.maxlength >1){
+				if(graycal_2.maxlength > 0 || graycal_3.maxlength >0){
 					if(graycal_2.invalid && graycal_3.invalid){
 						valid_increnum ++;
 						if(valid_increnum <= 3) incre = increpid(&PIDf, PIDf.last_error);
-						else if (valid_increnum > 3 && last_trueincre > 0 )  incre = 1.5 * 20;
-						else  incre = -1.5 * 20; 
+						else if (valid_increnum > 3 && last_trueincre > 0 )  incre = 2.0 * 95;
+						else  incre = -2.0 * 95; 
 						}
-					else if(graycal_2.invalid)	{incre = increpid(&PIDf, graycal_3.center) * 20; valid_increnum = 0;}
-					else if(graycal_3.invalid) { incre = increpid(&PIDf, graycal_2.center) * 20; valid_increnum = 0;}
-					else  { incre = increpid(&PIDf, (graycal_2.center + graycal_3.center) / 2.0) * 20; valid_increnum = 0;}
+					else if(graycal_2.invalid)	{incre = increpid(&PIDf, graycal_3.center) * 95; valid_increnum = 0;}
+					else if(graycal_3.invalid) { incre = increpid(&PIDf, graycal_2.center) * 95; valid_increnum = 0;}
+					else  { incre = increpid(&PIDf, (graycal_2.center + graycal_3.center) / 2.0) * 95; valid_increnum = 0;}
 				}
 				else{
 					//向树莓派索取摄像信息进行PID；
@@ -272,16 +294,15 @@ u8 march_in_line(){
 	int direction = 0;
 	//forward
 		TIM4_mode = 1;
-		TIM4_Int_Init(4999,7199);//500ms
 		TIM4mode1_count = 0;
-		TIM_Cmd(TIM4,ENABLE);
 		//10是调参处,开环控制直走时间
-		while(TIM4mode1_count<10){
-			if(TIM4mode1_count == 5)
+		while(TIM4mode1_count<3000){
+			if(TIM4mode1_count == 1500)
 			//5也是调参处，这里代表要降速的时刻
 				Control_changeSpeed(direction, STRAIGHT_SPEED_CHANGE);
-		Control_Straight(gray_request,direction);
 		}
+		TIM4_mode = 0;
+		TIM4mode1_count = 0;
 		return 1;
 }
 

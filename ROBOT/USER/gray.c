@@ -94,7 +94,7 @@ void CalculFromGray(Graycalcudef* graycal_x, u8* grayx_list, u8 graytab){
 			listlength = 7;
 			cross_judge = CROSS_JUDGE_1;
 		}
-	  else if(graytab = 2) listlength = 3;
+	  else if(graytab == 2) listlength = 3;
 		else listlength = 4;
     i = 0;
     while(i < listlength){
@@ -132,13 +132,16 @@ void CalculFromGray(Graycalcudef* graycal_x, u8* grayx_list, u8 graytab){
 		graycal_x->cross = 0;
 		//如果是1,2号灰度工作那么拐点进行PID修正，并判断是否到达拐点
 		if(graytab == 0 || graytab == 1){
+			float revise;
+			if(graytab == 1) revise = 1;
+			else revise = 0.6;
 			if(graycal_x->maxlength >cross_judge|| (graycal_x -> repeat && graycal_x -> maxlength >= 3)){
 				graycal_x->cross = 1;
 				if(graycal_x->center >= 0.5){
-					graycal_x->center = graycal_x->min_number + 0.6 ;
+					graycal_x->center = graycal_x->min_number + revise ;
 				}
 				else if(graycal_x->center <= - 0.5){
-					graycal_x->center = graycal_x->max_number - 0.6;
+					graycal_x->center = graycal_x->max_number - revise;
 				}
 		  }
 			else{

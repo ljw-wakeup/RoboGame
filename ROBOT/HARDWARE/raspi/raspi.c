@@ -4,6 +4,7 @@ u8 raspi_status;
 u8 color_list[9];
 u8 cam;
 extern u8 area;
+extern int colorlist[9];
 
 void push_raspi(u8 a){
 
@@ -43,12 +44,12 @@ void TIM2_Int_Init(u16 arr,u16 psc)
 //定时器4中断服务程序
 void TIM2_IRQHandler(void)   //TIM3中断
 {
-	if (TIM_GetITStatus(TIM4, TIM_IT_Update) != RESET) //检查指定的TIM中断发生与否:TIM 中断源 
+	if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET) //检查指定的TIM中断发生与否:TIM 中断源 
 		{
-		TIM_ClearITPendingBit(TIM4, TIM_IT_Update  );  //清除TIMx的中断待处理位:TIM 中断源 
+		TIM_ClearITPendingBit(TIM2, TIM_IT_Update  );  //清除TIMx的中断待处理位:TIM 中断源 
+			
+	///zpush_raspi(area);
 		}
-	
-	push_raspi(area);
 		
 }
 
@@ -57,17 +58,26 @@ void TIM2_IRQHandler(void)   //TIM3中断
 void connect_raspi(void )	
 {
 	u16 len; 
-	u8 i;
+	u8 i; 
+	u8 j;
 if(USART2_RX_STA&0x8000)//
-		{
+{
 			len = USART2_RX_STA&0x3fff;//	
 					if(len==9) {
 						raspi_status='d';
 					for(i=0;i<len;i++){
 					color_list[i]=USART2_RX_BUF[i];
 					}
+					/*
+				  for(j = 0; j < 9; j++){
+						if(colorlist[j] != -1) colorlist[j] = color_list[j] - '0';
+					}
+					*/
+					
+					
 				} 
-			USART2_RX_STA=0;			
+			USART2_RX_STA=0;	
+		  
 }
 }
 
