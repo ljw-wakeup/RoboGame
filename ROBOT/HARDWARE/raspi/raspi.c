@@ -31,8 +31,8 @@ void TIM2_Int_Init(u16 arr,u16 psc)
 
 	//中断优先级NVIC设置
 	NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;  //TIM4中断
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;  //先占优先级0级
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;  //从优先级3级
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;  //先占优先级0级
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;  //从优先级3级
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; //IRQ通道被使能
 	NVIC_Init(&NVIC_InitStructure);  //初始化NVIC寄存器
 
@@ -60,24 +60,23 @@ void connect_raspi(void )
 	u16 len; 
 	u8 i; 
 	u8 j;
-if(USART2_RX_STA&0x8000)//
-{
-			len = USART2_RX_STA&0x3fff;//	
-					if(len==9) {
-						raspi_status='d';
-					for(i=0;i<len;i++){
-					color_list[i]=USART2_RX_BUF[i];
-					}
-					/*
-				  for(j = 0; j < 9; j++){
-						if(colorlist[j] != -1) colorlist[j] = color_list[j] - '0';
-					}
-					*/
-					
-					
-				} 
-			USART2_RX_STA=0;	
-		  
-}
+  if(USART2_RX_STA&0x8000)//
+  {
+    len = USART2_RX_STA&0x3fff;//	
+	  if(len==9&&USART2_RX_BUF[8]=='9') {
+		  raspi_status='d';
+		  for(i=0;i<len;i++){
+			  color_list[i]=USART2_RX_BUF[i];
+		  }
+			
+		  for(j = 0; j < 9; j++){
+			  if(colorlist[j] != -1 && colorlist[j] != -2) colorlist[j] = color_list[j] - '0';
+		  }	
+			
+       			
+	  } 
+		else USART2_RX_STA = 0;
+  }
+ 
 }
 

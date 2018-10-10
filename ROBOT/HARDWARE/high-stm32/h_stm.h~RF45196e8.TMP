@@ -14,7 +14,6 @@
 //All rights reserved									  
 ////////////////////////////////////////////////////////////////////////////////// 
 
-extern u8 L_flag,R_flag,P_flag,F_flag,G_flag,B_flag, Ld_flag, Rd_flag,Pd_flag,Fd_flag,end_flag,L_catch,R_catch;
-void send_instruction(u8 instruction);		
-
+extern u8 L_flag,R_flag,P_flag,F_flag,G_flag,B_flag, Ld_flag, Rd_flag,Pd_flag,Fd_flag;
+void send_instruction(u8 instruction);		 				    
 #endif

@@ -26,6 +26,8 @@ extern Graycalcudef graycal_0;
 extern Graycalcudef graycal_1;
 extern Graycalcudef graycal_2;
 extern Graycalcudef graycal_3;
+extern Graycalcudef_beta graycal_0_beta;
+extern Graycalcudef_beta graycal_1_beta;
 
 u8 TIM4_mode;
 int TIM4mode1_count;
@@ -50,7 +52,8 @@ void Control_Reset_PID(){
 	resetPID(&PIDf);
 	resetPID(&PIDb);
 	resetPID(&PIDl);
-		resetPID(&PIDr);
+	resetPID(&PIDr);
+	last_trueincre = 0;
 	
 }
 void Control_pidInit(){
@@ -65,15 +68,17 @@ void Control_pidInit(){
 	pidSetPoint(&PIDl, 0.3);
 	pidSetPoint(&PIDr, 0.3);
 	
-	pidSetpara(&PIDf, 2.0, 0.0, 0.6);
-	pidSetpara(&PIDb, 1.0, 0.0, 0.6);
-	pidSetpara(&PIDl, 0.8, 0.0, 0.7);
-	pidSetpara(&PIDr, 1, 0.0, 0.7);
+	pidSetpara(&PIDf, 0.5, 0.0, 0.4);
+	pidSetpara(&PIDb, 0.5, 0.0, 0.4);
+	//11.8V(0.2 0.0 0.25)
+	pidSetpara(&PIDl, 0.5, 0.0, 0.13);
+	pidSetpara(&PIDr, 0.7, 0.0, 0.18);
 	
 }
 
 void Control_pwmInit(){
 	TIM3_PWM_Init(PWM_ORIGIN,0);
+	Control_Stop();
 	PWMstraightInit(STRAIGHT_BASIC_SPEED, STRAIGHT_BASIC_SPEED, STRAIGHT_BASIC_SPEED, STRAIGHT_BASIC_SPEED);
 	PWMrotateInit(ROTATE_BASIC_SPEED, ROTATE_BASIC_SPEED, ROTATE_BASIC_SPEED, ROTATE_BASIC_SPEED);
 }
@@ -101,8 +106,8 @@ void TIM4_Int_Init(u16 arr,u16 psc)
 
 	//中断优先级NVIC设置
 	NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;  //TIM4中断
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;  //先占优先级0级
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;  //从优先级3级
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;  //先占优先级0级
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;  //从优先级3级
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; //IRQ通道被使能
 	NVIC_Init(&NVIC_InitStructure);  //初始化NVIC寄存器
 
@@ -117,12 +122,13 @@ void TIM4_IRQHandler(void)   //TIM3中断
 	if (TIM_GetITStatus(TIM4, TIM_IT_Update) != RESET) //检查指定的TIM中断发生与否:TIM 中断源 
 		{
 		TIM_ClearITPendingBit(TIM4, TIM_IT_Update  );  //清除TIMx的中断待处理位:TIM 中断源 
-		}
-	if(TIM4_mode == 1){ 
+			if(TIM4_mode == 1){ 
 		TIM4mode1_count++;
 	}
 	CON_cross = Control_Straight(CON_grayrequest,CON_direction);
 		
+		}
+	
 }
 
 
@@ -142,9 +148,9 @@ u8 Control_Straight(u8 grayrequest,int direction){
 				//有无效信息
 				if (graycal_0.invalid){
 					valid_increnum ++;
-					if(valid_increnum <= 3) incre = increpid(&PIDf, PIDf.last_error);
-					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 90;
-					else incre = -3 * 90;
+					if(valid_increnum <= 3) incre = increpid(&PIDf, PIDf.last_error) * 90;
+					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * PIDf.proportion * 90;
+					else incre = -3 * 90 * PIDf.proportion;
 					
 				}
 				//没有信息
@@ -159,9 +165,9 @@ u8 Control_Straight(u8 grayrequest,int direction){
 				//无效
 				if(graycal_0.invalid){
 					valid_increnum ++;
-					if(valid_increnum <= 3) incre = increpid(&PIDb, PIDb.last_error);
-					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 90;
-					else incre = -3 * 90;
+					if(valid_increnum <= 3) incre = increpid(&PIDb, PIDb.last_error) * 90;
+					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 90 * PIDb.proportion;
+					else incre = -3 * 90 * PIDb.proportion;
 					
 				}
 				else{
@@ -184,16 +190,17 @@ u8 Control_Straight(u8 grayrequest,int direction){
 			Read_Gray(gray);
 			//forward
 			if(direction == 0) {
-				if(graycal_2.maxlength > 0 || graycal_3.maxlength >0){
+				u8 cam = 0;
+				if(cam == 0){
 					if(graycal_2.invalid && graycal_3.invalid){
 						valid_increnum ++;
-						if(valid_increnum <= 3) incre = increpid(&PIDf, PIDf.last_error);
-						else if (valid_increnum > 3 && last_trueincre > 0 )  incre = 2.0 * 95;
-						else  incre = -2.0 * 95; 
+						if(valid_increnum <= 3) incre = increpid(&PIDf, PIDf.last_error) * 95;
+						else if (valid_increnum > 3 && last_trueincre > 0 )  incre = 2.5 * 95;
+						else  incre = -2.5 * 95; 
 						}
-					else if(graycal_2.invalid)	{incre = increpid(&PIDf, graycal_3.center) * 95; valid_increnum = 0;}
-					else if(graycal_3.invalid) { incre = increpid(&PIDf, graycal_2.center) * 95; valid_increnum = 0;}
-					else  { incre = increpid(&PIDf, (graycal_2.center + graycal_3.center) / 2.0) * 95; valid_increnum = 0;}
+					else if(graycal_2.invalid)	{incre = increpid(&PIDf, graycal_3.center) * 95; last_trueincre = incre;  valid_increnum = 0;}
+					else if(graycal_3.invalid) { incre = increpid(&PIDf, graycal_2.center) * 95; last_trueincre = incre; valid_increnum = 0;}
+					else  { incre = increpid(&PIDf, (graycal_2.center + graycal_3.center) / 2.0) * 95; last_trueincre = incre; valid_increnum = 0;}
 				}
 				else{
 					//向树莓派索取摄像信息进行PID；
@@ -201,16 +208,17 @@ u8 Control_Straight(u8 grayrequest,int direction){
 			}
 			//backward
 			else{
-				if(graycal_2.maxlength >1 || graycal_3.maxlength > 1){
+				u8 cam = 0;
+				if(cam == 0){
 					if(graycal_2.invalid && graycal_3.invalid){
 						valid_increnum ++;
-						if(valid_increnum <= 3) incre = increpid(&PIDb, PIDb.last_error);
-						else if (valid_increnum > 3 && last_trueincre > 0 )  incre = 1.5 * 90; 
-						else incre = -1.5 * 20;
+						if(valid_increnum <= 3) incre = increpid(&PIDb, PIDb.last_error) * 95;
+						else if (valid_increnum > 3 && last_trueincre > 0 )  incre = 2.5 * 95; 
+						else incre = -2.5 * 95;
 						}
-					else if(graycal_2.invalid)	{incre = increpid(&PIDb, graycal_3.center) * 90;  valid_increnum = 0; }
-					else if(graycal_3.invalid) {incre = increpid(&PIDb, graycal_2.center) * 90;  valid_increnum = 0; }
-					else {incre = increpid(&PIDb, (graycal_2.center + graycal_3.center) / 2.0) * 90;  valid_increnum = 0; }
+					else if(graycal_2.invalid)	{incre = increpid(&PIDb, graycal_3.center) * 95; last_trueincre = incre;  valid_increnum = 0; }
+					else if(graycal_3.invalid) {incre = increpid(&PIDb, graycal_2.center) * 95; last_trueincre = incre;  valid_increnum = 0; }
+					else {incre = increpid(&PIDb, (graycal_2.center + graycal_3.center) / 2.0) * 95; last_trueincre = incre; valid_increnum = 0; }
 				}
 				else{
 					//向树莓派索取摄像头信息
@@ -230,11 +238,11 @@ u8 Control_Straight(u8 grayrequest,int direction){
 			Read_Gray(gray);
 			//右
 			if (direction == 1) {
-				if (graycal_1.repeat){
+				if (graycal_1.invalid){
 					valid_increnum ++;
-					if(valid_increnum <= 3) incre = last_trueincre;
-					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 90;
-					else incre = -3 * 90;
+					if(valid_increnum <= 3)  incre = increpid(&PIDr, PIDr.last_error) * 90;
+					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 90 * PIDr.proportion;
+					else incre = -3 * 90 * PIDr.proportion;
 				}
 				//没有重复信息
 				else{
@@ -245,11 +253,11 @@ u8 Control_Straight(u8 grayrequest,int direction){
 			}
 			//左
 			else {
-				if (graycal_1.repeat){
+				if (graycal_1.invalid){
 					valid_increnum ++;
-					if(valid_increnum <= 3) incre = last_trueincre;
-					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 90;
-					else incre = -3 * 90;
+					if(valid_increnum <= 3) incre = increpid(&PIDl, PIDl.last_error) * 90;
+					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 90 * PIDl.proportion;
+					else incre = -3 * 90 * PIDl.proportion;
 				}
 				//没有重复信息
 				else{
@@ -269,10 +277,97 @@ u8 Control_Straight(u8 grayrequest,int direction){
 	}
 	return 0;
 }
+u8 Control_Straight_beta(u8 grayrequest,u8 graymode, int direction){
+	int incre = 0;
+	int adjustment[4] = {0,0,0,0};
+	//forward or backward
+	if (direction == 0 || direction == 2){
+		//正常直走
+			Read_Gray_beta(grayrequest, graymode);
+			//forward
+			if(direction == 0) {
+				if (graycal_0_beta.invalid){
+					valid_increnum ++;
+					if(valid_increnum <= 3) incre = increpid(&PIDf, PIDf.last_error) * 90;
+					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 90;
+					else incre = -3 * 90;
+					
+				}
+				//valid
+				else{
+					incre = increpid(&PIDf, graycal_0_beta.center) * 90;	
+					valid_increnum = 0;
+					last_trueincre = incre;
+				}
+			}
+			//backward
+			else {
+				//无效
+				if(graycal_0_beta.invalid){
+					valid_increnum ++;
+					if(valid_increnum <= 3) incre = increpid(&PIDb, PIDb.last_error) * 90;
+					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 90;
+					else incre = -3 * 90;
+					
+				}
+				else{
+					incre = increpid(&PIDb, graycal_0_beta.center) * 90;	
+					valid_increnum = 0;
+					last_trueincre = incre;
+				}
+			}
+			adjustment[0] = -incre;
+		  adjustment[1] = incre;
+			straight(direction,adjustment);
+			if (graycal_0_beta.blacknum > 3) return 1;
+			return 0;
+		}
+	//right or left 
+  else{
+			Read_Gray_beta(grayrequest,graymode);
+			//右
+			if (direction == 1) {
+				if (graycal_1_beta.invalid){
+					valid_increnum ++;
+					if(valid_increnum <= 3) incre = last_trueincre;
+					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 90;
+					else incre = -3 * 90;
+				}
+				//没有重复信息
+				else{
+					incre = increpid(&PIDr, graycal_1_beta.center) * 90;	
+					valid_increnum = 0;
+					last_trueincre = incre;
+				}
+			}
+			//左
+			else {
+				if (graycal_1_beta.invalid){
+					valid_increnum ++;
+					if(valid_increnum <= 3) incre = last_trueincre;
+					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 90;
+					else incre = -3 * 90;
+				}
+				//没有重复信息
+				else{
+					incre = increpid(&PIDl, graycal_1_beta.center) * 90;	
+					valid_increnum = 0;
+					last_trueincre = incre;
+				}
+				
+			}
+				
+			adjustment[3] = incre;
+			adjustment[2] = -incre;
+			straight(direction,adjustment);
+			if(graycal_1_beta.blacknum > 3) return 1;
+			return 0;
+		}
+	}
 
 u8 Control_Rotate(int direction, int angle){
 	rotate(direction);
-	if(angle >= 1000){
+	if(angle > 1000){
 		delay_ms(1000);
 		angle -= 1000;
 	}
@@ -289,46 +384,13 @@ void Control_to_plot(){
 	
 }
 
-u8 march_in_line(){
-	u8 gray_request = 2;
-	int direction = 0;
-	//forward
-		TIM4_mode = 1;
-		TIM4mode1_count = 0;
-		//10是调参处,开环控制直走时间
-		while(TIM4mode1_count<3000){
-			if(TIM4mode1_count == 1500)
-			//5也是调参处，这里代表要降速的时刻
-				Control_changeSpeed(direction, STRAIGHT_SPEED_CHANGE);
-		}
-		TIM4_mode = 0;
-		TIM4mode1_count = 0;
-		return 1;
-}
-
-void back_in_line(){
-	u8 gray_request = 2;
-	int direction = 2;
-	u8 iscross;
-	int cross_count;
-	while(1){
-		iscross = Control_Straight(gray_request, direction);
-		if(iscross){
-				cross_count ++;
-				if(cross_count > 5){
-					cross_count = 0;
-					break;
-				}
-		}
-		else cross_count = 0;
-	}
-}
 
 
-void Control_test(){
-	int adjustment[4] = {200, 200, 200, 200};
-	straight(1,adjustment);
+void Control_test(int direction){
+	int adjustment[4] = {0, 0, 0, 0};
+	straight_only(direction,adjustment);
 }
+
 
 void Control_Stop(){
 	Control_PID_Stop();
@@ -350,10 +412,7 @@ void Control_Begin(int direction){
 }
 
 void Control_PID_Begin(){
-	resetPID(&PIDf);
-	resetPID(&PIDb);
-	resetPID(&PIDl);
-	resetPID(&PIDr);
+	Control_Reset_PID();
 	TIM_Cmd(TIM4,ENABLE);
 }
 
@@ -395,4 +454,32 @@ u8 Control_Cal_Gray(u8 grayrequest,int direction){
 		}
 	}
 	return 0;
+}
+void Control_Begin_Only(u8 direction, int* adjustment){
+	straight_only(direction, adjustment);
+}
+
+void Control_rotate_beta(int direction, int angle){
+	if(direction == 1){
+ 	  rotate_beta(direction);
+	  if(angle >= 1000){
+		  delay_ms(1000);
+		  angle -= 1000;
+	  }
+	  delay_ms(angle);
+  }
+	else{
+		int iscross_count = 0;
+		while(1){
+			rotate_beta(direction);
+			Control_Cal_Gray(0, 0);
+			if(graycal_0.cross == 1){
+				iscross_count ++ ;
+				if(iscross_count > 2){
+					return;
+				}
+			}
+			else iscross_count = 0;
+		}
+	}
 }

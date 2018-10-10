@@ -58,7 +58,19 @@ TIM4:PID_CONTROL (0,3)
 			
 TIM5测试： PC11()
 
-			
+		RED BROWN BLACK WHITE
+		
+下发：
+上收：
+while(L_receive == 0){
+ if(收到)L_receive = L_flag = 1；
+ if(L_receive == 1){
+   抓旗子
+   L_flag = 0;
+   break;
+}
+}
+
 			
 			
 			

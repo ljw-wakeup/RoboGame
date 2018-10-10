@@ -3,7 +3,7 @@
 #include "raspi.h"
 u16 num;
 u8 flag,RFID;
-u8 L_flag=0,R_flag=0,P_flag=0,F_flag,G_flag=0,B_flag=0,Ld_flag=0,Rd_flag=0;//?? ?? ?? ?? ??rfid ???????
+u8 L_flag=0,R_flag=0,P_flag=0,F_flag,G_flag=0,B_flag=0,Ld_flag=0,Rd_flag=0,Pd_flag=0,Fd_flag=0,end_flag=0,L_catch=0,R_catch=0;//?? ?? ?? ?? ??rfid ???????
 extern u16 usart1_len,usart2_len;//??????
 u8 b_flag=0,s_flag=0;
 char information_all[50];
@@ -271,7 +271,6 @@ void get_motor(void)
 							
 				case 'L':
 					if(USART1_RX_BUF[1]=='d'){
-						if(!Ld_flag)
 							Ld_flag=1;
 						while(USART1_RX_STA&0x8000&&USART1_RX_BUF[0]=='L'&&USART1_RX_BUF[1]=='d'){		
 						USART_SendData(USART1, 'L');
@@ -286,18 +285,20 @@ void get_motor(void)
 						}
 					}
 					else if(USART1_RX_BUF[1]=='r'){
-						if(!L_flag)
 							L_flag=1;
 						
 						USART1_RX_STA=0;
 					}
-				
+				if(USART1_RX_BUF[1]=='c'){
+						L_catch=1;
 						
-					
+						USART1_RX_STA=0;
+				
+				}
+						
 					break;
 				case 'R':
 					if(USART1_RX_BUF[1]=='d'){
-						if(!Rd_flag)
 							Rd_flag=1;
 						while(USART1_RX_STA&0x8000&&USART1_RX_BUF[0]=='R'&&USART1_RX_BUF[1]=='d'){		
 						USART_SendData(USART1, 'R');
@@ -312,25 +313,71 @@ void get_motor(void)
 						}
 					}
 					else if(USART1_RX_BUF[1]=='r'){
-						if(!R_flag)
 							R_flag=1;
 						USART1_RX_STA=0;
-						
+					}
+					else if(USART1_RX_BUF[1]=='c'){
+							R_catch=1;
+						USART1_RX_STA=0;
 					}
 					break;
 				case 'P': 
-					if(USART1_RX_BUF[1]=='r'){
-						if(!P_flag)
-							P_flag=1;
-						USART1_RX_STA=0;
+					if(USART1_RX_BUF[1]=='d'){
+							Pd_flag=1;
+						while(USART1_RX_STA&0x8000&&USART1_RX_BUF[0]=='P'&&USART1_RX_BUF[1]=='d'){		
+						USART_SendData(USART1, 'P');
+						while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
+						USART_SendData(USART1, 'd');
+						while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
+						USART_SendData(USART1, 0x0d);
+						while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
+						USART_SendData(USART1, 0x0a);
+						while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
+							USART1_RX_STA=0;
+						}
+						
 						
 					}
-					break;
-				case 'F':
 					if(USART1_RX_BUF[1]=='r'){
-						F_flag=1;
-						USART1_RX_STA=0;
-						
+							P_flag=1;		
+					USART1_RX_STA=0;						
+					}
+					break;
+				case 'e':
+					if(USART1_RX_BUF[1]=='n'&&USART1_RX_BUF[2]=='d'){
+						end_flag=1;	
+						USART_SendData(USART1, 'e');
+						while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
+						USART_SendData(USART1, 'n');
+						while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
+						USART_SendData(USART1, 'd');
+						while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
+						USART_SendData(USART1, 0x0d);
+						while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
+				    USART_SendData(USART1, 0x0a);
+						while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
+							USART1_RX_STA=0;
+						}
+						break;
+				case 'F':
+					if(USART1_RX_BUF[1]=='d'){
+							Fd_flag=1;
+						while(USART1_RX_STA&0x8000&&USART1_RX_BUF[0]=='F'&&USART1_RX_BUF[1]=='d'){		
+						USART_SendData(USART1, 'F');
+						while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
+						USART_SendData(USART1, 'd');
+						while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
+						USART_SendData(USART1, 0x0d);
+						while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
+				    USART_SendData(USART1, 0x0a);
+						while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
+							USART1_RX_STA=0;
+						}
+										
+					}
+						if(USART1_RX_BUF[1]=='r'){
+							F_flag=1;		
+					USART1_RX_STA=0;						
 					}
 					break;
 				case 'G':
@@ -343,7 +390,7 @@ void get_motor(void)
 						
 					}
 					break;
-				case 'a': //ask ??????		
+				case 'a': //ask
 				sprintf(information_all,"%d",1);
 				Usart_SendString(USART1,information_all);
 				USART_SendData(USART1, 0x0d0a);

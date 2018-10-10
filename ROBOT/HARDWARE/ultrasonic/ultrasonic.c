@@ -8,13 +8,15 @@ u8 TIM5_mode= 0;//TIM5模式为0：
 u8 TIM5_count = 0;
 u8 Exti_count = 0;
 u8 test = 1;
+int testr = 0;
+u8 ultra_flag = 0;
 
 void TIM5_NVIC_Configuration(){
 	
 NVIC_InitTypeDef NVIC_InitStructure;
 //中断优先级NVIC设置
 NVIC_InitStructure.NVIC_IRQChannel = TIM5_IRQn;  //TIM5中断
-NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;  //先占优先级0级
+NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;  //先占优先级0级
 NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;  //从优先级3级
 NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; //IRQ通道被使能
 NVIC_Init(&NVIC_InitStructure);  //初始化NVIC寄存器
@@ -142,8 +144,9 @@ void EXTI4_IRQHandler(void){
 		if(valid){
 		u16 temp =TIM_GetCounter(TIM5);
 		valid=0;	
-		
 		ultrasonic1 = (ULTRASONIC_TRIGTIME - TIM5_count) * 20000 + temp - temp1;
+		TIM5_count = 0;
+    ultra_flag = 1;
 		}
 	}
 	else{ //Rising
@@ -172,6 +175,7 @@ void get_ultrasonic(void){
 
 
 void trig_ultrasonic(void){
+	ultrasonic1 = 0;
 	TIM5_mode = 0;
 	TIM5_count = ULTRASONIC_TRIGTIME;
 	TIM5_Configuration(60,71);

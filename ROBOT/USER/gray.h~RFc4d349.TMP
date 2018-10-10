@@ -1,5 +1,5 @@
-#ifndef __H_STM_H
-#define __H_STM_H	 
+#ifndef __GRAY_H
+#define __GRAY_H	 
 #include "sys.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
@@ -13,8 +13,21 @@
 //Copyright(C) 广州市星翼电子科技有限公司 2009-2019
 //All rights reserved									  
 ////////////////////////////////////////////////////////////////////////////////// 
-
-extern u8 L_flag,R_flag,P_flag,F_flag,G_flag,B_flag, Ld_flag, Rd_flag,Pd_flag,Fd_flag,end_flag,L_catch,R_catch;
-void send_instruction(u8 instruction);		
-
+#define CROSS_JUDGE_0 3
+#define CROSS_JUDGE_1 3
+#define CROSS_JUDGE_2 3    //如果为4则无效
+#define CROSS_JUDGE_3 3    //如果为4则无效
+typedef struct 
+{
+  int max_number;//区间[min_number,max_number)
+	int min_number;
+  int maxlength;
+	float center;
+	u8 cross;
+	u8 repeat;
+	u8 invalid;
+} Graycalcudef;
+void Gray_Init(void);//初始化
+void Read_Gray(u8* grayrequest); //读灰度
+		 				    
 #endif

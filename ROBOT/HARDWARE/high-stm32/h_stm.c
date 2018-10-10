@@ -17,7 +17,8 @@
 //LED IO≥ı ºªØ
 
 
-void Left_catch(){
+void Left_put(){
+	L_flag=0;
 	while(!L_flag){
 		USART_SendData(USART1, 'L');
 		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
@@ -28,10 +29,11 @@ void Left_catch(){
 		USART_SendData(USART1, 0x0a);
 		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
 	}
-	L_flag=0;
+	
 }
 
-void Right_catch(){
+void Right_put(){
+		R_flag=0;
 	while(!R_flag){
 		USART_SendData(USART1, 'R');
 		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
@@ -42,9 +44,59 @@ void Right_catch(){
 		USART_SendData(USART1, 0x0a);
 		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
 	}
-	R_flag=0;
+
+}
+void waite_L(){
+	Ld_flag=0;
+	while(!Ld_flag){}
+	
+}
+
+void waite_R(){
+	Rd_flag=0;
+	while(!Rd_flag){}
+	
+}
+void Left_catch(void){
+	L_catch=0;
+	while(!L_catch){
+		USART_SendData(USART1, 'L');
+		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
+		USART_SendData(USART1, 'c');
+		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
+		USART_SendData(USART1, 0x0d);
+		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
+		USART_SendData(USART1, 0x0a);
+		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
+	}
+	waite_L();
+}
+void Right_catch(void){
+	R_catch=0;
+	while(!R_catch){
+		USART_SendData(USART1, 'R');
+		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
+		USART_SendData(USART1, 'c');
+		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
+		USART_SendData(USART1, 0x0d);
+		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
+		USART_SendData(USART1, 0x0a);
+		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
+	}
+	waite_R();
+}
+void waite_P(){
+	Pd_flag=0;
+	while(!Pd_flag){}
+	
+}
+void waite_F(){
+	Fd_flag=0;
+	while(!Fd_flag){}
+	
 }
 void Put_falg(){
+	P_flag=0;
 	while(!P_flag){
 		USART_SendData(USART1, 'P');
 		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
@@ -55,9 +107,12 @@ void Put_falg(){
 		USART_SendData(USART1, 0x0a);
 		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
 	}
-	P_flag=0;
+	waite_P();
+
+	
 }
 void Fly(){
+		F_flag=0;
 	while(!F_flag){
 		USART_SendData(USART1, 'F');
 		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
@@ -68,9 +123,12 @@ void Fly(){
 		USART_SendData(USART1, 0x0a);
 		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
 	}
-	F_flag=0;
+
+	waite_F();
+
 }
 void Read_rfid(){
+	G_flag=0;
 	while(!G_flag){
 		USART_SendData(USART1, 'G');
 		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
@@ -81,56 +139,51 @@ void Read_rfid(){
 		USART_SendData(USART1, 0x0a);
 		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
 	}
-	G_flag=0;
+	
 }
-void Back(){
-	while(!B_flag){
-		USART_SendData(USART1, 'B');
+void End(){
+	end_flag=0;
+	while(!end_flag){
+		USART_SendData(USART1, 'e');
 		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
-		USART_SendData(USART1, 'q');
+		USART_SendData(USART1, 'n');
+		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
+		USART_SendData(USART1, 'd');
 		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
 		USART_SendData(USART1, 0x0d);
 		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
 		USART_SendData(USART1, 0x0a);
 		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
 	}
-	B_flag=0;
+	
 }
 
-void waite_L(){
-	while(!Ld_flag){}
-	Ld_flag=0;
-}
 
-void waite_R(){
-	while(!Rd_flag){}
-	Rd_flag=0;
-}
+
 void send_instruction(u8 instruction){
 	switch(instruction){
 		case 1:
-			Left_catch();
+			Left_put();
 			break;
 		case 2:
-			Right_catch();
+			Left_catch();
 			break;
 		case 3:
-			Put_falg();
+			Right_put();
 			break;
 		case 4:
-			Fly();
+			Right_catch();
 			break;
 		case 5:
-			Read_rfid();
+			Put_falg();
 			break;
 		case 6:
-			Back();
+			Fly();
 			break;
 		case 7:
-			waite_L();
+			End();
 			break;
 		case 8:
-			waite_R();
 			break;
 		case 9:
 			break;

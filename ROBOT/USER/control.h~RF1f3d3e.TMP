@@ -1,8 +1,8 @@
 #ifndef __CONTROL_H
 #define __CONTROL_H	 
 #include "sys.h"
-#define QUARTER0 950
-#define QUARTER1 950
+#define QUARTER0 940
+#define QUARTER1 940
 #define TWO_QUARTER0 1000
 #define TWO_QUARTER1 1000
 #define THREE_QUARTER0 1000
@@ -40,7 +40,7 @@ void Control_changeSpeed(int direction,int Dvalue);
 void Control_to_plot(void);
 u8 march_in_line(void);
 void back_in_line(void);
-void Control_test(int direction);
+void Control_test(void);
 void Control_Stop(void);
 void Control_Begin(int direction);
 void TIM4_Int_Init(u16 arr,u16 psc);

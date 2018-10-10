@@ -34,7 +34,9 @@ void PWMrotateInit(int k1, int k2, int k3, int k4);
 void PWMrotateSet( int k1, int k2, int k3, int k4);
 void PWMstraightSet(int k1, int k2, int k3, int k4);
 void straight(int direction, int adjustment[4]);
+void straight_only(int direction, int adjustment[4]);
 void rotate(int direction);
+void rotate_beta(int direction);
 void move_stop(void);
 void adjust(int* adjustment);
 
