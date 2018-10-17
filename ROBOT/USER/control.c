@@ -65,14 +65,14 @@ void Control_pidInit(){
 	
 	pidSetPoint(&PIDf, 0.0);
 	pidSetPoint(&PIDb, 0.0);
-	pidSetPoint(&PIDl, 0.3);
-	pidSetPoint(&PIDr, 0.3);
+	pidSetPoint(&PIDl, 0.5);
+	pidSetPoint(&PIDr, 0.5);
 	
-	pidSetpara(&PIDf, 0.5, 0.0, 0.4);
-	pidSetpara(&PIDb, 0.5, 0.0, 0.4);
+	pidSetpara(&PIDf, 2.1, 0.0, 0.5);
+	pidSetpara(&PIDb, 2.1, 0.0, 0.5);
 	//11.8V(0.2 0.0 0.25)
-	pidSetpara(&PIDl, 0.5, 0.0, 0.13);
-	pidSetpara(&PIDr, 0.7, 0.0, 0.18);
+	pidSetpara(&PIDl, 2.7, 0.0, 0.5);
+	pidSetpara(&PIDr, 2.7, 0.0, 0.5);
 	
 }
 
@@ -393,8 +393,41 @@ void Control_test(int direction){
 
 
 void Control_Stop(){
+	move_stop();
+	delay_ms(10);
+	if(CON_direction == 0){
+		CON_direction = 2;
+	}
+	else if(CON_direction == 1){
+		CON_direction = 3;
+	}
+	else if(CON_direction == 2){
+		CON_direction = 0;
+	}
+	else{
+		CON_direction = 1;
+	}
+	delay_ms(300);
 	Control_PID_Stop();
 	move_stop();
+	if(CON_direction == 0){
+		CON_direction = 2;
+	}
+	else if(CON_direction == 1){
+		CON_direction = 3;
+	}
+	else if(CON_direction == 2){
+		CON_direction = 0;
+	}
+	else{
+		CON_direction = 1;
+	}
+}
+
+void Control_Stop_only(){
+	Control_PID_Stop();
+	move_stop();
+	delay_ms(50);
 }
  
 

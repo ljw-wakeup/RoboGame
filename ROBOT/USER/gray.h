@@ -14,7 +14,7 @@
 //All rights reserved									  
 ////////////////////////////////////////////////////////////////////////////////// 
 #define CROSS_JUDGE_0 4
-#define CROSS_JUDGE_1 4
+#define CROSS_JUDGE_1 3
 #define CROSS_JUDGE_2 3    //如果为4则无效
 #define CROSS_JUDGE_3 3    //如果为4则无效
 typedef struct 

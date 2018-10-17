@@ -243,13 +243,13 @@ void CalculFromGray(Graycalcudef* graycal_x, u8* grayx_list, u8 graytab){
 			float revise;
 			if(graytab == 1) revise = 1;
 			else revise = 0.6;
-			if(graycal_x->maxlength >cross_judge|| (graycal_x -> repeat && graycal_x -> maxlength >= 3)){
+			if(graycal_x->maxlength > cross_judge|| (graycal_x -> repeat && graycal_x -> maxlength >= 3)){
 				graycal_x->cross = 1;
 				if(graycal_x->center >= 0.5){
-					graycal_x->center = graycal_x->min_number + revise ;
+					graycal_x->center = graycal_x->min_number + revise - 3.5 ;
 				}
 				else if(graycal_x->center <= - 0.5){
-					graycal_x->center = graycal_x->max_number - revise;
+					graycal_x->center = graycal_x->max_number - revise - 3.5;
 				}
 		  }
 			else{

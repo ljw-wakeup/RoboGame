@@ -1,8 +1,8 @@
 #ifndef __CONTROL_H
 #define __CONTROL_H	 
 #include "sys.h"
-#define QUARTER0 950
-#define QUARTER1 950
+#define QUARTER0 635
+#define QUARTER1 635
 #define TWO_QUARTER0 1000
 #define TWO_QUARTER1 1000
 #define THREE_QUARTER0 1000
@@ -10,7 +10,7 @@
 #define ROUND0 1000
 #define ROUND1 1000
 #define MARCH_LINES 10000
-#define STRAIGHT_BASIC_SPEED 750
+#define STRAIGHT_BASIC_SPEED 800
 #define ROTATE_BASIC_SPEED 700
 #define STRAIGHT_SPEED_CHANGE -300
 #define ULTRASONIC_DISTANCE 800
@@ -51,6 +51,7 @@ void Control_Begin_Only(u8 direction, int* adjustment);
 void Control_Set_PID(u8 direction , float goal);
 void Control_Set_PID_para(u8 direction, float pp, float ii, float dd);
 void Control_Reset_PID(void);
+void Control_Stop_only(void);
 
 		 				    
 #endif
