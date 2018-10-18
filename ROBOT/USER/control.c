@@ -68,8 +68,8 @@ void Control_pidInit(){
 	pidSetPoint(&PIDl, 0.5);
 	pidSetPoint(&PIDr, 0.5);
 	
-	pidSetpara(&PIDf, 2.1, 0.0, 0.5);
-	pidSetpara(&PIDb, 2.1, 0.0, 0.5);
+	pidSetpara(&PIDf, 2.0, 0.0, 0.2);
+	pidSetpara(&PIDb, 2.0, 0.0, 0.2);
 	//11.8V(0.2 0.0 0.25)
 	pidSetpara(&PIDl, 2.7, 0.0, 0.5);
 	pidSetpara(&PIDr, 2.7, 0.0, 0.5);
@@ -131,7 +131,10 @@ void TIM4_IRQHandler(void)   //TIM3ÖĞ¶Ï
 	
 }
 
-
+void Control_Straight_only(int direction){
+	int adjustment[4] = {0,0,0,0};
+	straight_only(direction,adjustment);
+}
 
 u8 Control_Straight(u8 grayrequest,int direction){
 	int incre = 0;
@@ -376,7 +379,7 @@ u8 Control_Rotate(int direction, int angle){
 }
 
 
-void Control_changeSpeed(int direction,int Dvalue){
+void Control_changeSpeed(int Dvalue){
 	PWMstraightSet(STRAIGHT_BASIC_SPEED + Dvalue, STRAIGHT_BASIC_SPEED + Dvalue, STRAIGHT_BASIC_SPEED + Dvalue, STRAIGHT_BASIC_SPEED + Dvalue);
 }
 
@@ -393,8 +396,7 @@ void Control_test(int direction){
 
 
 void Control_Stop(){
-	move_stop();
-	delay_ms(10);
+	Control_changeSpeed(150);
 	if(CON_direction == 0){
 		CON_direction = 2;
 	}
@@ -407,9 +409,10 @@ void Control_Stop(){
 	else{
 		CON_direction = 1;
 	}
-	delay_ms(300);
+	delay_ms(200);
 	Control_PID_Stop();
 	move_stop();
+	Control_changeSpeed(-150);
 	if(CON_direction == 0){
 		CON_direction = 2;
 	}
@@ -427,7 +430,7 @@ void Control_Stop(){
 void Control_Stop_only(){
 	Control_PID_Stop();
 	move_stop();
-	delay_ms(50);
+	delay_ms(200);
 }
  
 
@@ -506,7 +509,7 @@ void Control_rotate_beta(int direction, int angle){
 		while(1){
 			rotate_beta(direction);
 			Control_Cal_Gray(0, 0);
-			if(graycal_0.cross == 1){
+			if(graycal_0.maxlength >= 2){
 				iscross_count ++ ;
 				if(iscross_count > 2){
 					return;

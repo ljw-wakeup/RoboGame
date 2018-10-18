@@ -317,25 +317,24 @@ void rotate(int direction) {
 void rotate_beta(int direction){
 	if(direction == 1){
 	  GPIO_SetBits(M1_GROUP, M1_PIN);
-	  TIM_SetCompare1(TIM3, 850);
+	  TIM_SetCompare1(TIM3, 900);
 	  GPIO_SetBits(M2_GROUP, M2_PIN);
-		TIM_SetCompare2(TIM3, 850);
+		TIM_SetCompare2(TIM3, 900);
 	  GPIO_ResetBits(M3_GROUP, M3_PIN);
-	 
 	  TIM_SetCompare3(TIM3, PWM_ORIGIN - 600);
 		GPIO_ResetBits(M4_GROUP, M4_PIN);
-		TIM_SetCompare4(TIM3, PWM_ORIGIN - 850);
+		TIM_SetCompare4(TIM3, PWM_ORIGIN - 900);
 	}
 		
 	else{
 		GPIO_ResetBits(M1_GROUP, M1_PIN);
 		TIM_SetCompare1(TIM3, PWM_ORIGIN - 400);
 		GPIO_ResetBits(M2_GROUP, M2_PIN);
-		TIM_SetCompare2(TIM3, PWM_ORIGIN - 850);
+		TIM_SetCompare2(TIM3, PWM_ORIGIN - 600);
 		GPIO_ResetBits(M3_GROUP, M3_PIN);
-		TIM_SetCompare3(TIM3, PWM_ORIGIN - 850);
+		TIM_SetCompare3(TIM3, PWM_ORIGIN - 600);
 		GPIO_SetBits(M4_GROUP, M4_PIN);
-		TIM_SetCompare4(TIM3, 850);
+		TIM_SetCompare4(TIM3, 600);
 	}
 }
 

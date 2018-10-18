@@ -48,11 +48,17 @@ void Gray_Init(void)
 
 void Read_Gray0(u8* grayx_list)
 {
-	u8 i;
+	u8 i, temp;
 	//(xiabiao)2:2, 1:1,
 	for(i = 0; i < 8; i++){
 		grayx_list[i] = PEin((14-i));
 	}
+	 temp = grayx_list[4];
+	 grayx_list[4] = grayx_list[5];
+	 grayx_list[5] = temp;
+	 temp = grayx_list[6];
+	 grayx_list[6] = grayx_list[7];
+	 grayx_list[7] = temp;
 }
 
 void Read_Gray1(u8* grayx_list){
@@ -60,7 +66,8 @@ void Read_Gray1(u8* grayx_list){
 	for(i = 0; i < 8 ; i++){
 		grayx_list[i] = PDin((7 -i ));
 	}
-	grayx_list[1] = PEin(0);
+	grayx_list[1] = PEin((0));
+	grayx_list[3] = PEin((11));
 }
 
 void Read_Gray2(u8* grayx_list){
