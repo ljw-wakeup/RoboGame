@@ -1,8 +1,8 @@
 #ifndef __CONTROL_H
 #define __CONTROL_H	 
 #include "sys.h"
-#define QUARTER0 635
-#define QUARTER1 635
+#define QUARTER0 1400
+#define QUARTER1 1400
 #define TWO_QUARTER0 1000
 #define TWO_QUARTER1 1000
 #define THREE_QUARTER0 1000
@@ -10,8 +10,23 @@
 #define ROUND0 1000
 #define ROUND1 1000
 #define MARCH_LINES 10000
-#define STRAIGHT_BASIC_SPEED 800
-#define ROTATE_BASIC_SPEED 700
+#define STRAIGHT_BASIC_SPEED_0_0 250
+#define STRAIGHT_BASIC_SPEED_0_1 250
+#define STRAIGHT_BASIC_SPEED_0_2 250
+#define STRAIGHT_BASIC_SPEED_0_3 250
+#define STRAIGHT_BASIC_SPEED_2_0 250
+#define STRAIGHT_BASIC_SPEED_2_1 250
+#define STRAIGHT_BASIC_SPEED_2_2 250
+#define STRAIGHT_BASIC_SPEED_2_3 250
+#define STRAIGHT_BASIC_SPEED_1_0 250
+#define STRAIGHT_BASIC_SPEED_1_1 250
+#define STRAIGHT_BASIC_SPEED_1_2 250
+#define STRAIGHT_BASIC_SPEED_1_3 250
+#define STRAIGHT_BASIC_SPEED_3_0 250
+#define STRAIGHT_BASIC_SPEED_3_1 250
+#define STRAIGHT_BASIC_SPEED_3_2 250
+#define STRAIGHT_BASIC_SPEED_3_3 250
+#define ROTATE_BASIC_SPEED 250
 #define STRAIGHT_SPEED_CHANGE -300
 #define ULTRASONIC_DISTANCE 800
 #define ULTRASONIC_SLOWDOWN 2000
@@ -37,7 +52,6 @@ u8 Control_Straight(u8 grayrequest,int direction);
 void Control_Straight_only(int direction);
 u8 Control_Rotate(int direction,int angle);
 void Control_rotate_beta(int direction, int angle);
-void Control_changeSpeed(int Dvalue);
 void Control_to_plot(void);
 u8 march_in_line(void);
 void back_in_line(void);
@@ -53,6 +67,7 @@ void Control_Set_PID(u8 direction , float goal);
 void Control_Set_PID_para(u8 direction, float pp, float ii, float dd);
 void Control_Reset_PID(void);
 void Control_Stop_only(void);
+void Control_pwmSet(u8 straightmode, u8 direction, u8 mode);
 
 		 				    
 #endif

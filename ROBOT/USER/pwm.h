@@ -1,14 +1,22 @@
 #ifndef __PWM_H
 #define __PWM_H	 
 
-#define M1_GROUP GPIOG
-#define M2_GROUP GPIOG
-#define M3_GROUP GPIOA
-#define M4_GROUP GPIOG
-#define M1_PIN GPIO_Pin_7
-#define M2_PIN GPIO_Pin_8
-#define M3_PIN GPIO_Pin_8
-#define M4_PIN GPIO_Pin_6
+#define M1_1_GROUP GPIOG
+#define M1_2_GROUP GPIOG
+#define M2_1_GROUP GPIOG
+#define M2_2_GROUP GPIOG
+#define M3_1_GROUP GPIOA
+#define M3_2_GROUP GPIOA
+#define M4_1_GROUP GPIOD 
+#define M4_2_GROUP GPIOG 
+#define M1_2_PIN GPIO_Pin_7
+#define M1_1_PIN GPIO_Pin_5
+#define M2_2_PIN GPIO_Pin_8
+#define M2_1_PIN GPIO_Pin_4
+#define M3_2_PIN GPIO_Pin_8
+#define M3_1_PIN GPIO_Pin_11
+#define M4_2_PIN GPIO_Pin_6
+#define M4_1_PIN GPIO_Pin_14
 #define PWM_ORIGIN 1000
 
 #include "sys.h"
@@ -38,6 +46,6 @@ void straight_only(int direction, int adjustment[4]);
 void rotate(int direction);
 void rotate_beta(int direction);
 void move_stop(void);
-void adjust(int* adjustment);
+void adjust(int* adjustment,int direction);
 
 #endif

@@ -68,19 +68,38 @@ void Control_pidInit(){
 	pidSetPoint(&PIDl, 0.5);
 	pidSetPoint(&PIDr, 0.5);
 	
-	pidSetpara(&PIDf, 2.0, 0.0, 0.2);
-	pidSetpara(&PIDb, 2.0, 0.0, 0.2);
+	pidSetpara(&PIDf, 0.65, 0.0, 0.1);//对应基础250  上下限150 400 （2.5） 对应基础500 上下限制 200-700 
+	pidSetpara(&PIDb,0.6, 0.0, 0.1);
 	//11.8V(0.2 0.0 0.25)
-	pidSetpara(&PIDl, 2.7, 0.0, 0.5);
-	pidSetpara(&PIDr, 2.7, 0.0, 0.5);
+//	pidSetpara(&PIDl, 2.6, 0.0, 0.5);
+//	pidSetpara(&PIDr, 2.6, 0.0, 0.5);
+	pidSetpara(&PIDl, 0.5, 0.0, 0.8);//对应基础250  上下限150 400 （2.5） 对应基础500 上下限制 200-700 
+	pidSetpara(&PIDr,0.5, 0.0, 0.8);
 	
 }
 
 void Control_pwmInit(){
-	TIM3_PWM_Init(PWM_ORIGIN,0);
-	Control_Stop();
-	PWMstraightInit(STRAIGHT_BASIC_SPEED, STRAIGHT_BASIC_SPEED, STRAIGHT_BASIC_SPEED, STRAIGHT_BASIC_SPEED);
+	TIM3_PWM_Init(PWM_ORIGIN,35);
+//	Control_Stop();
+	PWMstraightInit(STRAIGHT_BASIC_SPEED_0_0, STRAIGHT_BASIC_SPEED_0_1, STRAIGHT_BASIC_SPEED_0_2, STRAIGHT_BASIC_SPEED_0_3);
 	PWMrotateInit(ROTATE_BASIC_SPEED, ROTATE_BASIC_SPEED, ROTATE_BASIC_SPEED, ROTATE_BASIC_SPEED);
+	PBout((5)) = 1;
+	PBout((6)) = 1;
+	PBout((7)) = 1;
+	PBout((4)) = 1;
+}
+
+void Control_pwmSet(u8 straightmode, u8 direction, u8 mode){
+	//staight
+	if(straightmode == 1){
+		if(direction == 0)	PWMstraightSet(STRAIGHT_BASIC_SPEED_0_0, STRAIGHT_BASIC_SPEED_0_1, STRAIGHT_BASIC_SPEED_0_2, STRAIGHT_BASIC_SPEED_0_3);
+		else if(direction == 1) PWMstraightSet(STRAIGHT_BASIC_SPEED_1_0, STRAIGHT_BASIC_SPEED_1_1, STRAIGHT_BASIC_SPEED_1_2, STRAIGHT_BASIC_SPEED_1_3);
+		else if(direction == 2) PWMstraightSet(STRAIGHT_BASIC_SPEED_2_0, STRAIGHT_BASIC_SPEED_2_1, STRAIGHT_BASIC_SPEED_2_2, STRAIGHT_BASIC_SPEED_2_3);	
+		else  PWMstraightSet(STRAIGHT_BASIC_SPEED_3_0, STRAIGHT_BASIC_SPEED_3_1, STRAIGHT_BASIC_SPEED_3_2, STRAIGHT_BASIC_SPEED_3_3);	
+	}
+	else{
+		
+	}
 }
 void Control_grayInit(){
 	Gray_Init();
@@ -152,8 +171,8 @@ u8 Control_Straight(u8 grayrequest,int direction){
 				if (graycal_0.invalid){
 					valid_increnum ++;
 					if(valid_increnum <= 3) incre = increpid(&PIDf, PIDf.last_error) * 90;
-					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * PIDf.proportion * 90;
-					else incre = -3 * 90 * PIDf.proportion;
+					else if(valid_increnum>3 && last_trueincre >0) incre = 5 * PIDf.proportion * 90;
+					else incre = -5 * 90 * PIDf.proportion;
 					
 				}
 				//没有信息
@@ -169,8 +188,8 @@ u8 Control_Straight(u8 grayrequest,int direction){
 				if(graycal_0.invalid){
 					valid_increnum ++;
 					if(valid_increnum <= 3) incre = increpid(&PIDb, PIDb.last_error) * 90;
-					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 90 * PIDb.proportion;
-					else incre = -3 * 90 * PIDb.proportion;
+					else if(valid_increnum>3 && last_trueincre >0) incre = 5 * 90 * PIDb.proportion;
+					else incre = -5 * 90 * PIDb.proportion;
 					
 				}
 				else{
@@ -244,8 +263,8 @@ u8 Control_Straight(u8 grayrequest,int direction){
 				if (graycal_1.invalid){
 					valid_increnum ++;
 					if(valid_increnum <= 3)  incre = increpid(&PIDr, PIDr.last_error) * 90;
-					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 90 * PIDr.proportion;
-					else incre = -3 * 90 * PIDr.proportion;
+					else if(valid_increnum>3 && last_trueincre >0) incre = 5 * 90 * PIDr.proportion;
+					else incre = -5 * 90 * PIDr.proportion;
 				}
 				//没有重复信息
 				else{
@@ -259,8 +278,8 @@ u8 Control_Straight(u8 grayrequest,int direction){
 				if (graycal_1.invalid){
 					valid_increnum ++;
 					if(valid_increnum <= 3) incre = increpid(&PIDl, PIDl.last_error) * 90;
-					else if(valid_increnum>3 && last_trueincre >0) incre = 3 * 90 * PIDl.proportion;
-					else incre = -3 * 90 * PIDl.proportion;
+					else if(valid_increnum>3 && last_trueincre >0) incre = 5 * 90 * PIDl.proportion;
+					else incre = -5 * 90 * PIDl.proportion;
 				}
 				//没有重复信息
 				else{
@@ -379,10 +398,6 @@ u8 Control_Rotate(int direction, int angle){
 }
 
 
-void Control_changeSpeed(int Dvalue){
-	PWMstraightSet(STRAIGHT_BASIC_SPEED + Dvalue, STRAIGHT_BASIC_SPEED + Dvalue, STRAIGHT_BASIC_SPEED + Dvalue, STRAIGHT_BASIC_SPEED + Dvalue);
-}
-
 void Control_to_plot(){
 	
 }
@@ -396,41 +411,13 @@ void Control_test(int direction){
 
 
 void Control_Stop(){
-	Control_changeSpeed(150);
-	if(CON_direction == 0){
-		CON_direction = 2;
-	}
-	else if(CON_direction == 1){
-		CON_direction = 3;
-	}
-	else if(CON_direction == 2){
-		CON_direction = 0;
-	}
-	else{
-		CON_direction = 1;
-	}
-	delay_ms(200);
 	Control_PID_Stop();
 	move_stop();
-	Control_changeSpeed(-150);
-	if(CON_direction == 0){
-		CON_direction = 2;
-	}
-	else if(CON_direction == 1){
-		CON_direction = 3;
-	}
-	else if(CON_direction == 2){
-		CON_direction = 0;
-	}
-	else{
-		CON_direction = 1;
-	}
 }
 
 void Control_Stop_only(){
 	Control_PID_Stop();
 	move_stop();
-	delay_ms(200);
 }
  
 

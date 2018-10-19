@@ -16,7 +16,7 @@
  广州市星翼电子科技有限公司  
  作者：正点原子 @ALIENTEK
 ************************************************/
-u8 left = 2; 
+u8 left = 0; 
 //该变量用来标识是不是左侧场地、、原始为右侧场地
 u8 gray_request;
 int direction;
@@ -198,7 +198,6 @@ void o_to_c_beta(void){
 	else{
 		Control_Stop();
 	  Control_Rotate(0, QUARTER0);
-		Control_Rotate(0, QUARTER0);
 		Control_Stop_only();
 		CON_direction = 0;
 		CON_grayrequest = 0;
@@ -364,7 +363,7 @@ void low_beta(void){
 	  Control_PID_Begin();
     Control_Reset_PID();
 	  Control_Set_PID(1, - 0.5);
-	  delay_ms(1200);
+	  delay_ms(1800);
 	  Control_Stop_only();
 	  Control_rotate_beta(1, 10000);
 	  Control_Stop_only();
@@ -401,7 +400,6 @@ void low_beta(void){
 void low_to_o_beta(void){
 	if(left == 0){
 		Control_Stop();
-		Control_Rotate(1, QUARTER1);
 		Control_Rotate(1, QUARTER1);
 		Control_Stop_only();
 		CON_direction = 2;
@@ -468,7 +466,6 @@ void o_to_low_beta(void){
 	  }
 		Control_Stop();
 		Control_Set_PID(0, 0.0);
-		Control_Rotate(0, QUARTER0);
 		Control_Rotate(0, QUARTER0);
 		Control_Stop_only();
 	}
@@ -658,7 +655,7 @@ void area_21_circle_status0_beta(void){
 			CON_grayrequest = 1;
 			CON_direction = 1 + left;
 			Control_Set_PID(1, 0.5); 
-			 Control_Set_PID(3, 0.5); 
+			Control_Set_PID(3, 0.5); 
 			Control_PID_Begin();
 			delay_ms(300);
 			while(1){
@@ -685,13 +682,14 @@ void area_21_circle_status1_beta(void){
 
 void area_atpoint_status0(void){
 			if(colorlist[area/3] == 7 -  3*left || colorlist[area/3] == 8 - 3 * left){
-				if(area != 0){
+				if(area != 0 || (area == 0 && circle_status == 1)){
 			   	Control_Stop();
 				}
 				CON_grayrequest = 0;
 				CON_direction = 0;
-				Control_PID_Begin();
+				Control_Straight_only(0);
 				delay_ms(300);
+				Control_PID_Begin();
 				while(1){
 					iscross = Control_Cal_Gray(CON_grayrequest, CON_direction);
 					if(!iscross){
@@ -731,13 +729,13 @@ void area_atpoint_status0(void){
 
 
 void area_atpoint_status1(void){
-	    Control_PID_Begin();
 			if(colorlist[area/3] == 5 - left || colorlist[area/3] == 6 - left ){
+				Control_Stop();
 				CON_grayrequest = 0;
 				CON_direction = 0;
-				Control_Reset_PID();
-				 Control_PID_Begin();
-				delay_ms(300);
+				Control_Straight_only(0);
+				delay_ms(400);
+				Control_PID_Begin();
 				while(1){
 				  iscross = Control_Cal_Gray(CON_grayrequest,CON_direction);
 				  if(!iscross){
@@ -838,15 +836,16 @@ void area_fetchline(){
 				
 			 if(colorlist[(area - 1) / 3] == 6 || colorlist[(area - 1) / 3] == 4 || colorlist[(area - 1) / 3] == 2  || colorlist[(area - 1) / 3] == 8){
 					 Control_Reset_PID();
-				   Control_Set_PID(0, 2.5);
+				   Control_Set_PID(0, 0.0);
 				}
 				else {
 						Control_Reset_PID(); 
-						Control_Set_PID(0, 2.5); 
+						Control_Set_PID(0, 0.0); 
 				}
 				Control_PID_Begin();
 			  delay_ms(400);
-			  detect_distance();
+				delay_ms(600);
+			  //detect_distance();
 				Control_Stop();
 				#ifdef ONSTM
 				if(colorlist[(area -1) / 3] == 5 - left * 2 || colorlist[(area -1) / 3] == 7 - left * 2) {
@@ -869,9 +868,9 @@ void area_fetchline(){
 			else{
 				//Control_Reset_PID();
 				Control_Set_PID(0, 0.0);
-				if(colorlist[(area - 1) / 3] == -2) Control_Set_PID(0, 2.5);
+				if(colorlist[(area - 1) / 3] == -2) Control_Set_PID(2, 0.0);
 				else {
-					Control_Set_PID(2, 2.5);
+					Control_Set_PID(2, 0.0);
 				}
 				CON_grayrequest = 0;
 				CON_direction = 2;
@@ -941,14 +940,14 @@ int main(void){
 //	 ultrasonic_IRQ_init();
 //   ultrasonic_GPIO_init();
 	 TIM5_TEST_GPIO_init();
-   TIM4_Int_Init(99,71);//0.1ms
+   TIM4_Int_Init(1999,71);//0.1ms
 //	 TIM5_Configuration(19999,71);//20ms
 	 TIM2_Int_Init(9999,719);//100ms
 //	 trig_ultrasonic();
-	Control_Stop();
+//	Control_Stop();
 //	 TIM2_Int_Init(19999,71);
 
-/*
+
 	while(1){
 			if(colorlist[8] != 0) break;
 	}
@@ -1073,18 +1072,23 @@ int main(void){
 	}
 
 
-*/
 	#define ABC
 	#ifdef ABC
 	//这里是基值设置在这个函数里，可以看到宏定义，如果两个轮子基准值不同，就自己添加宏定义
-	
+
+ Control_pwmSet(1, 3, 0);
+CON_grayrequest = 1;
+CON_direction = 3;
+Control_PID_Begin();
+while(1){}
+
+while(1){}
 	
 	
 	//转弯参数测试：第一个参数是方向。1顺时针0逆时针，第二个参数是转的时间。QUARTER0对应的是方向0的宏定义，QUARTER1对应的是方向1的宏定义，宏定义在control.h里面
 	
 	//直走参数测试：参数是方向 
-	Control_Rotate(0, 10000000);
-	while(1){}
+
 	
 	
 	
