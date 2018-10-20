@@ -6,7 +6,7 @@
 #include "h_stm.h"
 #include "ultrasonic.h"
 #include "timer.h"
-#define ONSTMa
+#define ONSTM
 /************************************************
  ALIENTEK精英STM32开发板实验1
  跑马灯实验
@@ -16,7 +16,7 @@
  广州市星翼电子科技有限公司  
  作者：正点原子 @ALIENTEK
 ************************************************/
-u8 left = 0; 
+u8 left = 2; 
 //该变量用来标识是不是左侧场地、、原始为右侧场地
 u8 gray_request;
 int direction;
@@ -43,7 +43,7 @@ extern u8 CON_cross;
 void send_first(u8 circle){
 	u8 a,b,i;
 	if(left == 0 && circle == 0){
-		for(i = 0; i < 7; i++){
+		for(i = 0; i < 8; i++){
 			if(colorlist[i]==7) a = i;
 			else if(colorlist[i] == 8) b = i;
 		}
@@ -51,7 +51,7 @@ void send_first(u8 circle){
 		else send_instruction(3);
 	}
 	if(left == 0 && circle == 1){
-		for(i = 0; i < 7; i++){
+		for(i = 0; i < 8; i++){
 			if(colorlist[i]==5) a = i;
 			else if(colorlist[i] == 6) b = i;
 		}
@@ -59,7 +59,7 @@ void send_first(u8 circle){
 		else send_instruction(3);
 	}
 	if(left == 2 && circle == 0){
-		for(i = 0; i < 7; i++){
+		for(i = 0; i < 8; i++){
 			if(colorlist[i]==1) a = i;
 			else if(colorlist[i] == 2) b = i;
 		}
@@ -67,7 +67,7 @@ void send_first(u8 circle){
 		else send_instruction(3);
 	}
 	if(left == 2 && circle == 1){
-		for(i = 0; i < 7; i++){
+		for(i = 0; i < 8; i++){
 			if(colorlist[i]==3) a = i;
 			else if(colorlist[i] == 4) b = i;
 		}
@@ -82,7 +82,8 @@ void detect_distance(){
 			count ++ ;
 			if(count >= 100){
 				count = 0;
-				return;
+				return
+					;
 			}
 		}
 		else count = 0 ;
@@ -129,7 +130,6 @@ void b_to_o_beta(void){
 					send_instruction(1);
 				 } 
 				#endif
-				delay_ms(1000);
 				break;
 			}
 		}
@@ -189,6 +189,7 @@ void o_to_c_beta(void){
 			  cross_count++;
 			  if(cross_count > 3){
 				  cross_count = 0;
+					Control_Stop();
 				  break;
 			  }
 		  }
@@ -230,7 +231,7 @@ void o_to_c_beta(void){
 	}
 	CON_direction = 1;
 	CON_grayrequest = 1;
-	Control_Set_PID(1, - 0.5);
+	Control_Set_PID(1, - 1.5);
 	 Control_PID_Begin();
 	  delay_ms(1000);
 	  delay_ms(1000);
@@ -362,8 +363,8 @@ void low_beta(void){
 	  CON_direction = 1;
 	  Control_PID_Begin();
     Control_Reset_PID();
-	  Control_Set_PID(1, - 0.5);
-	  delay_ms(1800);
+	  Control_Set_PID(1, - 2.0);
+	  delay_ms(1500);
 	  Control_Stop_only();
 	  Control_rotate_beta(1, 10000);
 	  Control_Stop_only();
@@ -379,9 +380,6 @@ void low_beta(void){
 	  CON_grayrequest = 1;
 	  CON_direction = 3;
 	  Control_PID_Begin();
-		#ifdef ONSTM
-		send_first(1);
-		#endif
 	  while(1){
 		  iscross = Control_Cal_Gray(CON_grayrequest, CON_direction);
 		  if(iscross){
@@ -532,9 +530,9 @@ void o_to_b_beta(void){
 	CON_direction = 0;
 	Control_Reset_PID();
 	 if(colorlist[(area ) / 3] == 6 || colorlist[(area ) / 3] == 4 || colorlist[(area ) / 3] == 2  || colorlist[(area ) / 3] == 8){
-			Control_Set_PID(0, 3.0);
+			Control_Set_PID(0, 0.0);
 	 }
-	else  Control_Set_PID(0, 1.5); 
+	else  Control_Set_PID(0, 0.0); 
   detect_distance();
 	Control_Stop();
 	#ifdef ONSTM
@@ -562,18 +560,19 @@ void low_to_b_beta(void){
 	if(left == 0){
 		Control_Stop();
 		Control_Rotate(0,	QUARTER0);
-	  Control_Rotate(0,	QUARTER0);
-		Control_Stop_only();
+	
 	}
+	Control_Stop_only();
 	CON_direction = 0;
 	CON_grayrequest = 0;
-	Control_Reset_PID();
 	 if(colorlist[(area) / 3] == 6 || colorlist[(area ) / 3] == 4 || colorlist[(area) / 3] == 2  || colorlist[(area ) / 3] == 8){
 			Control_Set_PID(0, 0.0);
 	 }
 	else  Control_Set_PID(0, 0.0); 
-	 Control_PID_Begin();
-	detect_distance();
+	Control_PID_Begin();
+//	detect_distance();
+	 delay_ms(1000);
+	 delay_ms(1000);
 	Control_Stop();
 #	ifdef ONSTM
   if(colorlist[(area) / 3] == 5 - left * 2 || colorlist[(area) / 3] == 7 - left * 2) {
@@ -645,6 +644,9 @@ void area_21_circle_status0_beta(void){
 			
 			//进入第二轮取旗
 			circle_status = 1;
+			#ifdef ONSTM
+		  send_first(1);
+		  #endif
 			fetch_flag = 0;
 			//如果在第二轮取旗在最后一条有旗子
 			if(colorlist[area/3] == 5 - left || colorlist[area/3] == 6- left){
@@ -752,7 +754,7 @@ void area_atpoint_status1(void){
 			else if(fetch_flag < 2){
 				CON_grayrequest = 1;
 				CON_direction = 1 + left;
-				delay_ms(200);
+				delay_ms(400);
 				while(1){			
 					iscross = Control_Cal_Gray(CON_grayrequest, CON_direction);
 				  if(!iscross){
@@ -769,7 +771,7 @@ void area_atpoint_status1(void){
 			else{
 				CON_grayrequest = 1;
 				CON_direction = 3 - left;
-				delay_ms(200);
+				delay_ms(400);
 				while(1){
 				  iscross = Control_Cal_Gray(CON_grayrequest, CON_direction);
 				  if(!iscross){
@@ -845,6 +847,7 @@ void area_fetchline(){
 				Control_PID_Begin();
 			  delay_ms(400);
 				delay_ms(600);
+				delay_ms(800);
 			  //detect_distance();
 				Control_Stop();
 				#ifdef ONSTM
@@ -884,12 +887,16 @@ void area_fetchline(){
 							Control_Set_PID(2, 0.0);
 							Control_Stop();
 							#ifdef ONSTM
-							if(colorlist[(area - 1) / 3] == -2) send_instruction(3);
+							if(colorlist[(area) / 3] == -2) {
+								send_instruction(3);
+							}
+							
 				      else {
 					      send_instruction(1);
 				      } 
 							#endif
 							break;
+							
 					  }
 				  }
 				  else cross_count = 0;		
@@ -959,6 +966,11 @@ int main(void){
 	  {	
 		  Control_PID_Begin();
 		  //在初始线
+			if(area % 3 == 0 && circle_status == 1){
+				Control_Stop();
+				delay_ms(1000);
+				Control_PID_Begin();
+			}
 		  if(area == 0x7F && circle_status == 0){
 			   area_0x7f();
 		  }
@@ -1073,7 +1085,7 @@ int main(void){
 
 
 	#define ABC
-	#ifdef ABC
+	#ifdef ABc
 	//这里是基值设置在这个函数里，可以看到宏定义，如果两个轮子基准值不同，就自己添加宏定义
 
  Control_pwmSet(1, 3, 0);
