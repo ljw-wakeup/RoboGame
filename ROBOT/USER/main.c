@@ -22,7 +22,7 @@ u8 gray_request;
 int direction;
 extern u8 color_list[9]; //the same as colorlist
 extern u8 cam;
-int colorlist[9] = {7,8,5,6,1,2,3,4,1};
+int colorlist[9] = {7,8,5,6,1,2,3,4,9};
 u8 area= 0x7f;
 int circle_status = 0; //第一轮取旗为0，第二轮取旗为1
 int cross_count = 0;
@@ -139,11 +139,11 @@ void b_to_o_beta(void){
 
 
 void o_to_c_beta(void){
-  int adjustment[4] = {0, 0, 0, 0};
+  int adjustment[4] = {50, 50, 50, 50};
 	if(left == 2){
 		CON_direction = 2;
 		CON_grayrequest = 0;
-		Control_Set_PID(2, -1.0);
+		Control_Set_PID(2, -0.5);
 		Control_Reset_PID();
 		Control_PID_Begin();
 		delay_ms(700);
@@ -244,13 +244,6 @@ void o_to_c_beta(void){
 	  Control_Begin_Only(3, adjustment);
 	  delay_ms(1000);
     delay_ms(1000);
-	  delay_ms(1000);
-	  delay_ms(1000);
-	  delay_ms(1000);
-	  delay_ms(1000);
-		delay_ms(1000);
-		delay_ms(1000);
-		delay_ms(1000);
 	  Control_Stop();
 	  send_instruction(7);
 	  while(1){}
@@ -363,8 +356,8 @@ void low_beta(void){
 	  CON_direction = 1;
 	  Control_PID_Begin();
     Control_Reset_PID();
-	  Control_Set_PID(1, - 2.0);
-	  delay_ms(1500);
+	  Control_Set_PID(1, - 0.5);
+	  delay_ms(1250);
 	  Control_Stop_only();
 	  Control_rotate_beta(1, 10000);
 	  Control_Stop_only();
@@ -474,7 +467,7 @@ void b_to_low_beta(void)
 {
 		CON_grayrequest = 0;
 		CON_direction = 2;
-	  if(left == 0)  Control_Set_PID(2, 2.5);
+	  if(left == 0)  Control_Set_PID(2, 1.0);
 	  else Control_Set_PID(2, -1.0);
 	  Control_PID_Begin();
 		while(1){
@@ -515,10 +508,8 @@ void b_to_low_beta(void)
 		else{
 			Control_Stop();
 			Control_Rotate(1,	QUARTER1);
-			Control_Rotate(1,	QUARTER1);
 			Control_Stop_only();
 		}
-		
 }
 
 
@@ -533,6 +524,7 @@ void o_to_b_beta(void){
 			Control_Set_PID(0, 0.0);
 	 }
 	else  Control_Set_PID(0, 0.0); 
+	 Control_PID_Begin();
   detect_distance();
 	Control_Stop();
 	#ifdef ONSTM
@@ -570,9 +562,7 @@ void low_to_b_beta(void){
 	 }
 	else  Control_Set_PID(0, 0.0); 
 	Control_PID_Begin();
-//	detect_distance();
-	 delay_ms(1000);
-	 delay_ms(1000);
+  detect_distance();
 	Control_Stop();
 #	ifdef ONSTM
   if(colorlist[(area) / 3] == 5 - left * 2 || colorlist[(area) / 3] == 7 - left * 2) {
@@ -635,6 +625,7 @@ void area_0x7f(void){
 void area_21_circle_status0_beta(void){
 	//如果有旗
 			if(colorlist[area/3] == 7 - left * 3 || colorlist[area/3] == 8 - left * 3){
+        Control_Stop();				
 				o_to_b_beta();
 				b_to_low_beta();
 			}
@@ -679,6 +670,7 @@ void area_21_circle_status0_beta(void){
 
 
 void area_21_circle_status1_beta(void){
+	Control_Stop();
 	o_to_c_beta();
 }
 
@@ -845,10 +837,7 @@ void area_fetchline(){
 						Control_Set_PID(0, 0.0); 
 				}
 				Control_PID_Begin();
-			  delay_ms(400);
-				delay_ms(600);
-				delay_ms(800);
-			  //detect_distance();
+			  detect_distance();
 				Control_Stop();
 				#ifdef ONSTM
 				if(colorlist[(area -1) / 3] == 5 - left * 2 || colorlist[(area -1) / 3] == 7 - left * 2) {
@@ -877,6 +866,7 @@ void area_fetchline(){
 				}
 				CON_grayrequest = 0;
 				CON_direction = 2;
+				Control_PID_Begin();
 				while(1){
 				  iscross = Control_Cal_Gray(CON_grayrequest, CON_direction);
 				  if(iscross){
@@ -887,13 +877,14 @@ void area_fetchline(){
 							Control_Set_PID(2, 0.0);
 							Control_Stop();
 							#ifdef ONSTM
-							if(colorlist[(area) / 3] == -2) {
-								send_instruction(3);
+							if(fetch_flag < 2){
+							    if(colorlist[(area) / 3] == -2) {
+								    send_instruction(3);
+							    }
+				          else {
+					          send_instruction(1);
+				          } 
 							}
-							
-				      else {
-					      send_instruction(1);
-				      } 
 							#endif
 							break;
 							
@@ -933,7 +924,8 @@ void change_colorlist(void){
 }
 
 int main(void){
-
+int i=10;
+	
 	 delay_init();	    //延时函数初始化	  
 	 Control_grayInit();
 	 Control_pidInit();
@@ -954,11 +946,23 @@ int main(void){
 //	Control_Stop();
 //	 TIM2_Int_Init(19999,71);
 
+   i=5;
+	while(i){
+	USART_SendData(USART2, '1');
+	while(USART_GetFlagStatus(USART2,USART_FLAG_TC)!=SET);
+		
+	USART_SendData(USART2, 0x0d);
 
-	while(1){
-			if(colorlist[8] != 0) break;
+		while(USART_GetFlagStatus(USART2,USART_FLAG_TC)!=SET);
+		
+   
+	USART_SendData(USART2, 0x0a);
+	while(USART_GetFlagStatus(USART2,USART_FLAG_TC)!=SET);
+		if(colorlist[8] == 9) break;
+delay_us(50);	
 	}
-	if(colorlist[8] == 1){
+	
+	
 		#ifdef ONSTM
 	  send_first(0);
 		#endif
@@ -966,11 +970,6 @@ int main(void){
 	  {	
 		  Control_PID_Begin();
 		  //在初始线
-			if(area % 3 == 0 && circle_status == 1){
-				Control_Stop();
-				delay_ms(1000);
-				Control_PID_Begin();
-			}
 		  if(area == 0x7F && circle_status == 0){
 			   area_0x7f();
 		  }
@@ -1010,7 +1009,8 @@ int main(void){
 			  area_fetchline();		
 	    } 	
      }
-	 }
+	 
+/*
 	else{
 		change_colorlist();
 		#ifdef ONSTM
@@ -1083,7 +1083,7 @@ int main(void){
 		
 	}
 
-
+*/
 	#define ABC
 	#ifdef ABc
 	//这里是基值设置在这个函数里，可以看到宏定义，如果两个轮子基准值不同，就自己添加宏定义
@@ -1122,11 +1122,17 @@ send_instruction(5);
 delay_ms(1000);
 delay_ms(1000);
 delay_ms(1000);
-send_instruction(6);
+send_instruction(3);
+delay_ms(1000);
+send_instruction(4);
 delay_ms(1000);
 delay_ms(1000);
 delay_ms(1000);
-send_instruction(7);
+send_instruction(1);
+delay_ms(1000);
+send_instruction(2);
+delay_ms(1000);
+delay_ms(1000);
 delay_ms(1000);
 Control_test(2);
 delay_ms(1000);

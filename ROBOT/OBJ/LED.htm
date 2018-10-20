@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\OBJ\LED.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\LED.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060300: Last Updated: Sat Oct 20 08:37:42 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060300: Last Updated: Sat Oct 20 19:57:31 2018
 <BR><P>
 <H3>Maximum Stack Usage =        248 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -540,7 +540,6 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_rotate_beta
 <LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;o_to_low_beta
 <LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;o_to_c_beta
-<LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;low_to_o_beta
 <LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;low_beta
 <LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;b_to_o_beta
@@ -562,6 +561,7 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;o_to_low_beta
 <LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;o_to_c_beta
+<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;o_to_b_beta
 <LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;low_to_o_beta
 <LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;low_to_b_beta
@@ -633,7 +633,6 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;o_to_low_beta
 <LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;o_to_c_beta
 <LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;o_to_b_beta
-<LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;low_to_o_beta
 <LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;low_to_b_beta
 <LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;b_to_o_beta
@@ -641,6 +640,8 @@ Global Symbols
 <LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;area_fetchline
 <LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;area_atpoint_status1
 <LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;area_atpoint_status0
+<LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;area_21_circle_status1_beta
+<LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;area_21_circle_status0_beta
 </UL>
 
 <P><STRONG><a name="[83]"></a>Control_Stop_only</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, control.o(i.Control_Stop_only))
@@ -747,17 +748,17 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
 <LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetFlagStatus
 </UL>
-<BR>[Called By]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
+<BR>[Called By]<UL><LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
 </UL>
 
 <P><STRONG><a name="[9b]"></a>Fly</STRONG> (Thumb, 112 bytes, Stack size 8 bytes, h_stm.o(i.Fly))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = Fly
 </UL>
-<BR>[Calls]<UL><LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;waite_F
-<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
+<BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
 <LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetFlagStatus
+<LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;waite_F
 </UL>
-<BR>[Called By]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
+<BR>[Called By]<UL><LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
 </UL>
 
 <P><STRONG><a name="[9e]"></a>GPIO_Init</STRONG> (Thumb, 278 bytes, Stack size 24 bytes, stm32f10x_gpio.o(i.GPIO_Init))
@@ -765,8 +766,8 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM3_PWM_Init
 <LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gray_Init
-<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart2_init
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart1_init
+<LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart2_init
+<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart1_init
 <LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM5_TEST_GPIO_init
 </UL>
 
@@ -806,14 +807,15 @@ Global Symbols
 <P><STRONG><a name="[5]"></a>HardFault_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f10x_it.o(i.HardFault_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f10x_hd.o(RESET)
 </UL>
-<P><STRONG><a name="[9f]"></a>Left_catch</STRONG> (Thumb, 112 bytes, Stack size 8 bytes, h_stm.o(i.Left_catch))
+<P><STRONG><a name="[9f]"></a>Left_catch</STRONG> (Thumb, 120 bytes, Stack size 8 bytes, h_stm.o(i.Left_catch))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = Left_catch
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;waite_L
+<BR>[Calls]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
 <LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
 <LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetFlagStatus
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;waite_L
 </UL>
-<BR>[Called By]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
+<BR>[Called By]<UL><LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
 </UL>
 
 <P><STRONG><a name="[a1]"></a>Left_put</STRONG> (Thumb, 108 bytes, Stack size 8 bytes, h_stm.o(i.Left_put))
@@ -822,7 +824,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
 <LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetFlagStatus
 </UL>
-<BR>[Called By]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
+<BR>[Called By]<UL><LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
 </UL>
 
 <P><STRONG><a name="[6]"></a>MemManage_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f10x_it.o(i.MemManage_Handler))
@@ -834,13 +836,13 @@ Global Symbols
 <P><STRONG><a name="[b3]"></a>NVIC_Init</STRONG> (Thumb, 100 bytes, Stack size 16 bytes, misc.o(i.NVIC_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = NVIC_Init
 </UL>
-<BR>[Called By]<UL><LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart2_init
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart1_init
+<BR>[Called By]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart2_init
+<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart1_init
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM4_Int_Init
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM2_Int_Init
 </UL>
 
-<P><STRONG><a name="[df]"></a>NVIC_PriorityGroupConfig</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, misc.o(i.NVIC_PriorityGroupConfig))
+<P><STRONG><a name="[e0]"></a>NVIC_PriorityGroupConfig</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, misc.o(i.NVIC_PriorityGroupConfig))
 <BR><BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
@@ -862,16 +864,16 @@ Global Symbols
 <P><STRONG><a name="[a2]"></a>Put_falg</STRONG> (Thumb, 112 bytes, Stack size 8 bytes, h_stm.o(i.Put_falg))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = Put_falg
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;waite_P
-<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
+<BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
 <LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetFlagStatus
+<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;waite_P
 </UL>
-<BR>[Called By]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
+<BR>[Called By]<UL><LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
 </UL>
 
 <P><STRONG><a name="[b0]"></a>RCC_APB1PeriphClockCmd</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, stm32f10x_rcc.o(i.RCC_APB1PeriphClockCmd))
 <BR><BR>[Called By]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM3_PWM_Init
-<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart2_init
+<LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart2_init
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM4_Int_Init
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM2_Int_Init
 <LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM5_Configuration
@@ -880,8 +882,8 @@ Global Symbols
 <P><STRONG><a name="[9d]"></a>RCC_APB2PeriphClockCmd</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, stm32f10x_rcc.o(i.RCC_APB2PeriphClockCmd))
 <BR><BR>[Called By]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM3_PWM_Init
 <LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gray_Init
-<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart2_init
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart1_init
+<LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart2_init
+<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart1_init
 <LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM5_TEST_GPIO_init
 </UL>
 
@@ -922,14 +924,15 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Read_Gray
 </UL>
 
-<P><STRONG><a name="[a8]"></a>Right_catch</STRONG> (Thumb, 112 bytes, Stack size 8 bytes, h_stm.o(i.Right_catch))
+<P><STRONG><a name="[a8]"></a>Right_catch</STRONG> (Thumb, 120 bytes, Stack size 8 bytes, h_stm.o(i.Right_catch))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = Right_catch
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;waite_R
+<BR>[Calls]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
 <LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
 <LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetFlagStatus
+<LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;waite_R
 </UL>
-<BR>[Called By]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
+<BR>[Called By]<UL><LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
 </UL>
 
 <P><STRONG><a name="[aa]"></a>Right_put</STRONG> (Thumb, 108 bytes, Stack size 8 bytes, h_stm.o(i.Right_put))
@@ -938,14 +941,14 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
 <LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetFlagStatus
 </UL>
-<BR>[Called By]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
+<BR>[Called By]<UL><LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
 </UL>
 
 <P><STRONG><a name="[9]"></a>SVC_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f10x_it.o(i.SVC_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f10x_hd.o(RESET)
 </UL>
-<P><STRONG><a name="[dd]"></a>SysTick_CLKSourceConfig</STRONG> (Thumb, 40 bytes, Stack size 0 bytes, misc.o(i.SysTick_CLKSourceConfig))
-<BR><BR>[Called By]<UL><LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_init
+<P><STRONG><a name="[de]"></a>SysTick_CLKSourceConfig</STRONG> (Thumb, 40 bytes, Stack size 0 bytes, misc.o(i.SysTick_CLKSourceConfig))
+<BR><BR>[Called By]<UL><LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_init
 </UL>
 
 <P><STRONG><a name="[c]"></a>SysTick_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f10x_it.o(i.SysTick_Handler))
@@ -1190,12 +1193,13 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f10x_hd.o(RESET)
 </UL>
 <P><STRONG><a name="[ea]"></a>USART_Cmd</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, stm32f10x_usart.o(i.USART_Cmd))
-<BR><BR>[Called By]<UL><LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart2_init
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart1_init
+<BR><BR>[Called By]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart2_init
+<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart1_init
 </UL>
 
 <P><STRONG><a name="[9a]"></a>USART_GetFlagStatus</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, stm32f10x_usart.o(i.USART_GetFlagStatus))
-<BR><BR>[Called By]<UL><LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_motor
+<BR><BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_motor
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Usart_SendString
 <LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Right_put
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Right_catch
@@ -1216,8 +1220,8 @@ Global Symbols
 <P><STRONG><a name="[e9]"></a>USART_ITConfig</STRONG> (Thumb, 74 bytes, Stack size 20 bytes, stm32f10x_usart.o(i.USART_ITConfig))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = USART_ITConfig
 </UL>
-<BR>[Called By]<UL><LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart2_init
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart1_init
+<BR>[Called By]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart2_init
+<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart1_init
 </UL>
 
 <P><STRONG><a name="[c7]"></a>USART_Init</STRONG> (Thumb, 210 bytes, Stack size 56 bytes, stm32f10x_usart.o(i.USART_Init))
@@ -1225,8 +1229,8 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_GetClocksFreq
 </UL>
-<BR>[Called By]<UL><LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart2_init
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart1_init
+<BR>[Called By]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart2_init
+<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart1_init
 </UL>
 
 <P><STRONG><a name="[c4]"></a>USART_ReceiveData</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, stm32f10x_usart.o(i.USART_ReceiveData))
@@ -1235,7 +1239,8 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[99]"></a>USART_SendData</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, stm32f10x_usart.o(i.USART_SendData))
-<BR><BR>[Called By]<UL><LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_motor
+<BR><BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_motor
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Usart_SendString
 <LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Right_put
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Right_catch
@@ -1277,10 +1282,11 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[cb]"></a>area_21_circle_status0_beta</STRONG> (Thumb, 292 bytes, Stack size 8 bytes, main.o(i.area_21_circle_status0_beta))
+<P><STRONG><a name="[cb]"></a>area_21_circle_status0_beta</STRONG> (Thumb, 296 bytes, Stack size 8 bytes, main.o(i.area_21_circle_status0_beta))
 <BR><BR>[Stack]<UL><LI>Max Depth = 216<LI>Call Chain = area_21_circle_status0_beta &rArr; low_beta &rArr; Control_rotate_beta &rArr; Control_Cal_Gray &rArr; Read_Gray &rArr; CalculFromGray &rArr; __aeabi_cdcmple
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
+<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Stop
 <LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Set_PID
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_PID_Begin
 <LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Cal_Gray
@@ -1296,10 +1302,11 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[d4]"></a>area_21_circle_status1_beta</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, main.o(i.area_21_circle_status1_beta))
+<P><STRONG><a name="[d4]"></a>area_21_circle_status1_beta</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, main.o(i.area_21_circle_status1_beta))
 <BR><BR>[Stack]<UL><LI>Max Depth = 224<LI>Call Chain = area_21_circle_status1_beta &rArr; o_to_c_beta &rArr; Control_rotate_beta &rArr; Control_Cal_Gray &rArr; Read_Gray &rArr; CalculFromGray &rArr; __aeabi_cdcmple
 </UL>
-<BR>[Calls]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;o_to_c_beta
+<BR>[Calls]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Stop
+<LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;o_to_c_beta
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -1344,21 +1351,21 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[da]"></a>area_fetchline</STRONG> (Thumb, 714 bytes, Stack size 8 bytes, main.o(i.area_fetchline))
+<P><STRONG><a name="[da]"></a>area_fetchline</STRONG> (Thumb, 706 bytes, Stack size 8 bytes, main.o(i.area_fetchline))
 <BR><BR>[Stack]<UL><LI>Max Depth = 192<LI>Call Chain = area_fetchline &rArr; Control_Cal_Gray &rArr; Read_Gray &rArr; CalculFromGray &rArr; __aeabi_cdcmple
 </UL>
-<BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
-<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
+<BR>[Calls]<UL><LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Stop
 <LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Set_PID
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Reset_PID
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_PID_Begin
 <LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Cal_Gray
+<LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;detect_distance
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[cd]"></a>b_to_low_beta</STRONG> (Thumb, 254 bytes, Stack size 8 bytes, main.o(i.b_to_low_beta))
+<P><STRONG><a name="[cd]"></a>b_to_low_beta</STRONG> (Thumb, 246 bytes, Stack size 8 bytes, main.o(i.b_to_low_beta))
 <BR><BR>[Stack]<UL><LI>Max Depth = 192<LI>Call Chain = b_to_low_beta &rArr; Control_Cal_Gray &rArr; Read_Gray &rArr; CalculFromGray &rArr; __aeabi_cdcmple
 </UL>
 <BR>[Calls]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Stop_only
@@ -1368,25 +1375,18 @@ Global Symbols
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_PID_Begin
 <LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Cal_Gray
 </UL>
-<BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;area_21_circle_status0_beta
+<BR>[Called By]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;area_21_circle_status0_beta
 </UL>
 
 <P><STRONG><a name="[d2]"></a>b_to_o_beta</STRONG> (Thumb, 238 bytes, Stack size 8 bytes, main.o(i.b_to_o_beta))
 <BR><BR>[Stack]<UL><LI>Max Depth = 192<LI>Call Chain = b_to_o_beta &rArr; Control_Cal_Gray &rArr; Read_Gray &rArr; CalculFromGray &rArr; __aeabi_cdcmple
 </UL>
-<BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
+<BR>[Calls]<UL><LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Stop
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_PID_Begin
 <LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Cal_Gray
 </UL>
 <BR>[Called By]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;area_21_circle_status0_beta
-</UL>
-
-<P><STRONG><a name="[e2]"></a>change_colorlist</STRONG> (Thumb, 198 bytes, Stack size 16 bytes, main.o(i.change_colorlist))
-<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = change_colorlist
-</UL>
-<BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[c6]"></a>connect_raspi</STRONG> (Thumb, 112 bytes, Stack size 8 bytes, raspi.o(i.connect_raspi))
@@ -1395,10 +1395,10 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[33]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART2_IRQHandler
 </UL>
 
-<P><STRONG><a name="[dc]"></a>delay_init</STRONG> (Thumb, 50 bytes, Stack size 8 bytes, delay.o(i.delay_init))
+<P><STRONG><a name="[dd]"></a>delay_init</STRONG> (Thumb, 50 bytes, Stack size 8 bytes, delay.o(i.delay_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = delay_init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_CLKSourceConfig
+<BR>[Calls]<UL><LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_CLKSourceConfig
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -1411,25 +1411,31 @@ Global Symbols
 <LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;o_to_c_beta
 <LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;low_to_o_beta
-<LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;low_to_b_beta
 <LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;low_beta
-<LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;area_fetchline
 <LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;area_atpoint_status1
 <LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;area_atpoint_status0
 <LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;area_21_circle_status0_beta
+<LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Right_catch
+<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Left_catch
 </UL>
 
-<P><STRONG><a name="[e3]"></a>detect_distance</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, main.o(i.detect_distance))
+<P><STRONG><a name="[e3]"></a>delay_us</STRONG> (Thumb, 72 bytes, Stack size 0 bytes, delay.o(i.delay_us))
+<BR><BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+</UL>
+
+<P><STRONG><a name="[db]"></a>detect_distance</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, main.o(i.detect_distance))
 <BR><BR>[Called By]<UL><LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;o_to_b_beta
+<LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;low_to_b_beta
+<LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;area_fetchline
 </UL>
 
 <P><STRONG><a name="[c5]"></a>get_motor</STRONG> (Thumb, 1326 bytes, Stack size 8 bytes, usart.o(i.get_motor))
 <BR><BR>[Stack]<UL><LI>Max Depth = 128 + Unknown Stack Size
 <LI>Call Chain = get_motor &rArr; __2sprintf &rArr; _printf_char_common &rArr; __printf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Usart_SendString
-<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
+<BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
 <LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetFlagStatus
+<LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Usart_SendString
 <LI><a href="#[61]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[32]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART1_IRQHandler
@@ -1439,7 +1445,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = increpid &rArr; __aeabi_fsub
 </UL>
 <BR>[Calls]<UL><LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fsub
-<LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_frsub
+<LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_frsub
 <LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fadd
 <LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fmul
 </UL>
@@ -1449,7 +1455,7 @@ Global Symbols
 <P><STRONG><a name="[cf]"></a>low_beta</STRONG> (Thumb, 166 bytes, Stack size 8 bytes, main.o(i.low_beta))
 <BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = low_beta &rArr; Control_rotate_beta &rArr; Control_Cal_Gray &rArr; Read_Gray &rArr; CalculFromGray &rArr; __aeabi_cdcmple
 </UL>
-<BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
+<BR>[Calls]<UL><LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
 <LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
 <LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_rotate_beta
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Stop_only
@@ -1461,17 +1467,17 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;area_21_circle_status0_beta
 </UL>
 
-<P><STRONG><a name="[d1]"></a>low_to_b_beta</STRONG> (Thumb, 388 bytes, Stack size 8 bytes, main.o(i.low_to_b_beta))
+<P><STRONG><a name="[d1]"></a>low_to_b_beta</STRONG> (Thumb, 376 bytes, Stack size 8 bytes, main.o(i.low_to_b_beta))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = low_to_b_beta &rArr; Control_Rotate &rArr; rotate
 </UL>
-<BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
-<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
+<BR>[Calls]<UL><LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Stop_only
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Stop
 <LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Set_PID
 <LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Rotate
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Reset_PID
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_PID_Begin
+<LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;detect_distance
 </UL>
 <BR>[Called By]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;area_21_circle_status0_beta
 </UL>
@@ -1489,27 +1495,25 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;area_21_circle_status0_beta
 </UL>
 
-<P><STRONG><a name="[5b]"></a>main</STRONG> (Thumb, 732 bytes, Stack size 0 bytes, main.o(i.main))
+<P><STRONG><a name="[5b]"></a>main</STRONG> (Thumb, 380 bytes, Stack size 0 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 224<LI>Call Chain = main &rArr; area_21_circle_status1_beta &rArr; o_to_c_beta &rArr; Control_rotate_beta &rArr; Control_Cal_Gray &rArr; Read_Gray &rArr; CalculFromGray &rArr; __aeabi_cdcmple
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart2_init
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart1_init
+<BR>[Calls]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart2_init
+<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart1_init
+<LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
 <LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
-<LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_init
+<LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_init
+<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
+<LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetFlagStatus
 <LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM5_TEST_GPIO_init
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM4_Int_Init
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM2_Int_Init
-<LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_PriorityGroupConfig
+<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_PriorityGroupConfig
 <LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_pwmInit
 <LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_pidInit
 <LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_grayInit
-<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Stop
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_PID_Begin
-<LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Cal_Gray
 <LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_first
-<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;o_to_b_beta
-<LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;change_colorlist
-<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;b_to_low_beta
 <LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;area_fetchline
 <LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;area_betweenpoint_status1
 <LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;area_betweenpoint_status0
@@ -1533,23 +1537,23 @@ Global Symbols
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Stop
 </UL>
 
-<P><STRONG><a name="[cc]"></a>o_to_b_beta</STRONG> (Thumb, 348 bytes, Stack size 8 bytes, main.o(i.o_to_b_beta))
+<P><STRONG><a name="[cc]"></a>o_to_b_beta</STRONG> (Thumb, 352 bytes, Stack size 8 bytes, main.o(i.o_to_b_beta))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = o_to_b_beta &rArr; send_instruction &rArr; Right_put
 </UL>
-<BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
+<BR>[Calls]<UL><LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Stop
 <LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Set_PID
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Reset_PID
-<LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;detect_distance
+<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_PID_Begin
+<LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;detect_distance
 </UL>
-<BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;area_21_circle_status0_beta
+<BR>[Called By]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;area_21_circle_status0_beta
 </UL>
 
-<P><STRONG><a name="[d5]"></a>o_to_c_beta</STRONG> (Thumb, 616 bytes, Stack size 24 bytes, main.o(i.o_to_c_beta))
+<P><STRONG><a name="[d5]"></a>o_to_c_beta</STRONG> (Thumb, 560 bytes, Stack size 24 bytes, main.o(i.o_to_c_beta))
 <BR><BR>[Stack]<UL><LI>Max Depth = 224<LI>Call Chain = o_to_c_beta &rArr; Control_rotate_beta &rArr; Control_Cal_Gray &rArr; Read_Gray &rArr; CalculFromGray &rArr; __aeabi_cdcmple
 </UL>
-<BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
+<BR>[Calls]<UL><LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
 <LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
 <LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_rotate_beta
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Stop_only
@@ -1624,13 +1628,13 @@ Global Symbols
 <P><STRONG><a name="[d0]"></a>send_first</STRONG> (Thumb, 274 bytes, Stack size 24 bytes, main.o(i.send_first))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = send_first &rArr; send_instruction &rArr; Right_put
 </UL>
-<BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
+<BR>[Calls]<UL><LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_instruction
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;area_21_circle_status0_beta
 </UL>
 
-<P><STRONG><a name="[db]"></a>send_instruction</STRONG> (Thumb, 78 bytes, Stack size 8 bytes, h_stm.o(i.send_instruction))
+<P><STRONG><a name="[dc]"></a>send_instruction</STRONG> (Thumb, 78 bytes, Stack size 8 bytes, h_stm.o(i.send_instruction))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = send_instruction &rArr; Right_put
 </UL>
 <BR>[Calls]<UL><LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Right_put
@@ -1679,7 +1683,7 @@ Global Symbols
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Begin_Only
 </UL>
 
-<P><STRONG><a name="[e0]"></a>uart1_init</STRONG> (Thumb, 152 bytes, Stack size 32 bytes, usart.o(i.uart1_init))
+<P><STRONG><a name="[e1]"></a>uart1_init</STRONG> (Thumb, 152 bytes, Stack size 32 bytes, usart.o(i.uart1_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 100<LI>Call Chain = uart1_init &rArr; USART_Init &rArr; RCC_GetClocksFreq
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Init
@@ -1692,7 +1696,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[e1]"></a>uart2_init</STRONG> (Thumb, 156 bytes, Stack size 32 bytes, usart.o(i.uart2_init))
+<P><STRONG><a name="[e2]"></a>uart2_init</STRONG> (Thumb, 156 bytes, Stack size 32 bytes, usart.o(i.uart2_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 100<LI>Call Chain = uart2_init &rArr; USART_Init &rArr; RCC_GetClocksFreq
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphClockCmd
@@ -1882,7 +1886,7 @@ Global Symbols
 <LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_fmul
 </UL>
 
-<P><STRONG><a name="[de]"></a>__aeabi_frsub</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, faddsub_clz.o(x$fpl$frsb))
+<P><STRONG><a name="[df]"></a>__aeabi_frsub</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, faddsub_clz.o(x$fpl$frsb))
 <BR><BR>[Called By]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;increpid
 </UL>
 

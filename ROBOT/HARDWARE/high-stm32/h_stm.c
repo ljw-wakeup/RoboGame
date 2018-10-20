@@ -1,5 +1,5 @@
 #include "h_stm.h"
-
+#include "delay.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //±¾³ÌÐòÖ»¹Ñ§Ï°Ê¹ÓÃ£¬Î´¾­×÷ÕßÐí¿É£¬²»µÃÓÃÓÚÆäËüÈÎºÎÓÃÍ¾
 //ALIENTEK ¾«Ó¢STM32¿ª·¢°å
@@ -69,6 +69,7 @@ void Left_catch(void){
 		USART_SendData(USART1, 0x0a);
 		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
 	}
+	delay_ms(1000);
 	waite_L();
 }
 void Right_catch(void){
@@ -83,6 +84,7 @@ void Right_catch(void){
 		USART_SendData(USART1, 0x0a);
 		while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//??????
 	}
+	delay_ms(1000);
 	waite_R();
 }
 void waite_P(){
